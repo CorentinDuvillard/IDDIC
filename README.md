@@ -1,6 +1,6 @@
 # IDDIC 2026 : PCE, Processus Créatif Éthique
 
-Les livrables sont dans [livrable/](livrable/).
+Les livrables sont dans [livrable/](livrable/). Le rapport d'audit est dans [AUDIT.md](AUDIT.md).
 
 ## Mise en ligne sur Vercel
 

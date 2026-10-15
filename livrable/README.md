@@ -3,19 +3,24 @@
 | Livrable | Fichier |
 |---|---|
 | Pitch écrit | [Pitch_PCE.pdf](Pitch_PCE.pdf) |
-| Présentation | [Presentation_PCE.pdf](Presentation_PCE.pdf) |
-| Business plan | [Business_Plan_PCE.xlsx](Business_Plan_PCE.xlsx) |
+| Business plan | [Business_Plan_PCE.xlsx](Business_Plan_PCE.xlsx) (onglet Hypothèses inclus) |
+| Business Model Canvas | [BMC_PCE.pdf](BMC_PCE.pdf) |
 | Charte de transparence | [Charte_de_Transparence_PCE.pdf](Charte_de_Transparence_PCE.pdf) |
+| Présentation | [Presentation_PCE.pdf](Presentation_PCE.pdf) |
 | Prototype | [Prototype_PCE.html](Prototype_PCE.html) : à télécharger puis ouvrir dans Chrome ou Edge, sans connexion |
 
 ## Prototype
 
 Site complet en un seul fichier. Les données sont enregistrées dans le navigateur.
 
-- **Côté public** : accueil, critères et tarifs, page clients, vérification d'une certification, registre des œuvres certifiées, FAQ.
-- **Parcours créateur** : dépôt du dossier en 5 étapes, signature obligatoire de la Charte de transparence (champs des articles 1 et 2, acceptation, signature manuscrite), calcul du dosage humain et IA (seuil 10 %), devis client transparent, règlement, accusé de réception, suivi du dossier, certificat, œuvre signée avec sceau et QR code (téléchargeable en PNG).
+- **Côté public** : accueil, critères et tarifs avec estimateur d'abonnement, page clients, vérification d'une certification, registre des œuvres certifiées, FAQ.
+- **Parcours créateur** : dépôt du dossier en 5 étapes, calcul du dosage humain et IA (seuil 10 %), signature obligatoire de la Charte de transparence, abonnement sur mesure, devis client transparent, accusé de réception, suivi, certificat, œuvre signée avec sceau et QR code.
 - **Bouton Livrables** dans l'en-tête : téléchargement de tous les livrables.
-- **Espace pro** (connexion de démonstration pré-remplie) : tableau de bord, charte signée de chaque dossier, dossiers à traiter, base des œuvres avec recherche, filtres, tri, fiche détaillée, décision de la commission, export CSV.
+- **Espace pro** (connexion de démonstration pré-remplie) : tableau de bord, dossiers à traiter, base des œuvres avec recherche, filtres, tri, fiche détaillée avec charte signée, décision de la commission, export CSV.
+
+### Tarifs
+
+L'abonnement est sur mesure, à partir de 9 € HT par mois. Son tarif dépend du nombre de créations à certifier, de la taille de la structure, de l'ampleur du processus créatif et de l'étude du dossier. La certification à l'unité dépend de l'œuvre, de 25 € à 149 € HT. La vérification est gratuite.
 
 ### Accueil
 ![Accueil](captures/01-accueil.png)
@@ -26,29 +31,32 @@ Site complet en un seul fichier. Les données sont enregistrées dans le navigat
 ### Dépôt : signature de la charte
 ![Dépôt, charte](captures/03-depot-charte.png)
 
-### Dépôt : devis et règlement
+### Dépôt : abonnement, devis et règlement
 ![Dépôt, devis](captures/04-depot-devis.png)
 
+### Tarifs et estimateur d'abonnement
+![Tarifs](captures/05-tarifs.png)
+
 ### Confirmation
-![Confirmation](captures/05-confirmation.png)
+![Confirmation](captures/06-confirmation.png)
 
 ### Certificat et œuvre signée
-![Certificat](captures/06-certificat.png)
+![Certificat](captures/07-certificat.png)
 
 ### Vérification
-![Vérification](captures/07-verification.png)
+![Vérification](captures/08-verification.png)
 
 ### Registre public
-![Registre](captures/08-registre.png)
+![Registre](captures/09-registre.png)
 
 ### Espace pro : tableau de bord
-![Tableau de bord](captures/09-pro-tableau.png)
+![Tableau de bord](captures/10-pro-tableau.png)
 
 ### Espace pro : base des œuvres
-![Base des œuvres](captures/10-pro-base.png)
+![Base des œuvres](captures/11-pro-base.png)
 
 ### Espace pro : fiche dossier
-![Fiche dossier](captures/11-pro-dossier.png)
+![Fiche dossier](captures/12-pro-dossier.png)
 
 ### Mobile
-![Mobile](captures/12-mobile.png)
+![Mobile](captures/13-mobile.png)
