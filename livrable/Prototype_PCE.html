@@ -225,10 +225,10 @@ table.devis tr.tot td { font-weight: 700; font-size: 16px; border-bottom: 2px so
 .signee img { height: 46px; background: #fff; border: 1px solid var(--trait-c); }
 
 /* Accueil enrichi */
-.hero-visu { min-height: 430px; background: var(--fond); padding: 26px 26px 112px !important; }
+.hero-visu { border: none !important; background: transparent !important; padding: 10px !important; overflow: visible !important; }
 .anneaux { position: absolute; inset: -40%; background: repeating-radial-gradient(circle at 50% 50%, transparent 0 34px, rgba(2, 52, 129, .07) 34px 35px); animation: respire 9s ease-in-out infinite; }
 @keyframes respire { 50% { transform: scale(1.06); } }
-.hero-visu img.sceau-h { position: relative; width: 250px; border-radius: 50%; box-shadow: 0 18px 50px rgba(2, 52, 129, .18); animation: tampon 1s .2s cubic-bezier(.2, 1.4, .3, 1) both; }
+.hero-visu img.sceau-h { position: relative; width: 320px; border-radius: 50%; box-shadow: 0 18px 50px rgba(2, 52, 129, .18); animation: tampon 1s .2s cubic-bezier(.2, 1.4, .3, 1) both; }
 .mini-cert { position: absolute; left: 18px; right: 18px; bottom: 18px; display: grid; grid-template-columns: 62px 1fr 54px; gap: 12px; align-items: center; background: var(--blanc); border-top: 3px solid var(--marine); box-shadow: var(--ombre); padding: 10px 12px; text-decoration: none; color: var(--encre); animation: entree .7s .7s both, flotte 6s 1.4s ease-in-out infinite; }
 @keyframes flotte { 50% { transform: translateY(-6px); } }
 .mini-cert .mc-img { width: 62px; height: 46px; overflow: hidden; } .mini-cert .mc-img img, .mini-cert .mc-img svg { width: 100%; height: 100%; object-fit: cover; }
@@ -2907,8 +2907,7 @@ function vueAccueil() {
         <p class="chapo">Un label qui atteste que vos créations sont issues d'un processus créatif documenté et examiné par une commission indépendante.</p>
         <div class="actions"><a class="btn" href="#/depot">Déposer mon dossier <span class="fl">→</span></a><a class="btn sec" href="#/verifier">Vérifier une certification</a></div>
       </div>
-      <div class="hero-visu"><div class="anneaux"></div><img class="sceau-h" src="${LOGO}" alt="Sceau de la certification PCE">
-        ${(m => m ? `<a class="mini-cert" href="#/oeuvre/${m.id}"><span class="mc-img">${visuel(m)}</span><span><span class="badge b-certifiee">Certification valide</span><b>${esc(m.titre)}</b><small class="mono">${m.id}</small></span><span class="mc-qr">${qrSvg(urlVerif(m.id))}</span></a>` : "")(DB.get("PCE-2026-000127"))}</div>
+      <div class="hero-visu"><img class="sceau-h" src="${LOGO}" alt="Sceau de la certification PCE"></div>
     </section>
     <div class="chiffres rev">
       <div><b data-compte="${cert.length}">0</b><span>œuvres certifiées</span></div>
