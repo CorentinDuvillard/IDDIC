@@ -1,0 +1,7 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "rewrites": [
+    { "source": "/", "destination": "/livrable/Prototype_PCE.html" },
+    { "source": "/:page(verifier|suivi|oeuvre)/:id", "destination": "/livrable/Prototype_PCE.html" }
+  ]
+}

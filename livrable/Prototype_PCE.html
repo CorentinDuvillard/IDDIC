@@ -2707,7 +2707,9 @@ function qrSvg(texte) {
   for (let y = 0; y < n; y++) for (let x = 0; x < n; x++) if (d(x, y)) p += `M${x + 1} ${y + 1}h1v1h-1z`;
   return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${n + 2} ${n + 2}" shape-rendering="crispEdges" role="img" aria-label="QR code de vérification"><rect width="${n + 2}" height="${n + 2}" fill="#fff"/><path d="${p}" fill="#1F2530"/></svg>`;
 }
-const urlVerif = id => `${SITE}/verifier/${id}`;
+// En ligne (Vercel), le QR code pointe vers l'adresse réelle du site ; en local, vers l'adresse cible.
+const BASE = location.protocol.startsWith("http") ? location.origin : SITE;
+const urlVerif = id => `${BASE}/verifier/${id}`;
 
 /* ---------- Base de données (localStorage) ---------- */
 const PRENOMS = ["Léa", "Hugo", "Inès", "Malo", "Clara", "Nolan", "Jade", "Rayan", "Zoé", "Théo", "Lina", "Sacha", "Maëlle", "Elio", "Romane", "Nathan", "Anaïs", "Yanis", "Lou", "Basile"];
@@ -3142,7 +3144,7 @@ function vueConfirmation(id) {
 }
 function initConfirmation(id) {
   const o = DB.get(id); if (!o || !$("#dl-ar")) return;
-  $("#dl-ar").onclick = () => { telecharger(`accuse-reception-${o.id}.txt`, `CERTIFICATION PCE · PROCESSUS CRÉATIF ÉTHIQUE\n\nAccusé de réception\n\nNuméro de dossier : ${o.id}\nDéposé le : ${dateFr(o.date)}\nCréateur : ${o.createur}\nŒuvre : ${o.titre} (${o.type})\nRecours à l'IA : ${IA_LIB[o.iaMode]} · ${pctIA(o.dosage)} % du projet\nJustificatifs : ${o.justificatifs.join(", ")}\n\nSuivi : ${SITE}/suivi/${o.id}\n`, "text/plain"); toast("Accusé de réception téléchargé."); };
+  $("#dl-ar").onclick = () => { telecharger(`accuse-reception-${o.id}.txt`, `CERTIFICATION PCE · PROCESSUS CRÉATIF ÉTHIQUE\n\nAccusé de réception\n\nNuméro de dossier : ${o.id}\nDéposé le : ${dateFr(o.date)}\nCréateur : ${o.createur}\nŒuvre : ${o.titre} (${o.type})\nRecours à l'IA : ${IA_LIB[o.iaMode]} · ${pctIA(o.dosage)} % du projet\nJustificatifs : ${o.justificatifs.join(", ")}\n\nSuivi : ${BASE}/suivi/${o.id}\n`, "text/plain"); toast("Accusé de réception téléchargé."); };
 }
 function vueSuivi(id) {
   const o = DB.get(id);
@@ -3318,6 +3320,7 @@ function rendre() {
   revele(); compteurs();
 }
 DB.charger(); DB.sauver();
+{ const m = location.pathname.match(/^\/(verifier|suivi|oeuvre)\/([^/]+)\/?$/); if (m && !location.hash) history.replaceState(null, "", "/#/" + m[1] + "/" + m[2]); }
 addEventListener("hashchange", rendre);
 rendre();
 </script>
