@@ -26,7 +26,8 @@ button { font-family: inherit; }
 .sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
 
 /* En-tête */
-.entete { position: sticky; top: 0; z-index: 40; background: var(--blanc); border-bottom: 3px solid var(--marine); }
+.entete { position: sticky; top: 0; z-index: 40; background: rgba(255,255,255,.96); backdrop-filter: saturate(1.4) blur(8px); border-bottom: 3px solid var(--marine); transition: box-shadow .3s; }
+.entete.ombre { box-shadow: 0 6px 22px rgba(2, 52, 129, .12); }
 .entete .conteneur { display: flex; align-items: center; gap: 20px; height: 76px; max-width: 1380px; }
 .marque { display: flex; align-items: center; gap: 12px; text-decoration: none; color: var(--marine); flex: none; }
 .marque img { width: 52px; height: 52px; border-radius: 50%; }
@@ -145,10 +146,13 @@ input[type=radio], input[type=checkbox] { width: 18px; height: 18px; accent-colo
 .progression { margin: 6px 0 26px; }
 .progression .num { font-size: 13px; color: var(--gris); font-weight: 700; }
 .progression h1 { font-size: 30px; margin: 4px 0 12px; }
-.barres { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; }
-.barres span { height: 6px; background: var(--pale); position: relative; overflow: hidden; }
+.barres { display: grid; grid-template-columns: repeat(5, 1fr); gap: 6px; }
+.barres .pas small { display: block; font-size: 11.5px; color: var(--gris-c); margin-top: 6px; line-height: 1.25; transition: color .3s; }
+.barres .pas.fait small { color: var(--gris); }
+.barres .pas.cur small { color: var(--marine); font-weight: 700; }
+.barres span[data-b] { display: block; height: 6px; background: var(--pale); position: relative; overflow: hidden; }
 .barres span i { position: absolute; inset: 0; background: var(--marine); transform-origin: left; transform: scaleX(0); transition: transform .5s cubic-bezier(.2, .7, .2, 1); }
-.barres span.ok i { transform: scaleX(1); }
+.barres span[data-b].ok i { transform: scaleX(1); }
 .progression .suiv { font-size: 13px; color: var(--gris); font-style: italic; margin-top: 8px; }
 .panneau { border: 1px solid var(--trait-c); padding: 28px; background: var(--blanc); }
 .nav-etapes { display: flex; justify-content: space-between; align-items: center; gap: 12px; margin-top: 26px; flex-wrap: wrap; }
@@ -195,6 +199,72 @@ table.devis tr.tot td { font-weight: 700; font-size: 16px; border-bottom: 2px so
 .boite { background: var(--blanc); padding: 32px; width: min(440px, 92vw); text-align: center; border-top: 4px solid var(--marine); animation: entree .35s both; }
 .rond { width: 54px; height: 54px; border: 4px solid var(--pale); border-top-color: var(--marine); border-radius: 50%; margin: 6px auto 16px; animation: tourne .8s linear infinite; }
 @keyframes tourne { to { transform: rotate(360deg); } }
+
+/* Charte de transparence */
+.charte { border: 1px solid var(--marine); }
+.charte-ent { display: flex; gap: 16px; align-items: center; padding: 18px 20px; background: var(--fond); border-bottom: 1px solid var(--trait-c); }
+.charte-ent img { width: 58px; border-radius: 50%; flex: none; }
+.charte-ent h2 { font-size: 19px; margin: 6px 0 2px; }
+.charte-ent small { color: var(--gris); }
+.charte-ent .btn { margin-left: auto; flex: none; }
+.charte-corps { padding: 6px 20px 8px; }
+.preambule { font-size: 14.5px; background: var(--pale); padding: 12px 14px; margin: 14px 0; border-left: 4px solid var(--marine); }
+.article { padding: 14px 0; border-bottom: 1px solid var(--trait-c); font-size: 14.5px; }
+.article h3 { display: flex; gap: 10px; align-items: center; font-size: 16px; margin-bottom: 8px; }
+.article ul { margin: 6px 0 0; padding-left: 18px; } .article li { margin-bottom: 6px; }
+.article .radios { display: grid; grid-template-columns: 1fr 1fr; gap: 0 16px; }
+.signature-zone { padding: 18px 20px 20px; background: var(--fond); border-top: 2px solid var(--marine); }
+.signature-zone .lignes { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 12px; font-size: 14px; }
+.pad { position: relative; background: var(--blanc); border: 1.5px dashed var(--marine); height: 150px; touch-action: none; cursor: crosshair; }
+.pad canvas { position: absolute; inset: 0; width: 100%; height: 100%; }
+.pad .indice { position: absolute; inset: 0; display: grid; place-items: center; color: var(--gris-c); font-size: 14px; pointer-events: none; transition: opacity .3s; }
+.pad.signe .indice { opacity: 0; }
+.pad.signe { border-style: solid; }
+.champ.erreur .pad { border-color: var(--rouge); }
+.signee { display: flex; gap: 14px; align-items: center; border: 1px solid var(--vert); background: var(--vert-p); padding: 12px 14px; font-size: 14px; }
+.signee img { height: 46px; background: #fff; border: 1px solid var(--trait-c); }
+
+/* Accueil enrichi */
+.hero-visu { min-height: 430px; background: var(--fond); padding: 26px 26px 112px !important; }
+.anneaux { position: absolute; inset: -40%; background: repeating-radial-gradient(circle at 50% 50%, transparent 0 34px, rgba(2, 52, 129, .07) 34px 35px); animation: respire 9s ease-in-out infinite; }
+@keyframes respire { 50% { transform: scale(1.06); } }
+.hero-visu img.sceau-h { position: relative; width: 250px; border-radius: 50%; box-shadow: 0 18px 50px rgba(2, 52, 129, .18); animation: tampon 1s .2s cubic-bezier(.2, 1.4, .3, 1) both; }
+.mini-cert { position: absolute; left: 18px; right: 18px; bottom: 18px; display: grid; grid-template-columns: 62px 1fr 54px; gap: 12px; align-items: center; background: var(--blanc); border-top: 3px solid var(--marine); box-shadow: var(--ombre); padding: 10px 12px; text-decoration: none; color: var(--encre); animation: entree .7s .7s both, flotte 6s 1.4s ease-in-out infinite; }
+@keyframes flotte { 50% { transform: translateY(-6px); } }
+.mini-cert .mc-img { width: 62px; height: 46px; overflow: hidden; } .mini-cert .mc-img img, .mini-cert .mc-img svg { width: 100%; height: 100%; object-fit: cover; }
+.mini-cert b { display: block; color: var(--marine); font-size: 14px; margin-top: 3px; }
+.mini-cert small { font-size: 12px; color: var(--gris); }
+.mini-cert .mc-qr svg { width: 54px; height: 54px; display: block; }
+.ico { width: 44px; height: 44px; border-radius: 50%; background: var(--pale); display: grid; place-items: center; margin-bottom: 14px; transition: background .25s, transform .25s; }
+.ico svg { width: 22px; height: 22px; stroke: var(--marine); fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; transition: stroke .25s; }
+.carte:hover .ico { background: var(--marine); transform: rotate(-6deg); } .carte:hover .ico svg { stroke: #fff; }
+.verif-home { display: grid; grid-template-columns: 1fr 1.1fr; gap: 40px; align-items: center; border: 1px solid var(--marine); border-top: 4px solid var(--marine); padding: 30px; background: var(--blanc); }
+.verif-home .verif-form { max-width: none; }
+.cta { background: var(--marine); color: var(--blanc); position: relative; overflow: hidden; }
+.cta::before { content: ""; position: absolute; right: -120px; top: -120px; width: 420px; height: 420px; border-radius: 50%; border: 60px solid rgba(255, 255, 255, .05); }
+.cta .conteneur { display: flex; justify-content: space-between; align-items: center; gap: 24px; padding-top: 44px; padding-bottom: 44px; flex-wrap: wrap; position: relative; }
+.cta h2 { color: var(--blanc); margin: 0 0 6px; }
+.cta p { margin: 0; color: #C9D6EE; }
+.cta .g { display: flex; gap: 12px; flex-wrap: wrap; }
+.btn.blanc { background: var(--blanc); color: var(--marine); border-color: var(--blanc); }
+.btn.blanc:hover { background: var(--pale); }
+.btn.contour { background: transparent; color: var(--blanc); border-color: var(--blanc); }
+.btn.contour:hover { background: rgba(255, 255, 255, .1); }
+.vignette .voir { position: absolute; left: 0; right: 0; bottom: 0; background: linear-gradient(transparent, rgba(2, 52, 129, .88)); color: #fff; padding: 26px 12px 10px; font-size: 13px; font-weight: 700; transform: translateY(100%); transition: transform .3s cubic-bezier(.2, .7, .2, 1); }
+.oeuvre-c:hover .voir { transform: none; }
+.vignette .mini-sceau { top: 8px; bottom: auto; }
+
+/* Pied enrichi */
+.pied-haut { display: grid !important; grid-template-columns: 1.5fr 1fr 1fr 1fr; gap: 28px; padding-top: 40px !important; padding-bottom: 30px !important; }
+.pied-haut .pm { display: flex; gap: 12px; align-items: center; margin-bottom: 12px; }
+.pied-haut .pm img { width: 48px; height: 48px; border-radius: 50%; background: #fff; }
+.pied-haut p { color: #C9D6EE; font-size: 13.5px; max-width: 300px; }
+.pied-haut h4 { color: var(--blanc); font-size: 13px; letter-spacing: .08em; text-transform: uppercase; margin-bottom: 12px; }
+.pied-haut ul { list-style: none; margin: 0; padding: 0; }
+.pied-haut li { margin-bottom: 8px; }
+.pied-haut a, .pied-haut button { color: #E2EAF7; font-size: 14px; background: none; border: none; padding: 0; cursor: pointer; font-family: inherit; text-align: left; }
+.pied-haut a:hover, .pied-haut button:hover { color: #fff; text-decoration: underline; }
+.pied-bas { border-top: 1px solid rgba(255, 255, 255, .18); }
 
 /* Livrables */
 .boite.livr { text-align: left; width: min(560px, 94vw); padding: 0; }
@@ -328,6 +398,8 @@ table.bdd tbody tr:hover { background: var(--pale); }
   .nav a.btn { margin: 8px 0 0 !important; justify-content: center; }
 }
 @media (max-width: 960px) {
+  .verif-home, .pied-haut { grid-template-columns: 1fr 1fr !important; }
+  .barres .pas small { display: none; }
   .hero, .depot, .fiche, .pro-grille { grid-template-columns: 1fr; }
   .grille3, .grille4, .kpis, .chiffres, .etapes-h { grid-template-columns: 1fr 1fr; }
   .etapes-h::before { display: none; }
@@ -337,7 +409,8 @@ table.bdd tbody tr:hover { background: var(--pale); }
 }
 @media (max-width: 560px) {
   .grille3, .grille4, .kpis, .chiffres, .etapes-h, .deux, .formules { grid-template-columns: 1fr; }
-  .res-ok { grid-template-columns: 1fr; }
+  .res-ok, .verif-home, .pied-haut, .article .radios, .signature-zone .lignes { grid-template-columns: 1fr !important; }
+  .charte-ent { flex-wrap: wrap; }
   .verif-form { flex-direction: column; }
   .marque small { display: none; }
 }
@@ -357,9 +430,16 @@ table.bdd tbody tr:hover { background: var(--pale); }
 <header class="entete" id="entete"></header>
 <main id="vue" tabindex="-1"></main>
 <footer class="pied">
-  <div class="conteneur">
+  <div class="conteneur pied-haut">
+    <div><div class="pm"><img class="pied-logo" alt=""><div><b>Certification PCE</b><br><small style="color:#C9D6EE">Processus Créatif Éthique</small></div></div>
+      <p>Le label qui certifie le processus créatif : une vision humaine, une IA maîtrisée, une transparence totale pour le client.</p></div>
+    <div><h4>Le label</h4><ul><li><a href="#/">Accueil</a></li><li><a href="#/registre">Registre des œuvres</a></li><li><a href="#/faq">Questions fréquentes</a></li></ul></div>
+    <div><h4>Créateurs</h4><ul><li><a href="#/depot">Déposer mon dossier</a></li><li><a href="#/createurs">Critères et tarifs</a></li><li><a class="lien-charte" target="_blank">Charte de transparence</a></li><li><a href="#/suivi">Suivre mon dossier</a></li></ul></div>
+    <div><h4>Clients</h4><ul><li><a href="#/verifier">Vérifier une certification</a></li><li><a href="#/clients">Pour les clients</a></li><li><button type="button" class="pied-livr">Livrables IDDIC 2026</button></li><li><a href="#/pro">Espace pro</a></li></ul></div>
+  </div>
+  <div class="conteneur pied-bas">
     <div><a href="#/faq">Mentions légales</a> · <a href="#/faq">Accessibilité</a> · <a href="#/registre">Plan du site</a> · <a href="#/faq">Contact</a></div>
-    <div>Certification PCE · Processus Créatif Éthique</div>
+    <div>© 2026 Certification PCE · IDDIC 2026</div>
   </div>
 </footer>
 <div id="impression" hidden></div>
@@ -2677,7 +2757,7 @@ const STATUTS = {
   deposee: "Déposé", analyse: "Analyse du dossier", commission: "Étude par la commission", certifiee: "Certifiée", refusee: "Refusée",
 };
 const IA_LIB = { aucun: "Aucun", appui: "En appui (idées, retouches)", generation: "Génération d'éléments du rendu" };
-const CLE = "pce-demo-v3";
+const CLE = "pce-demo-v4";
 
 /* ---------- Utilitaires ---------- */
 const $ = (s, r = document) => r.querySelector(s);
@@ -2752,12 +2832,14 @@ function seedBase() {
       formule: r() < .7 ? "abonnement" : "unite", seed: 1 + Math.floor(r() * 100000), img: null,
       justificatifs: ["croquis-preparatoires.pdf", "fichier-source.psd"].slice(0, 1 + Math.floor(r() * 2)),
       motif: st === "refusee" ? "Part d'exécution par IA supérieure au seuil du référentiel." : "",
+      charte: { expertise: expertiseDefaut(type), expertiseAutre: type === "Tatouage" ? "Tatouage" : "", outilsTrad: "Crayon, carnet de croquis, tablette graphique, logiciel de retouche", outilsIA: iaMode === "aucun" ? "Aucun" : "Assistant de recherche, retouche assistée", signature: null, signeLe: new Date(2026, mois, jour).toISOString() },
     });
   }
   liste.push({ id: "PCE-2026-000127", titre: "La maison au soleil", createur: "Studio Lune", email: "contact@studiolune.fr", type: "Illustration", ville: "Lyon",
     date: new Date(2026, 9, 2).toISOString(), statut: "certifiee", dosage: { recherche: 4, creation: 8, ia: 1 }, iaMode: "appui", outils: "Nettoyage du trait",
     description: "Croquis au crayon, composition de la scène familiale, mise en couleur à la main, nettoyage du trait assisté.", formule: "abonnement", seed: 7, img: OEUVRE,
-    justificatifs: ["croquis-maison.jpg", "etapes-couleur.pdf"], motif: "" });
+    justificatifs: ["croquis-maison.jpg", "etapes-couleur.pdf"], motif: "",
+    charte: { expertise: "Design Graphique / Illustration", expertiseAutre: "", outilsTrad: "Crayon, feutres, tablette graphique", outilsIA: "Nettoyage du trait assisté", signature: null, signeLe: new Date(2026, 9, 1).toISOString() } });
   return liste.sort((a, b) => new Date(b.date) - new Date(a.date));
 }
 const DB = {
@@ -2793,6 +2875,7 @@ const LIVRABLES = [
   ["Pitch_PCE.pdf", "Pitch écrit", "PDF · 1 page"],
   ["Presentation_PCE.pdf", "Présentation", "PDF · 15 diapositives"],
   ["Business_Plan_PCE.xlsx", "Business plan", "Excel · 3 ans"],
+  ["Charte_de_Transparence_PCE.pdf", "Charte de transparence", "PDF · à signer lors du dépôt"],
   ["Prototype_PCE.html", "Prototype", "HTML · fichier unique, hors ligne"],
 ];
 function livrables() {
@@ -2824,7 +2907,8 @@ function vueAccueil() {
         <p class="chapo">Un label qui atteste que vos créations sont issues d'un processus créatif documenté et examiné par une commission indépendante.</p>
         <div class="actions"><a class="btn" href="#/depot">Déposer mon dossier <span class="fl">→</span></a><a class="btn sec" href="#/verifier">Vérifier une certification</a></div>
       </div>
-      <div class="hero-visu"><img src="${LOGO}" alt="Sceau de la certification PCE"></div>
+      <div class="hero-visu"><div class="anneaux"></div><img class="sceau-h" src="${LOGO}" alt="Sceau de la certification PCE">
+        ${(m => m ? `<a class="mini-cert" href="#/oeuvre/${m.id}"><span class="mc-img">${visuel(m)}</span><span><span class="badge b-certifiee">Certification valide</span><b>${esc(m.titre)}</b><small class="mono">${m.id}</small></span><span class="mc-qr">${qrSvg(urlVerif(m.id))}</span></a>` : "")(DB.get("PCE-2026-000127"))}</div>
     </section>
     <div class="chiffres rev">
       <div><b data-compte="${cert.length}">0</b><span>œuvres certifiées</span></div>
@@ -2836,9 +2920,9 @@ function vueAccueil() {
   <section class="section"><div class="conteneur">
     <h2 class="rev">Pourquoi la certification PCE ?</h2>
     <div class="grille3">
-      <div class="carte rev"><h3><span class="pastille">1</span>Rassurer vos clients</h3><p>Le label atteste que le rendu résulte d'un processus créatif réel, documenté et vérifiable.</p></div>
-      <div class="carte rev"><h3><span class="pastille">2</span>Valoriser votre travail</h3><p>Distinguez votre prestation des rendus générés automatiquement, à qualité apparente égale.</p></div>
-      <div class="carte rev"><h3><span class="pastille">3</span>Un examen indépendant</h3><p>Chaque dossier est étudié par une commission : compétences, démarche, rapport à l'IA.</p></div>
+      <div class="carte rev"><div class="ico"><svg viewBox="0 0 24 24"><path d="M12 3l7 3v5c0 4.5-3 8.3-7 10-4-1.7-7-5.5-7-10V6z"/><path d="M8.5 12l2.5 2.5 4.5-5"/></svg></div><h3><span class="pastille">1</span>Rassurer vos clients</h3><p>Le label atteste que le rendu résulte d'un processus créatif réel, documenté et vérifiable.</p></div>
+      <div class="carte rev"><div class="ico"><svg viewBox="0 0 24 24"><path d="M12 3l2.6 5.6 6.1.7-4.5 4.2 1.2 6L12 16.5 6.6 19.5l1.2-6L3.3 9.3l6.1-.7z"/></svg></div><h3><span class="pastille">2</span>Valoriser votre travail</h3><p>Distinguez votre prestation des rendus générés automatiquement, à qualité apparente égale.</p></div>
+      <div class="carte rev"><div class="ico"><svg viewBox="0 0 24 24"><circle cx="9" cy="8" r="3.2"/><path d="M3 20c0-3.3 2.7-6 6-6s6 2.7 6 6"/><circle cx="17" cy="9" r="2.4"/><path d="M15.5 14.2c3 .2 5.5 2.6 5.5 5.8"/></svg></div><h3><span class="pastille">3</span>Un examen indépendant</h3><p>Chaque dossier est étudié par une commission : compétences, démarche, rapport à l'IA.</p></div>
     </div>
   </div></section>
   <section class="section fond"><div class="conteneur">
@@ -2853,9 +2937,21 @@ function vueAccueil() {
   <section class="section"><div class="conteneur">
     <div style="display:flex;justify-content:space-between;align-items:end;gap:16px;flex-wrap:wrap" class="rev"><h2 style="margin:0">Dernières œuvres certifiées</h2><a href="#/registre">Consulter le registre →</a></div>
     <div class="galerie" style="margin-top:22px">${cert.slice(0, 8).map(carteOeuvre).join("")}</div>
-  </div></section>`;
+  </div></section>
+  <section class="section fond"><div class="conteneur"><div class="verif-home rev">
+    <div><span class="tag">Pour les clients</span><h2 style="margin-top:10px">Vous achetez une création ?</h2><p class="muted" style="margin:0">Saisissez le numéro PCE inscrit sur l'œuvre ou scannez son QR code. La vérification est gratuite.</p></div>
+    <div><form class="verif-form" id="vh-f"><label class="sr" for="vh-n">Numéro PCE</label><input id="vh-n" type="text" placeholder="PCE-2026-000127" autocomplete="off"><button class="btn">Vérifier <span class="fl">→</span></button></form>
+      <div class="exemples">Exemple : <button type="button" data-vh="PCE-2026-000127">PCE-2026-000127</button></div></div>
+  </div></div></section>
+  ${bandeauCta()}`;
 }
-const carteOeuvre = o => `<a class="oeuvre-c rev" href="#/oeuvre/${o.id}"><div class="vignette">${visuel(o)}<img class="mini-sceau" src="${LOGO}" alt=""></div><div class="txt"><b>${esc(o.titre)}</b><small>${esc(o.createur)} · ${esc(o.type)}</small></div></a>`;
+const bandeauCta = () => `<section class="cta"><div class="conteneur"><div><h2>Faites certifier votre processus créatif</h2><p>Dépôt en ligne en 15 minutes, signature de la Charte de transparence, décision de la commission.</p></div>
+  <div class="g"><a class="btn blanc" href="#/depot">Déposer mon dossier <span class="fl">→</span></a><a class="btn contour" href="${DOSSIER_LIVRABLES}Charte_de_Transparence_PCE.pdf" target="_blank">Lire la charte</a></div></div></section>`;
+function initAccueil() {
+  $("#vh-f").onsubmit = e => { e.preventDefault(); const n = $("#vh-n").value.trim(); if (n) location.hash = "#/verifier/" + encodeURIComponent(n); };
+  $$("[data-vh]").forEach(b => b.onclick = () => { location.hash = "#/verifier/" + b.dataset.vh; });
+}
+const carteOeuvre = o => `<a class="oeuvre-c rev" href="#/oeuvre/${o.id}"><div class="vignette">${visuel(o)}<img class="mini-sceau" src="${LOGO}" alt=""><span class="voir">Voir le certificat →</span></div><div class="txt"><b>${esc(o.titre)}</b><small>${esc(o.createur)} · ${esc(o.type)}</small></div></a>`;
 
 function vueCreateurs() {
   return `<div class="conteneur">${ariane("Pour les créateurs")}
@@ -2868,11 +2964,13 @@ function vueCreateurs() {
       <div class="carte rev"><h3><span class="pastille">4</span>Justificatifs</h3><p>Croquis, fichiers sources ou étapes intermédiaires, au format PDF, JPG ou PNG.</p></div>
     </div>
     <h2 style="margin-top:44px">Tarifs</h2>
-    <div class="deux" style="margin-bottom:56px">
+    <div class="deux" style="margin-bottom:24px">
       <div class="carte rev"><h3>Abonnement créateur</h3><p style="font-size:34px;font-weight:700;color:var(--marine);margin:4px 0">9 € <span style="font-size:16px">HT / mois</span></p><p>Certification de vos œuvres incluse, profil dans le registre, tableau de bord, devis transparents.</p><a class="btn" href="#/depot">Déposer mon dossier <span class="fl">→</span></a></div>
       <div class="carte rev"><h3>Certification à l'unité</h3><p class="muted">Le tarif dépend de l'œuvre.</p>
         <table class="devis">${Object.entries(TYPES).map(([t, p]) => `<tr><td>${t}</td><td>${eur(p)} HT</td></tr>`).join("")}</table></div>
-    </div></div>`;
+    </div>
+    <div class="info rev" style="margin-bottom:56px"><span class="i">i</span><span>La signature de la <a href="${DOSSIER_LIVRABLES}Charte_de_Transparence_PCE.pdf" target="_blank">Charte de transparence et d'éthique créative</a> est obligatoire pour déposer un dossier. Elle se signe en ligne, à l'étape 4 du dépôt.</span></div>
+    </div>${bandeauCta()}`;
 }
 function vueClients() {
   return `<div class="conteneur">${ariane("Pour les clients")}
@@ -2892,6 +2990,7 @@ function vueFaq() {
     ["Combien de temps dure l'examen ?", "Le dépôt prend environ 15 minutes. Le dossier passe ensuite par l'analyse, l'étude par la commission, puis la décision."],
     ["Combien coûte la certification ?", "L'abonnement créateur coûte 9 € HT par mois. La certification à l'unité dépend de l'œuvre, de 25 € à 149 € HT. La vérification est gratuite."],
     ["Comment un acheteur vérifie-t-il une œuvre ?", "En scannant le QR code apposé sur l'œuvre ou en saisissant le numéro PCE sur la page Vérifier une certification."],
+    ["Pourquoi signer la Charte de transparence ?", "La charte engage le créateur sur l'usage de l'IA, la transparence des devis, le respect de la propriété intellectuelle et l'acceptation des audits. Sa signature est obligatoire pour déposer un dossier."],
     ["Que se passe-t-il en cas de refus ?", "Le motif vous est communiqué. Vous pouvez compléter votre dossier et le déposer à nouveau."],
   ];
   return `<div class="conteneur etroit">${ariane("FAQ")}<h1>Questions fréquentes</h1>${q.map(([a, b]) => `<details class="rev"><summary>${a}</summary><p>${b}</p></details>`).join("")}<div style="height:56px"></div></div>`;
@@ -3000,9 +3099,10 @@ async function oeuvreSignee(o) {
 }
 
 /* ---------- Parcours de dépôt ---------- */
-const ETAPES = ["Votre activité", "Votre processus créatif", "Justificatifs", "Récapitulatif et règlement"];
-const brouillonVide = () => ({ etape: 0, createur: "", email: "", type: "Illustration", ville: "", site: "", titre: "", description: "", iaMode: "appui", recherche: 4, creation: 8, ia: 1, outils: "", img: null, imgNom: "", justificatifs: [], attestation: false, formule: "abonnement", taux: 45 });
-function brouillon() { if (!DB.data.brouillon) DB.data.brouillon = brouillonVide(); return DB.data.brouillon; }
+const ETAPES = ["Votre activité", "Votre processus créatif", "Justificatifs", "Charte de transparence", "Récapitulatif et règlement"];
+const N = ETAPES.length;
+const brouillonVide = () => ({ etape: 0, createur: "", email: "", type: "Illustration", ville: "", site: "", titre: "", description: "", iaMode: "appui", recherche: 4, creation: 8, ia: 1, outils: "", img: null, imgNom: "", justificatifs: [], formule: "abonnement", taux: 45, expertise: "", expertiseAutre: "", outilsTrad: "", outilsIA: "", charteOk: false, signature: null, signeLe: null });
+function brouillon() { const d = DB.data.brouillon; if (d && d.complet) return d; DB.data.brouillon = Object.assign(brouillonVide(), d || {}, { complet: true }); return DB.data.brouillon; }
 function vueDepot() {
   const b = brouillon(), e = b.etape;
   return `<div class="conteneur">${ariane("Déposer mon dossier")}
@@ -3010,18 +3110,18 @@ function vueDepot() {
       <div>
         <div class="progression">
           ${e > 0 ? `<button class="lien" id="d-retour" style="font-size:14px;margin-bottom:8px">‹ Retour</button>` : ""}
-          <div class="num">Étape ${e + 1} sur 4</div><h1>${ETAPES[e]}</h1>
-          <div class="barres">${ETAPES.map((_, i) => `<span class="${i < e ? "ok" : ""}" data-b="${i}"><i></i></span>`).join("")}</div>
-          ${e < 3 ? `<div class="suiv">Étape suivante : ${ETAPES[e + 1]}</div>` : ""}
+          <div class="num">Étape ${e + 1} sur ${N}</div><h1>${ETAPES[e]}</h1>
+          <div class="barres">${ETAPES.map((t, i) => `<div class="pas ${i < e ? "fait" : i === e ? "cur" : ""}"><span class="${i < e ? "ok" : ""}" data-b="${i}"><i></i></span><small>${t}</small></div>`).join("")}</div>
+          ${e < N - 1 ? `<div class="suiv">Étape suivante : ${ETAPES[e + 1]}</div>` : ""}
         </div>
-        <form class="panneau" id="d-form" novalidate>${[etape1, etape2, etape3, etape4][e](b)}</form>
+        <form class="panneau" id="d-form" novalidate>${[etape1, etape2, etape3, etapeCharte, etape4][e](b)}</form>
         <div class="nav-etapes">
-          <div class="g">${e > 0 ? `<button class="btn sec" id="d-prec" type="button">Précédent</button>` : ""}<button class="btn" id="d-suiv" type="button">${e < 3 ? "Continuer" : "Déposer ma demande"} <span class="fl">→</span></button></div>
+          <div class="g">${e > 0 ? `<button class="btn sec" id="d-prec" type="button">Précédent</button>` : ""}<button class="btn" id="d-suiv" type="button">${e < N - 1 ? "Continuer" : "Déposer ma demande"} <span class="fl">→</span></button></div>
           <button class="lien" id="d-plus-tard" type="button">Enregistrer et reprendre plus tard</button>
         </div>
       </div>
       <aside class="cote">
-        <div class="bloc"><h3>Avant de commencer</h3><ul>${ETAPES.map((t, i) => `<li class="${i < e ? "ok" : i === e ? "cur" : ""}"><span class="ck">${i < e ? "✓" : ""}</span>${["Présentation de votre activité", "Description de votre processus créatif", "Déclaration d'usage de l'IA et justificatifs", "Récapitulatif et règlement"][i]}</li>`).join("")}</ul></div>
+        <div class="bloc"><h3>Avant de commencer</h3><ul>${ETAPES.map((t, i) => `<li class="${i < e ? "ok" : i === e ? "cur" : ""}"><span class="ck">${i < e ? "✓" : ""}</span>${["Présentation de votre activité", "Description de votre processus créatif", "Justificatifs (croquis, fichiers sources)", "Signature de la Charte de transparence", "Récapitulatif et règlement"][i]}</li>`).join("")}</ul></div>
         <div class="info"><span class="i">i</span><span>Durée estimée : 15 minutes.<br>Votre dossier est enregistré automatiquement.</span></div>
         <p style="margin-top:14px"><a href="#/createurs">Consulter les critères d'obtention</a></p>
       </aside>
@@ -3056,8 +3156,71 @@ function etape3(b) {
       <div class="depose" id="z-just" tabindex="0" role="button"><b>⬆ Glisser un fichier ici</b><small>ou Parcourir · PDF, JPG, PNG</small></div>
       <input type="file" id="f-just" multiple hidden>
       <ul class="fichiers" id="l-just"></ul><div class="msg-err">Ajoutez au moins un justificatif.</div></div>
-    <div class="champ" data-c="attestation"><label style="display:flex;gap:10px;font-weight:400"><input type="checkbox" id="attestation" ${b.attestation ? "checked" : ""}> J'atteste sur l'honneur l'exactitude de ma déclaration d'usage de l'IA.</label><div class="msg-err">Cette attestation est obligatoire.</div></div>`;
+`;
 }
+/* ---------- Charte de transparence ---------- */
+const EXPERTISES = ["Direction Artistique (DA)", "Photographie", "Design Graphique / Illustration", "Autre"];
+const expertiseDefaut = t => ({ "Photographie": "Photographie", "Illustration": "Design Graphique / Illustration", "Identité visuelle": "Design Graphique / Illustration", "Campagne de marque": "Direction Artistique (DA)" }[t] || "Autre");
+const ARTICLES_3_5 = `
+  <div class="article"><h3><span class="pastille">3</span>Engagement de transparence</h3><p>Je m'engage légalement et moralement à faire preuve d'une transparence absolue envers le label PCE et mes futurs clients. À ce titre, je certifie que :</p>
+    <ul><li><b>L'IA comme assistant, pas comme créateur :</b> l'Intelligence Artificielle n'est utilisée que comme un outil d'assistance (recherche, inspiration, exécution de tâches répétitives, retouches mineures).</li>
+    <li><b>La réflexion humaine prédomine :</b> la direction artistique, le concept originel, le message et la structure de l'œuvre finale sont à 100 % le fruit de mon travail intellectuel humain.</li>
+    <li><b>Transparence des devis :</b> je m'engage à utiliser le devis certifié PCE pour indiquer clairement à mon client la proportion de mon processus de travail assistée par IA.</li></ul></div>
+  <div class="article"><h3><span class="pastille">4</span>Respect de la Propriété Intellectuelle</h3><p>Je certifie ne jamais utiliser de générateurs d'images ou de textes dans le but de reproduire, plagier ou piller le travail d'un autre créateur. Je m'assure que les contenus générés par IA que j'inclus dans mon travail final respectent les droits d'auteur en vigueur.</p></div>
+  <div class="article" style="border:none"><h3><span class="pastille">5</span>Consentement à l'Audit et aux contrôles</h3><p>J'accepte que l'organisme PCE puisse, de manière aléatoire ou sur demande d'un client, réaliser un audit de mon processus créatif. Je m'engage à fournir sur demande les fichiers sources (calques, croquis, rushs, prompts) permettant de prouver la part de travail humain sur une œuvre certifiée. En cas de fraude avérée, je reconnais que le label PCE me sera immédiatement retiré.</p></div>`;
+const PREAMBULE = "Le label Processus Créatif Éthique (PCE) a pour vocation de défendre la valeur du savoir-faire humain et de garantir aux clients une transparence totale sur l'utilisation de l'Intelligence Artificielle. En signant cette charte, le Créatif s'engage à faire de l'IA un outil d'assistance, et non un outil de substitution à sa réflexion artistique.";
+function etapeCharte(b) {
+  if (!b.expertise) b.expertise = expertiseDefaut(b.type);
+  if (!b.outilsIA) b.outilsIA = b.iaMode === "aucun" ? "Aucun" : b.outils;
+  return `<div class="charte">
+    <div class="charte-ent"><img src="${LOGO}" alt=""><div><span class="tag">Version 1.0</span><h2>Charte de transparence et d'éthique créative</h2><small>Label officiel : Processus Créatif Éthique (PCE)</small></div><a class="btn sec petit" href="${DOSSIER_LIVRABLES}Charte_de_Transparence_PCE.pdf" target="_blank">PDF</a></div>
+    <div class="charte-corps">
+      <p class="preambule"><b>Préambule.</b> ${PREAMBULE}</p>
+      <div class="article" data-c="expertise"><h3><span class="pastille">1</span>Déclaration d'identité et d'expertise</h3>
+        <p>Je soussigné(e), <b>${esc(b.createur)}</b>, certifie que mon domaine d'expertise principal pour lequel je demande la certification PCE est :</p>
+        <div class="radios">${EXPERTISES.map(x => `<label><input type="radio" name="expertise" value="${x}" ${b.expertise === x ? "checked" : ""}> ${x}</label>`).join("")}</div>
+        <div id="l-autre" style="${b.expertise === "Autre" ? "" : "display:none"}">${champ("expertiseAutre", "Précisez", `<input id="expertiseAutre" type="text" value="${esc(b.expertiseAutre || (b.expertise === "Autre" ? b.type : ""))}">`)}</div></div>
+      <div class="article"><h3><span class="pastille">2</span>Déclaration des outils et logiciels</h3><p>Dans le cadre de mon processus créatif, je déclare utiliser de manière régulière les outils suivants :</p>
+        ${champ("outilsTrad", "Outils traditionnels et numériques (hors IA générative) *", `<input id="outilsTrad" type="text" value="${esc(b.outilsTrad)}" placeholder="Ex : crayon, tablette graphique, logiciel de retouche">`)}
+        ${champ("outilsIA", "Outils intégrant de l'Intelligence Artificielle *", `<input id="outilsIA" type="text" value="${esc(b.outilsIA)}" placeholder="Ex : outil de détourage, assistant de recherche. Indiquez Aucun si besoin.">`)}</div>
+      ${ARTICLES_3_5}
+    </div>
+    <div class="signature-zone">
+      <div class="lignes"><div><span class="muted">Fait pour valoir ce que de droit, par</span><br><b>${esc(b.createur)}</b></div><div><span class="muted">Date</span><br><b>${dateFr(new Date())}</b></div></div>
+      <div class="champ" data-c="charteOk"><label style="display:flex;gap:10px;font-weight:400;align-items:flex-start"><input type="checkbox" id="charteOk" ${b.charteOk ? "checked" : ""} style="margin-top:2px"> En apposant ma signature, j'accepte les termes de la Charte PCE et engage ma responsabilité professionnelle.</label><div class="msg-err">Vous devez accepter les termes de la charte.</div></div>
+      <div class="champ" data-c="signature" style="margin:0"><span class="lab">Signature *</span><span class="aide">Signez dans le cadre avec la souris ou le doigt.</span>
+        <div class="pad ${b.signature ? "signe" : ""}" id="pad"><canvas aria-label="Zone de signature"></canvas><span class="indice">Signez ici</span></div>
+        <div style="display:flex;justify-content:space-between;margin-top:8px"><button type="button" class="lien" id="pad-eff">Effacer la signature</button><span class="muted petit-texte" id="pad-etat">${b.signature ? "Signature enregistrée" : ""}</span></div>
+        <div class="msg-err">La signature est obligatoire pour déposer votre dossier.</div></div>
+    </div></div>`;
+}
+function initCharte() {
+  const b = brouillon(), pad = $("#pad"), c = $("canvas", pad), g = c.getContext("2d");
+  const taille = () => { const r = pad.getBoundingClientRect(), k = devicePixelRatio || 1; c.width = r.width * k; c.height = r.height * k; g.setTransform(k, 0, 0, k, 0, 0); g.lineWidth = 2.2; g.lineCap = g.lineJoin = "round"; g.strokeStyle = "#023481"; if (b.signature) chargerImg(b.signature).then(im => g.drawImage(im, 0, 0, r.width, r.height)); };
+  taille();
+  let trace = false, dernier = null;
+  const pos = e => { const r = c.getBoundingClientRect(); return [e.clientX - r.left, e.clientY - r.top]; };
+  c.addEventListener("pointerdown", e => { trace = true; c.setPointerCapture(e.pointerId); dernier = pos(e); g.beginPath(); g.arc(dernier[0], dernier[1], 1.1, 0, 7); g.fillStyle = "#023481"; g.fill(); });
+  c.addEventListener("pointermove", e => { if (!trace) return; const p = pos(e); g.beginPath(); g.moveTo(...dernier); g.lineTo(...p); g.stroke(); dernier = p; });
+  const fin = () => { if (!trace) return; trace = false; b.signature = c.toDataURL("image/png"); b.signeLe = new Date().toISOString(); DB.sauver(); pad.classList.add("signe"); $("#pad-etat").textContent = "Signature enregistrée"; $('[data-c="signature"]').classList.remove("erreur"); };
+  c.addEventListener("pointerup", fin); c.addEventListener("pointercancel", fin);
+  $("#pad-eff").onclick = () => { g.clearRect(0, 0, c.width, c.height); b.signature = null; b.signeLe = null; DB.sauver(); pad.classList.remove("signe"); $("#pad-etat").textContent = ""; };
+  $$("input[name=expertise]").forEach(r => r.onchange = () => { b.expertise = r.value; $("#l-autre").style.display = r.value === "Autre" ? "" : "none"; DB.sauver(); });
+}
+function charteSigneeHtml(o) {
+  const ch = o.charte || {};
+  return `<!doctype html><html lang="fr"><meta charset="utf-8"><title>Charte PCE signée · ${esc(o.createur)}</title>
+<style>body{font-family:Arial,sans-serif;color:#1F2530;max-width:760px;margin:36px auto;padding:0 20px;font-size:14px;line-height:1.5}h1{color:#023481;font-size:22px;margin:0}h2{color:#023481;font-size:15px;margin:18px 0 6px}.ent{display:flex;gap:16px;align-items:center;border-bottom:3px solid #023481;padding-bottom:14px}.ent img{width:70px}.pre{background:#E8EEF8;padding:10px 12px;border-left:4px solid #023481}.sig{margin-top:22px;border:1px solid #023481;padding:14px;display:flex;justify-content:space-between;gap:20px;align-items:flex-end}.sig img{height:90px}.pied{margin-top:18px;font-size:12px;color:#666;border-top:1px solid #ddd;padding-top:8px}@media print{body{margin:0 auto}}</style>
+<div class="ent"><img src="${LOGO}" alt=""><div><h1>Charte de transparence et d'éthique créative</h1><div>Label officiel : Processus Créatif Éthique (PCE)</div></div></div>
+<p class="pre"><b>Préambule.</b> ${PREAMBULE}</p>
+<h2>Article 1 · Déclaration d'identité et d'expertise</h2><p>Je soussigné(e), <b>${esc(o.createur)}</b>, certifie que mon domaine d'expertise principal pour lequel je demande la certification PCE est : <b>${esc(ch.expertise === "Autre" ? "Autre : " + (ch.expertiseAutre || "") : ch.expertise || "")}</b>.</p>
+<h2>Article 2 · Déclaration des outils et logiciels</h2><p>Outils traditionnels et numériques (hors IA générative) : <b>${esc(ch.outilsTrad || "")}</b><br>Outils intégrant de l'Intelligence Artificielle : <b>${esc(ch.outilsIA || "")}</b></p>
+${ARTICLES_3_5.replace(/<div class="article"[^>]*><h3><span class="pastille">(\d)<\/span>([^<]+)<\/h3>/g, "<h2>Article $1 · $2</h2>").replace(/<\/div>/g, "")}
+<div class="sig"><div>Fait pour valoir ce que de droit.<br>Le <b>${dateFr(ch.signeLe || o.date)}</b>, par <b>${esc(o.createur)}</b><br><small>En apposant ma signature, j'accepte les termes de la Charte PCE et engage ma responsabilité professionnelle.</small><br><small>Dossier ${o.id}</small></div>
+<div>${ch.signature ? `<img src="${ch.signature}" alt="Signature">` : "<i>Signature électronique enregistrée</i>"}</div></div>
+<div class="pied">Label PCE · Charte de Transparence V1.0</div></html>`;
+}
+const telechargerCharte = o => { telecharger(`charte-signee-${o.id}.html`, charteSigneeHtml(o), "text/html"); toast("Charte signée téléchargée."); };
 function etape4(b) {
   const ia = pctIA(b), unite = TYPES[b.type];
   const h = (+b.recherche || 0) + (+b.creation || 0) + (+b.ia || 0), t = +b.taux || 0, cert = b.formule === "unite" ? unite : 0;
@@ -3079,6 +3242,7 @@ function etape4(b) {
     <h3 style="margin-top:28px">Récapitulatif</h3>
     <dl class="recap deux"><div><dt>Créateur</dt><dd>${esc(b.createur)}</dd><dt>E-mail</dt><dd>${esc(b.email)}</dd><dt>Discipline</dt><dd>${esc(b.type)}</dd></div>
     <div><dt>Œuvre</dt><dd>${esc(b.titre)}</dd><dt>Recours à l'IA</dt><dd>${IA_LIB[b.iaMode]}</dd><dt>Justificatifs</dt><dd>${b.justificatifs.length} fichier(s)</dd></div></dl>
+    ${b.signature ? `<div class="signee"><img src="${b.signature}" alt="Signature"><div><b>Charte de transparence signée</b><br><span class="muted">Le ${dateFr(b.signeLe)}</span></div></div>` : ""}
     ${b.img ? `<div class="apercu"><img src="${b.img}" alt=""><div><b>${esc(b.imgNom || "Œuvre finale")}</b><br><span class="muted petit-texte">Recevra le sceau PCE et un QR code.</span></div></div>` : ""}`;
 }
 function majDosage(b) {
@@ -3103,19 +3267,20 @@ function zone(zoneId, inputId, onFiles) {
 }
 function initDepot() {
   const b = brouillon(), e = b.etape;
-  requestAnimationFrame(() => $$(".barres span").forEach((s, i) => { if (i <= e) setTimeout(() => s.classList.add("ok"), 80 * i); if (i === e) s.classList.remove("ok"); }));
+  requestAnimationFrame(() => $$(".barres span[data-b]").forEach((s, i) => { if (i <= e) setTimeout(() => s.classList.add("ok"), 80 * i); if (i === e) s.classList.remove("ok"); }));
   setTimeout(() => { const s = $(`.barres span[data-b="${e}"] i`); if (s) s.style.transform = "scaleX(.5)"; }, 350);
   const form = $("#d-form");
   const lire = () => {
     $$("input[type=text], input[type=email], input[type=number], textarea, select", form).forEach(x => { if (x.id && x.id in b) b[x.id] = x.type === "number" ? Math.max(0, +x.value || 0) : x.value; });
     const r = $("input[name=iaMode]:checked", form); if (r) b.iaMode = r.value;
     const f = $("input[name=formule]:checked", form); if (f) b.formule = f.value;
-    const a = $("#attestation"); if (a) b.attestation = a.checked;
+    const a = $("#charteOk"); if (a) b.charteOk = a.checked;
+    const x = $("input[name=expertise]:checked", form); if (x) b.expertise = x.value;
     DB.sauver();
   };
   const iaUi = () => { const aucun = b.iaMode === "aucun"; if ($("#l-ia")) { $("#l-ia").style.display = aucun ? "none" : ""; $("#l-outils").style.display = aucun ? "none" : ""; if (aucun) { b.ia = 0; $("#ia").value = 0; } } majDosage(b); };
-  form.addEventListener("input", () => { lire(); iaUi(); if (e === 3) { const y = scrollY; $("#d-form").innerHTML = etape4(b); initEtape4(); scrollTo(0, y); } });
-  form.addEventListener("change", () => { lire(); iaUi(); if (e === 3) { const y = scrollY; $("#d-form").innerHTML = etape4(b); initEtape4(); scrollTo(0, y); } });
+  form.addEventListener("input", ev => { const ch = ev.target.closest(".champ, .article"); if (ch) ch.classList.remove("erreur"); lire(); iaUi(); if (e === 4) { const y = scrollY; $("#d-form").innerHTML = etape4(b); initEtape4(); scrollTo(0, y); } });
+  form.addEventListener("change", ev => { const ch = ev.target.closest(".champ, .article"); if (ch) ch.classList.remove("erreur"); lire(); iaUi(); if (e === 4) { const y = scrollY; $("#d-form").innerHTML = etape4(b); initEtape4(); scrollTo(0, y); } });
   if (e === 1) iaUi();
   if (e === 2) {
     const apImg = () => { $("#ap-img").innerHTML = b.img ? `<div class="apercu"><img src="${b.img}" alt=""><div><b>${esc(b.imgNom)}</b><br><button type="button" class="lien" id="rm-img">Retirer</button></div></div>` : ""; if ($("#rm-img")) $("#rm-img").onclick = () => { b.img = null; b.imgNom = ""; DB.sauver(); apImg(); }; };
@@ -3125,17 +3290,19 @@ function initDepot() {
     $("#ex-img").onclick = () => { b.img = OEUVRE; b.imgNom = "la-maison-au-soleil.png"; if (!b.justificatifs.length) b.justificatifs.push("croquis-preparatoires.pdf"); DB.sauver(); apImg(); lj(); };
     apImg(); lj();
   }
-  if (e === 3) initEtape4();
+  if (e === 3) initCharte();
+  if (e === 4) initEtape4();
   const valider = () => {
     lire(); let ok = true; const err = (c, cond) => { const z = $(`[data-c="${c}"]`); if (z) z.classList.toggle("erreur", !cond); if (!cond) ok = false; };
     if (e === 0) { err("createur", b.createur.trim()); err("email", /^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(b.email)); }
     if (e === 1) { err("titre", b.titre.trim()); err("description", b.description.trim().length >= 40); if (pctIA(b) > SEUIL) { ok = false; toast(`L'exécution assistée par IA dépasse ${SEUIL} % du projet.`); } }
-    if (e === 2) { err("img", b.img); err("just", b.justificatifs.length); err("attestation", b.attestation); }
+    if (e === 2) { err("img", b.img); err("just", b.justificatifs.length); }
+    if (e === 3) { err("expertise", b.expertise && (b.expertise !== "Autre" || b.expertiseAutre.trim())); err("outilsTrad", b.outilsTrad.trim()); err("outilsIA", b.outilsIA.trim()); err("charteOk", b.charteOk); err("signature", b.signature); }
     if (!ok) { const p = $(".erreur"); if (p) { p.scrollIntoView({ behavior: "smooth", block: "center" }); const i = $("input, textarea, select", p); if (i) i.focus({ preventScroll: true }); } }
     return ok;
   };
   const aller = n => { b.etape = n; DB.sauver(); rendre(); };
-  $("#d-suiv").onclick = () => { if (!valider()) return; if (e < 3) aller(e + 1); else payer(); };
+  $("#d-suiv").onclick = () => { if (!valider()) return; if (e < N - 1) aller(e + 1); else payer(); };
   if ($("#d-prec")) $("#d-prec").onclick = () => aller(e - 1);
   if ($("#d-retour")) $("#d-retour").onclick = () => aller(e - 1);
   $("#d-plus-tard").onclick = () => { lire(); toast("Dossier enregistré. Vous pourrez le reprendre depuis cet appareil."); };
@@ -3158,7 +3325,8 @@ function payer() {
     const id = DB.nouvelId();
     DB.ajouter({ id, titre: b.titre, createur: b.createur, email: b.email, type: b.type, ville: b.ville, date: new Date().toISOString(), statut: "deposee",
       dosage: { recherche: +b.recherche, creation: +b.creation, ia: +b.ia }, iaMode: b.iaMode, outils: b.outils, description: b.description, formule: b.formule,
-      seed: Math.floor(Math.random() * 1e5), img: b.img, justificatifs: [...b.justificatifs], motif: "", taux: b.taux });
+      seed: Math.floor(Math.random() * 1e5), img: b.img, justificatifs: [...b.justificatifs], motif: "", taux: b.taux,
+      charte: { expertise: b.expertise, expertiseAutre: b.expertiseAutre, outilsTrad: b.outilsTrad, outilsIA: b.outilsIA, signature: b.signature, signeLe: b.signeLe } });
     DB.data.brouillon = null; DB.sauver(); v.remove(); location.hash = "#/confirmation/" + id;
   }, 2200);
 }
@@ -3173,10 +3341,11 @@ function vueConfirmation(id) {
     <div class="succes"><span class="check"><svg viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></span><div><h2 style="margin:0;font-size:21px">Votre dossier a bien été déposé</h2><p class="muted" style="margin:4px 0 0">Un accusé de réception a été envoyé à ${esc(o.email)}.</p></div></div>
     <h3 style="color:var(--encre)">Numéro de dossier</h3><div class="numero mono">${o.id}</div><p class="muted petit-texte" style="font-style:italic;margin-top:8px">Conservez ce numéro pour suivre votre demande.</p>
     <h3 style="margin-top:22px">Suivi de votre demande</h3>${frise(o)}
-    <div class="pile"><a class="btn" href="#/suivi/${o.id}">Suivre mon dossier <span class="fl">→</span></a><button class="btn sec" id="dl-ar">Télécharger l'accusé de réception</button><a href="#/" style="text-align:center;font-size:14px;color:var(--encre)">Retour à l'accueil</a></div><div style="height:56px"></div></div>`;
+    <div class="pile"><a class="btn" href="#/suivi/${o.id}">Suivre mon dossier <span class="fl">→</span></a><button class="btn sec" id="dl-ar">Télécharger l'accusé de réception</button><button class="btn sec" id="dl-ch">Télécharger la charte signée</button><a href="#/" style="text-align:center;font-size:14px;color:var(--encre)">Retour à l'accueil</a></div><div style="height:56px"></div></div>`;
 }
 function initConfirmation(id) {
   const o = DB.get(id); if (!o || !$("#dl-ar")) return;
+  $("#dl-ch").onclick = () => telechargerCharte(o);
   $("#dl-ar").onclick = () => { telecharger(`accuse-reception-${o.id}.txt`, `CERTIFICATION PCE · PROCESSUS CRÉATIF ÉTHIQUE\n\nAccusé de réception\n\nNuméro de dossier : ${o.id}\nDéposé le : ${dateFr(o.date)}\nCréateur : ${o.createur}\nŒuvre : ${o.titre} (${o.type})\nRecours à l'IA : ${IA_LIB[o.iaMode]} · ${pctIA(o.dosage)} % du projet\nJustificatifs : ${o.justificatifs.join(", ")}\n\nSuivi : ${BASE}/suivi/${o.id}\n`, "text/plain"); toast("Accusé de réception téléchargé."); };
 }
 function vueSuivi(id) {
@@ -3300,12 +3469,15 @@ function tiroir(id, apres) {
       <table class="devis"><tr><td>Recherche et intention</td><td>${o.dosage.recherche} h</td></tr><tr><td>Création et direction artistique</td><td>${o.dosage.creation} h</td></tr><tr><td>Exécution assistée par IA</td><td>${o.dosage.ia} h</td></tr></table>
       <div class="dosage"><div class="barre"><span class="h" style="width:${100 - ia}%"></span><span class="ia" style="width:${ia}%"></span></div><div class="leg"><span>Humain ${100 - ia} %</span><span>Exécution IA ${ia} %</span></div>
       <div class="verdict ${ia <= SEUIL ? "ok" : "ko"}">${ia <= SEUIL ? `Conforme au référentiel (seuil ${SEUIL} %).` : `Au-delà du seuil du référentiel (${SEUIL} %).`}</div></div>
+      <h4 style="margin-top:16px">Charte de transparence</h4>
+      ${o.charte ? `<div class="signee">${o.charte.signature ? `<img src="${o.charte.signature}" alt="Signature">` : ""}<div><b>Signée le ${dateFr(o.charte.signeLe || o.date)}</b><br><span class="muted">${esc(o.charte.expertise === "Autre" ? o.charte.expertiseAutre : o.charte.expertise)} · Outils IA : ${esc(o.charte.outilsIA)}</span><br><button type="button" class="lien" id="t-ch">Télécharger la charte signée</button></div></div>` : `<div class="res-ko">Charte non signée.</div>`}
       <h4 style="margin-top:16px">Justificatifs</h4><ul class="fichiers">${o.justificatifs.map(n => `<li><span>📄 ${esc(n)}</span><span class="muted">Reçu</span></li>`).join("")}</ul>
       ${o.motif ? `<div class="res-ko" style="margin-top:14px"><b>Motif du refus</b><p style="margin:6px 0 0">${esc(o.motif)}</p></div>` : ""}
       ${o.statut === "commission" ? `<div class="champ" style="margin-top:16px"><label for="motif">Motif en cas de refus</label><textarea id="motif" style="min-height:70px">${ia > SEUIL ? "Part d'exécution par IA supérieure au seuil du référentiel." : ""}</textarea></div>` : ""}
       <div class="pile" style="margin-top:18px">${actions.map(([s, l, c]) => `<button class="btn ${c}" data-s="${s}">${l}</button>`).join("")}${o.statut === "certifiee" ? `<a class="btn sec" href="#/oeuvre/${o.id}">Voir la page publique</a>` : ""}</div>
     </div>`;
   document.body.append(fond, t);
+  if ($("#t-ch", t)) $("#t-ch", t).onclick = () => telechargerCharte(o);
   const fermer = () => { t.remove(); fond.remove(); document.removeEventListener("keydown", esc_); };
   const esc_ = e => { if (e.key === "Escape") fermer(); };
   document.addEventListener("keydown", esc_); fond.onclick = fermer; $(".fermer", t).onclick = fermer; $(".fermer", t).focus();
@@ -3333,7 +3505,7 @@ function compteurs() {
 
 /* ---------- Routeur ---------- */
 const ROUTES = [
-  [/^\/$/, () => [vueAccueil()]], [/^\/createurs$/, () => [vueCreateurs()]], [/^\/clients$/, () => [vueClients()]], [/^\/faq$/, () => [vueFaq()]],
+  [/^\/$/, () => [vueAccueil(), initAccueil]], [/^\/createurs$/, () => [vueCreateurs()]], [/^\/clients$/, () => [vueClients()]], [/^\/faq$/, () => [vueFaq()]],
   [/^\/registre$/, () => [vueRegistre(), initRegistre]], [/^\/verifier(?:\/(.+))?$/, m => [vueVerifier(m[1] && decodeURIComponent(m[1])), () => initVerifier(m[1] && decodeURIComponent(m[1]))]],
   [/^\/oeuvre\/(.+)$/, m => [vueOeuvre(m[1]), () => initOeuvre(m[1])]], [/^\/depot$/, () => [vueDepot(), initDepot]],
   [/^\/confirmation\/(.+)$/, m => [vueConfirmation(m[1]), () => initConfirmation(m[1])]], [/^\/suivi(?:\/(.+))?$/, m => [vueSuivi(m[1]), () => initSuivi(m[1])]],
@@ -3353,6 +3525,8 @@ function rendre() {
   revele(); compteurs();
 }
 DB.charger(); DB.sauver();
+addEventListener("scroll", () => $("#entete").classList.toggle("ombre", scrollY > 8), { passive: true });
+$(".pied-logo").src = LOGO; $(".lien-charte").href = DOSSIER_LIVRABLES + "Charte_de_Transparence_PCE.pdf"; $(".pied-livr").onclick = livrables;
 { const m = location.pathname.match(/^\/(verifier|suivi|oeuvre)\/([^/]+)\/?$/); if (m && !location.hash) history.replaceState(null, "", "/#/" + m[1] + "/" + m[2]); }
 addEventListener("hashchange", rendre);
 rendre();
