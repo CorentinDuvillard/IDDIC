@@ -27,7 +27,7 @@ button { font-family: inherit; }
 
 /* En-tête */
 .entete { position: sticky; top: 0; z-index: 40; background: var(--blanc); border-bottom: 3px solid var(--marine); }
-.entete .conteneur { display: flex; align-items: center; gap: 24px; height: 76px; }
+.entete .conteneur { display: flex; align-items: center; gap: 20px; height: 76px; max-width: 1380px; }
 .marque { display: flex; align-items: center; gap: 12px; text-decoration: none; color: var(--marine); flex: none; }
 .marque img { width: 52px; height: 52px; border-radius: 50%; }
 .marque b { display: block; font-size: 18px; }
@@ -196,6 +196,16 @@ table.devis tr.tot td { font-weight: 700; font-size: 16px; border-bottom: 2px so
 .rond { width: 54px; height: 54px; border: 4px solid var(--pale); border-top-color: var(--marine); border-radius: 50%; margin: 6px auto 16px; animation: tourne .8s linear infinite; }
 @keyframes tourne { to { transform: rotate(360deg); } }
 
+/* Livrables */
+.boite.livr { text-align: left; width: min(560px, 94vw); padding: 0; }
+.livr-ent { display: flex; justify-content: space-between; align-items: center; padding: 18px 22px; border-bottom: 1px solid var(--trait-c); }
+.livr-ent h2 { margin: 0; font-size: 20px; }
+.livr ul { list-style: none; margin: 0; padding: 8px 22px 18px; }
+.livr li { display: grid; grid-template-columns: 28px 1fr auto; gap: 14px; align-items: center; padding: 12px 0; border-bottom: 1px solid var(--trait-c); animation: entree .35s both; }
+.livr li:last-child { border-bottom: none; }
+.livr li b { display: block; color: var(--marine); }
+.livr li small { color: var(--gris); font-size: 13px; }
+
 /* Confirmation / suivi */
 .etroit { max-width: 720px; margin: 0 auto; padding-bottom: 56px; }
 .succes { display: flex; gap: 16px; align-items: center; border: 1px solid var(--marine); border-left: 5px solid var(--marine); padding: 18px 20px; margin: 10px 0 24px; }
@@ -310,7 +320,7 @@ table.bdd tbody tr:hover { background: var(--pale); }
 .toast { position: fixed; left: 50%; bottom: 26px; transform: translateX(-50%); background: var(--encre); color: var(--blanc); padding: 12px 18px; font-size: 14.5px; z-index: 90; animation: toast 3s both; border-left: 4px solid #2E6BFF; }
 @keyframes toast { 0% { opacity: 0; transform: translate(-50%, 16px); } 10%, 85% { opacity: 1; transform: translate(-50%, 0); } 100% { opacity: 0; transform: translate(-50%, 8px); } }
 
-@media (max-width: 1200px) {
+@media (max-width: 1340px) {
   .nav { display: none; position: absolute; top: 76px; left: 0; right: 0; background: var(--blanc); flex-direction: column; align-items: stretch; border-bottom: 3px solid var(--marine); padding: 8px 16px 16px; }
   .nav.ouvert { display: flex; animation: entree .25s both; }
   .nav .pro { border: none; margin: 0; }
@@ -2770,10 +2780,33 @@ function entete(route) {
     <nav class="nav" id="nav" aria-label="Navigation principale">
       ${liens.map(([h, t]) => `<a href="${h}" class="${(route === h.slice(1) || (h === "#/" && route === "/")) ? "actif" : ""}">${t}</a>`).join("")}
       <a href="#/pro" class="pro ${route.startsWith("/pro") ? "actif" : ""}">Espace pro</a>
+      <button class="btn petit sec" id="btn-livrables" type="button" style="margin-left:8px">Livrables</button>
       <a class="btn petit" href="#/depot" style="margin-left:8px">Déposer mon dossier</a>
     </nav></div>`;
   const b = $(".menu-btn"), n = $("#nav");
   b.onclick = () => { const o = n.classList.toggle("ouvert"); b.setAttribute("aria-expanded", o); };
+  $("#btn-livrables").onclick = livrables;
+}
+/* ---------- Livrables (fenêtre de téléchargement) ---------- */
+const DOSSIER_LIVRABLES = location.pathname.includes("/livrable/") ? "" : "/livrable/";
+const LIVRABLES = [
+  ["Pitch_PCE.pdf", "Pitch écrit", "PDF · 1 page"],
+  ["Presentation_PCE.pdf", "Présentation", "PDF · 15 diapositives"],
+  ["Business_Plan_PCE.xlsx", "Business plan", "Excel · 3 ans"],
+  ["Prototype_PCE.html", "Prototype", "HTML · fichier unique, hors ligne"],
+];
+function livrables() {
+  const v = document.createElement("div"); v.className = "voile";
+  v.innerHTML = `<div class="boite livr" role="dialog" aria-modal="true" aria-labelledby="livr-t">
+    <div class="livr-ent"><h2 id="livr-t">Livrables IDDIC 2026</h2><button class="fermer" aria-label="Fermer">×</button></div>
+    <ul>${LIVRABLES.map(([f, t, d], i) => `<li style="animation-delay:${i * 60}ms"><span class="pastille">${i + 1}</span><span><b>${t}</b><small>${d}</small></span><a class="btn petit" href="${DOSSIER_LIVRABLES}${f}" download="${f}">Télécharger</a></li>`).join("")}</ul>
+  </div>`;
+  document.body.append(v);
+  const fermer = () => { v.remove(); document.removeEventListener("keydown", k); $("#btn-livrables").focus(); };
+  const k = e => { if (e.key === "Escape") fermer(); };
+  document.addEventListener("keydown", k);
+  v.onclick = e => { if (e.target === v) fermer(); };
+  $(".fermer", v).onclick = fermer; $(".fermer", v).focus();
 }
 const ariane = (...p) => `<div class="ariane"><a href="#/">Accueil</a> › ${p.map((x, i) => i < p.length - 1 ? `<a href="${x[0]}">${x[1]}</a>` : esc(x)).join(" › ")}</div>`;
 
