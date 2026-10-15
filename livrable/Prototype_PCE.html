@@ -116,15 +116,23 @@
         <input id="createur" value="Studio Lune, illustration">
         <label for="projet">Projet</label>
         <input id="projet" value="Illustration « La maison au soleil »">
+        <label for="type">Type d'œuvre</label>
+        <select id="type">
+          <option value="29">Illustration (certification 29 € HT)</option>
+          <option value="25">Photographie (certification 25 € HT)</option>
+          <option value="49">Identité visuelle (certification 49 € HT)</option>
+          <option value="39">Tatouage, flash ou pièce unique (certification 39 € HT)</option>
+          <option value="149">Campagne de marque (certification 149 € HT)</option>
+        </select>
         <label for="taux">Taux horaire (€ HT)</label>
         <input id="taux" type="number" min="0" value="45">
         <div class="ligne"><div><label for="h1">Recherche et intention</label></div><input id="h1" type="number" min="0" value="4" aria-label="Heures de recherche et intention"></div>
         <div class="ligne"><div><label for="h2">Création et direction artistique</label></div><input id="h2" type="number" min="0" value="8" aria-label="Heures de création"></div>
-        <div class="ligne"><div><label for="h3">Exécution assistée par IA</label></div><input id="h3" type="number" min="0" value="2" aria-label="Heures d'exécution assistée par IA"></div>
+        <div class="ligne"><div><label for="h3">Exécution assistée par IA</label></div><input id="h3" type="number" min="0" value="1" aria-label="Heures d'exécution assistée par IA"></div>
         <label for="cert">Certification</label>
         <select id="cert">
           <option value="abo">Abonné PCE (inclus)</option>
-          <option value="unite">Certification de cette création (29 € HT)</option>
+          <option value="unite">Certification de cette création (tarif selon l'œuvre)</option>
         </select>
       </form>
 
@@ -197,11 +205,11 @@
 <script>
   const $ = id => document.getElementById(id);
   const eur = n => n.toLocaleString("fr-FR", { minimumFractionDigits: 0, maximumFractionDigits: 0 }) + " €";
-  const SEUIL = 30; // part maximale d'exécution assistée par IA pour obtenir le label
+  const SEUIL = 10; // part maximale d'exécution assistée par IA pour obtenir le label
 
   function calcul() {
     const t = +$("taux").value || 0, h = [1, 2, 3].map(i => +$("h" + i).value || 0);
-    const cert = $("cert").value === "unite" ? 29 : 0;
+    const cert = $("cert").value === "unite" ? +$("type").value : 0;
     const total = h.reduce((a, b) => a + b, 0) * t + cert;
     const heures = h.reduce((a, b) => a + b, 0) || 1;
     const ia = Math.round(h[2] / heures * 100), hum = 100 - ia;
@@ -235,6 +243,7 @@
   }
 
   $("form").addEventListener("input", calcul);
+  $("form").addEventListener("change", calcul);
   window.addEventListener("hashchange", route);
   calcul(); route();
 </script>
