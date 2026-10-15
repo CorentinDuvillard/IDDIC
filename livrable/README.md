@@ -5,18 +5,45 @@
 | Pitch écrit | [Pitch_PCE.pdf](Pitch_PCE.pdf) |
 | Présentation | [Presentation_PCE.pdf](Presentation_PCE.pdf) |
 | Business plan | [Business_Plan_PCE.xlsx](Business_Plan_PCE.xlsx) |
-| Prototype | [Prototype_PCE.html](Prototype_PCE.html) (à télécharger puis ouvrir dans un navigateur) |
+| Prototype | [Prototype_PCE.html](Prototype_PCE.html) : à télécharger puis ouvrir dans Chrome ou Edge, sans connexion |
 
 ## Prototype
 
-### 1. Arrivée sur le site
-![Accueil](captures/prototype-accueil.png)
+Site complet en un seul fichier. Les données sont enregistrées dans le navigateur.
 
-### 2. Simulation de devis
-![Devis](captures/prototype-devis.png)
+- **Côté public** : accueil, critères et tarifs, page clients, vérification d'une certification, registre des œuvres certifiées, FAQ.
+- **Parcours créateur** : dépôt du dossier en 4 étapes, calcul du dosage humain et IA (seuil 10 %), devis client transparent, règlement, accusé de réception, suivi du dossier, certificat, œuvre signée avec sceau et QR code (téléchargeable en PNG).
+- **Espace pro** (connexion de démonstration pré-remplie) : tableau de bord, dossiers à traiter, base des œuvres avec recherche, filtres, tri, fiche détaillée, décision de la commission, export CSV.
 
-### 3. Résultat : certificat et œuvre certifiée
-![Résultat](captures/prototype-resultat.png)
+### Accueil
+![Accueil](captures/01-accueil.png)
 
-### 4. Vérification par QR code
-![Vérification](captures/prototype-verifier.png)
+### Dépôt : processus créatif
+![Dépôt, processus](captures/02-depot-processus.png)
+
+### Dépôt : devis et règlement
+![Dépôt, devis](captures/03-depot-devis.png)
+
+### Confirmation
+![Confirmation](captures/04-confirmation.png)
+
+### Certificat et œuvre signée
+![Certificat](captures/05-certificat.png)
+
+### Vérification
+![Vérification](captures/06-verification.png)
+
+### Registre public
+![Registre](captures/07-registre.png)
+
+### Espace pro : tableau de bord
+![Tableau de bord](captures/08-pro-tableau.png)
+
+### Espace pro : base des œuvres
+![Base des œuvres](captures/09-pro-base.png)
+
+### Espace pro : fiche dossier
+![Fiche dossier](captures/10-pro-dossier.png)
+
+### Mobile
+![Mobile](captures/11-mobile.png)
