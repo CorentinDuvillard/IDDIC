@@ -2800,7 +2800,6 @@ const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": 
 const eur = n => (Math.round(n * 100) / 100).toLocaleString("fr-FR", { minimumFractionDigits: 0, maximumFractionDigits: 2 }) + " €";
 const dateFr = d => new Date(d).toLocaleDateString("fr-FR", { day: "numeric", month: "long", year: "numeric" });
 const dateC = d => new Date(d).toLocaleDateString("fr-FR");
-const pctIA = d => { const t = (+d.recherche || 0) + (+d.creation || 0) + (+d.ia || 0); return t ? Math.round((+d.ia || 0) / t * 100) : 0; };
 function rng(seed) { let s = seed >>> 0 || 1; return () => (s = (s * 1664525 + 1013904223) >>> 0) / 4294967296; }
 function toast(msg) { $$(".toast").forEach(t => t.remove()); const t = document.createElement("div"); t.className = "toast"; t.setAttribute("role", "status"); t.textContent = msg; document.body.append(t); setTimeout(() => t.remove(), 3100); }
 function telecharger(nom, contenu, type) { const b = contenu instanceof Blob ? contenu : new Blob([contenu], { type }); const a = document.createElement("a"); a.href = URL.createObjectURL(b); a.download = nom; document.body.append(a); a.click(); setTimeout(() => { URL.revokeObjectURL(a.href); a.remove(); }, 500); }
@@ -2930,7 +2929,7 @@ const ariane = (...p) => `<div class="ariane"><a href="#/">Accueil</a> › ${p.m
 function vueAccueil() {
   const o = DB.data.oeuvres, cert = o.filter(x => x.statut === "certifiee");
   const createurs = new Set(cert.map(x => x.createur)).size;
-  const moyIA = cert.length ? Math.round(cert.reduce((s, x) => s + pctIA(x.dosage), 0) / cert.length) : 0;
+  const disciplines = new Set(cert.map(x => x.type)).size;
   return `<div class="conteneur">
     ${ariane("Certification PCE")}
     <section class="hero">
@@ -2945,8 +2944,8 @@ function vueAccueil() {
     <div class="chiffres rev">
       <div><b data-compte="${cert.length}">0</b><span>œuvres certifiées</span></div>
       <div><b data-compte="${createurs}">0</b><span>créateurs certifiés</span></div>
-      <div><b data-compte="${moyIA}" data-suffixe=" %">0</b><span>part moyenne d'exécution par IA</span></div>
-      <div><b data-compte="${SEUIL}" data-suffixe=" %">0</b><span>seuil maximal du référentiel</span></div>
+      <div><b data-compte="${disciplines}">0</b><span>disciplines représentées</span></div>
+      <div><b>0 €</b><span>pour vérifier une œuvre</span></div>
     </div>
   </div>
   <section class="section"><div class="conteneur">
@@ -2992,7 +2991,7 @@ function vueCreateurs() {
     <div class="grille4">
       <div class="carte rev"><h3><span class="pastille">1</span>Processus documenté</h3><p>Recherches, croquis, versions successives, choix de style.</p></div>
       <div class="carte rev"><h3><span class="pastille">2</span>Conception humaine</h3><p>L'intention, la composition et les choix artistiques sont les vôtres.</p></div>
-      <div class="carte rev"><h3><span class="pastille">3</span>IA en exécution</h3><p>L'exécution assistée par IA représente ${SEUIL} % maximum du projet. La commission le vérifie sur vos justificatifs.</p></div>
+      <div class="carte rev"><h3><span class="pastille">3</span>IA maîtrisée</h3><p>L'IA reste un outil d'exécution, dans la limite de ${SEUIL} % du projet fixée par le référentiel. La commission le vérifie après le dépôt, sur vos justificatifs.</p></div>
       <div class="carte rev"><h3><span class="pastille">4</span>Justificatifs</h3><p>Croquis, fichiers sources ou étapes intermédiaires, au format PDF, JPG ou PNG.</p></div>
     </div>
     <h2 style="margin-top:44px">Tarifs</h2>
@@ -3042,7 +3041,7 @@ function vueFaq() {
     ["Combien coûte la certification ?", "L'abonnement est sur mesure, à partir de 9 € HT par mois pour un indépendant. Son tarif dépend du nombre de créations à certifier, de la taille de la structure, de l'ampleur du processus créatif et de l'étude du dossier. La certification à l'unité dépend de l'œuvre, de 25 € à 149 € HT. La vérification est gratuite."],
     ["Comment un acheteur vérifie-t-il une œuvre ?", "En scannant le QR code apposé sur l'œuvre ou en saisissant le numéro PCE sur la page Vérifier une certification."],
     ["Pourquoi signer la Charte de transparence ?", "La charte engage le créateur sur l'usage de l'IA, la transparence des devis, le respect de la propriété intellectuelle et l'acceptation des audits. Sa signature est obligatoire pour déposer un dossier."],
-    ["Les heures déclarées suffisent-elles à obtenir le label ?", "Non. Les heures sont indicatives : elles servent au devis client et à l'estimation de l'abonnement. La part réelle d'IA est vérifiée par la commission sur les justificatifs (croquis, fichiers sources, calques, prompts)."],
+    ["Les heures déclarées suffisent-elles à obtenir le label ?", "Non. Les heures sont indicatives : elles servent au devis client et à l'estimation de l'abonnement. Aucun test d'IA n'est fait au dépôt : la commission vérifie ensuite la démarche sur les justificatifs (croquis, fichiers sources, calques, prompts)."],
     ["Que se passe-t-il en cas de refus ?", "Le motif vous est communiqué. Vous pouvez compléter votre dossier et le déposer à nouveau."],
   ];
   return `<div class="conteneur etroit">${ariane("FAQ")}<h1>Questions fréquentes</h1>${q.map(([a, b]) => `<details class="rev"><summary>${a}</summary><p>${b}</p></details>`).join("")}<div style="height:56px"></div></div>`;
@@ -3078,7 +3077,7 @@ function vueVerifier(id) {
     <div class="grille3" style="margin:6px 0 24px">
       <div class="carte rev"><h3><span class="pastille">1</span>Repérez le sceau</h3><p>Chaque œuvre certifiée porte le sceau PCE et un QR code unique.</p></div>
       <div class="carte rev"><h3><span class="pastille">2</span>Scannez ou saisissez</h3><p>Le QR code ou le numéro PCE mène au certificat de l'œuvre.</p></div>
-      <div class="carte rev"><h3><span class="pastille">3</span>Consultez le dosage</h3><p>Vous voyez la part de réflexion humaine et la part d'exécution assistée par IA.</p></div>
+      <div class="carte rev"><h3><span class="pastille">3</span>Consultez le certificat</h3><p>Créateur, discipline, recours à l'IA déclaré et date de certification par la commission.</p></div>
     </div>
     <div class="info" style="margin-bottom:56px"><span class="i">i</span><span>Le <a href="#/registre">registre public</a> recense toutes les œuvres certifiées.</span></div></div>`;
 }
@@ -3089,7 +3088,7 @@ function initVerifier(id) {
     r.innerHTML = `<div class="resultat-v"><div class="rond"></div></div>`;
     setTimeout(() => {
       if (!o) r.innerHTML = `<div class="resultat-v res-ko"><h3 style="color:var(--rouge)">Aucune certification trouvée</h3><p>Le numéro ${esc(n)} ne figure pas au registre PCE. Cette œuvre n'est pas certifiée.</p></div>`;
-      else if (o.statut === "certifiee") r.innerHTML = `<div class="resultat-v res-ok"><div class="vignette">${visuel(o)}</div><div><span class="badge b-certifiee">Certification valide</span><h3 style="margin-top:10px">${esc(o.titre)}</h3><p>${esc(o.createur)} · ${esc(o.type)}<br><span class="muted">Certifiée le ${dateFr(o.date)} · Humain ${100 - pctIA(o.dosage)} % · IA ${pctIA(o.dosage)} %</span></p><a class="btn petit" href="#/oeuvre/${o.id}">Voir le certificat <span class="fl">→</span></a></div></div>`;
+      else if (o.statut === "certifiee") r.innerHTML = `<div class="resultat-v res-ok"><div class="vignette">${visuel(o)}</div><div><span class="badge b-certifiee">Certification valide</span><h3 style="margin-top:10px">${esc(o.titre)}</h3><p>${esc(o.createur)} · ${esc(o.type)}<br><span class="muted">Certifiée le ${dateFr(o.date)} · Recours à l'IA déclaré : ${IA_LIB[o.iaMode].toLowerCase()}</span></p><a class="btn petit" href="#/oeuvre/${o.id}">Voir le certificat <span class="fl">→</span></a></div></div>`;
       else if (o.statut === "refusee") r.innerHTML = `<div class="resultat-v res-ko"><span class="badge b-refusee">Non certifiée</span><h3 style="margin-top:10px">${esc(o.titre)}</h3><p>Ce dossier a été examiné et n'a pas obtenu la certification PCE.</p></div>`;
       else r.innerHTML = `<div class="resultat-v res-att"><span class="badge b-commission">En cours d'examen</span><h3 style="margin-top:10px">${esc(o.titre)}</h3><p>Ce dossier est en cours d'examen (${STATUTS[o.statut].toLowerCase()}). L'œuvre n'est pas encore certifiée.</p></div>`;
     }, 500);
@@ -3101,7 +3100,6 @@ function initVerifier(id) {
 
 /* ---------- Fiche œuvre et certificat ---------- */
 function blocCertificat(o) {
-  const ia = pctIA(o.dosage);
   return `<div class="certificat">
     <div class="ent"><img src="${LOGO}" alt="Sceau PCE"><div><span class="badge b-certifiee">Certification valide</span><h2 style="margin:6px 0 0;font-size:21px">Certificat Processus Créatif Éthique</h2></div></div>
     <dl>
@@ -3112,7 +3110,6 @@ function blocCertificat(o) {
       <dt>Recours à l'IA</dt><dd>${IA_LIB[o.iaMode]}</dd>
       <dt>Délivré le</dt><dd>${dateFr(o.date)}</dd>
     </dl>
-    <div class="dosage"><div class="barre"><span class="h" style="width:${100 - ia}%"></span><span class="ia" style="width:${ia}%"></span></div><div class="leg"><span>Humain ${100 - ia} %</span><span>Exécution IA ${ia} %</span></div></div>
   </div>`;
 }
 function vueOeuvre(id) {
@@ -3201,10 +3198,10 @@ function etape2(b) {
   return champ("titre", "Titre de l'œuvre *", `<input id="titre" type="text" value="${esc(b.titre)}">`)
     + champ("description", "Décrivez votre processus, de l'idée au rendu *", `<textarea id="description" placeholder="Ex : recherches, croquis, choix de style, versions successives, outils utilisés…">${esc(b.description)}</textarea>`, "", "Décrivez votre processus en 40 caractères minimum.")
     + `<div class="champ"><span class="lab">Recours à l'IA dans votre travail *</span><div class="radios">${Object.entries(IA_LIB).map(([k, v]) => `<label><input type="radio" name="iaMode" value="${k}" ${b.iaMode === k ? "checked" : ""}> ${v}</label>`).join("")}</div></div>
-    <div class="champ"><span class="lab">Temps consacré au projet (heures, à titre indicatif)</span><span class="aide">Ces heures servent au devis client et à l'estimation de l'abonnement. Elles ne déterminent pas la certification : la part réelle d'IA est vérifiée par la commission sur vos justificatifs.</span>
+    <div class="champ"><span class="lab">Temps consacré au projet (heures, à titre indicatif)</span><span class="aide">Ces heures servent uniquement au devis client et à l'estimation de l'abonnement. Aucun test d'IA n'est fait au dépôt : la commission vérifie votre démarche après le dépôt, sur vos justificatifs.</span>
       <div class="ligne-h"><label for="recherche">Recherche et intention</label><input id="recherche" type="number" min="0" value="${b.recherche}"></div>
       <div class="ligne-h"><label for="creation">Création et direction artistique</label><input id="creation" type="number" min="0" value="${b.creation}"></div>
-      <div class="ligne-h" id="l-ia"><label for="ia">Exécution assistée par IA</label><input id="ia" type="number" min="0" value="${b.ia}"></div>
+      <div class="ligne-h" id="l-ia"><label for="ia">Exécution et finitions</label><input id="ia" type="number" min="0" value="${b.ia}"></div>
       <div class="dosage" id="dos"></div></div>`
     + `<div id="l-outils">` + champ("outils", "Outils d'IA utilisés et pour quoi faire", `<input id="outils" type="text" value="${esc(b.outils)}" placeholder="Ex : retouche colorimétrique, détourage">`) + `</div>`;
 }
@@ -3227,8 +3224,8 @@ const ARTICLES_3_5 = `
   <div class="article"><h3><span class="pastille">3</span>Engagement de transparence</h3><p>Je m'engage légalement et moralement à faire preuve d'une transparence absolue envers le label PCE et mes futurs clients. À ce titre, je certifie que :</p>
     <ul><li><b>L'IA comme assistant, pas comme créateur :</b> l'Intelligence Artificielle n'est utilisée que comme un outil d'assistance (recherche, inspiration, exécution de tâches répétitives, retouches mineures), dans la limite de ${SEUIL} % du temps total de chaque projet, conformément au référentiel PCE.</li>
     <li><b>La réflexion humaine prédomine :</b> la direction artistique, le concept originel, le message et la structure de l'œuvre finale sont à 100 % le fruit de mon travail intellectuel humain.</li>
-    <li><b>Transparence des devis :</b> je m'engage à utiliser le devis certifié PCE pour indiquer clairement à mon client la proportion de mon processus de travail assistée par IA.</li>
-    <li><b>Sincérité des déclarations :</b> je m'engage à déclarer de bonne foi, à titre indicatif, le temps consacré à la recherche, à la création et à l'exécution assistée par IA, et à fournir les justificatifs permettant à la commission de vérifier la part réelle d'IA.</li></ul></div>
+    <li><b>Transparence des devis :</b> je m'engage à utiliser le devis certifié PCE pour indiquer clairement à mon client les étapes de mon processus de travail et les outils d'IA utilisés.</li>
+    <li><b>Sincérité des déclarations :</b> je m'engage à déclarer de bonne foi, à titre indicatif, le temps consacré à la recherche, à la création et à l'exécution, et à fournir les justificatifs permettant à la commission de vérifier ma démarche et mon recours à l'IA.</li></ul></div>
   <div class="article"><h3><span class="pastille">4</span>Respect de la Propriété Intellectuelle</h3><p>Je certifie ne jamais utiliser de générateurs d'images ou de textes dans le but de reproduire, plagier ou piller le travail d'un autre créateur. Je m'assure que les contenus générés par IA que j'inclus dans mon travail final respectent les droits d'auteur en vigueur.</p></div>
   <div class="article" style="border:none"><h3><span class="pastille">5</span>Consentement à l'Audit et aux contrôles</h3><p>J'accepte que l'organisme PCE puisse, de manière aléatoire ou sur demande d'un client, réaliser un audit de mon processus créatif. Je m'engage à fournir sur demande les fichiers sources (calques, croquis, rushs, prompts) permettant de prouver la part de travail humain sur une œuvre certifiée. En cas de fraude avérée, je reconnais que le label PCE me sera immédiatement retiré, ainsi que les certificats des œuvres concernées, qui seront signalés comme retirés dans le registre public.</p></div>`;
 const PREAMBULE = "Le label Processus Créatif Éthique (PCE) a pour vocation de défendre la valeur du savoir-faire humain et de garantir aux clients une transparence totale sur l'utilisation de l'Intelligence Artificielle. En signant cette charte, le Créatif s'engage à faire de l'IA un outil d'assistance, et non un outil de substitution à sa réflexion artistique.";
@@ -3285,7 +3282,7 @@ ${ARTICLES_3_5.replace(/<div class="article"[^>]*><h3><span class="pastille">(\d
 }
 const telechargerCharte = o => { telecharger(`charte-signee-${o.id}.html`, charteSigneeHtml(o), "text/html"); toast("Charte signée téléchargée."); };
 function etape4(b) {
-  const ia = pctIA(b), unite = TYPES[b.type], est = estimerAbo(b.taille, b.creationsAn, (+b.recherche || 0) + (+b.creation || 0) + (+b.ia || 0));
+  const unite = TYPES[b.type], est = estimerAbo(b.taille, b.creationsAn, (+b.recherche || 0) + (+b.creation || 0) + (+b.ia || 0));
   const h = (+b.recherche || 0) + (+b.creation || 0) + (+b.ia || 0), t = +b.taux || 0, cert = b.formule === "unite" ? unite : 0;
   return `<h3>Votre formule</h3>
     <div class="formules">
@@ -3298,10 +3295,9 @@ function etape4(b) {
     <table class="devis"><tr><th>Poste</th><th>Montant HT</th></tr>
       <tr><td>Recherche et intention · ${b.recherche} h</td><td>${eur(b.recherche * t)}</td></tr>
       <tr><td>Création et direction artistique · ${b.creation} h</td><td>${eur(b.creation * t)}</td></tr>
-      <tr><td>Exécution assistée par IA · ${b.ia} h</td><td>${eur(b.ia * t)}</td></tr>
+      <tr><td>Exécution et finitions · ${b.ia} h</td><td>${eur(b.ia * t)}</td></tr>
       <tr><td>Certification PCE</td><td>${cert ? eur(cert) : "Incluse"}</td></tr>
       <tr class="tot"><td>Total HT</td><td>${eur(h * t + cert)}</td></tr></table>
-    <div class="dosage"><div class="barre"><span class="h" style="width:${100 - ia}%"></span><span class="ia" style="width:${ia}%"></span></div><div class="leg"><span>Humain ${100 - ia} %</span><span>Exécution IA ${ia} %</span></div></div>
     <button type="button" class="btn sec petit" id="dl-devis" style="margin-top:10px">Télécharger le devis</button>
     <h3 style="margin-top:28px">Récapitulatif</h3>
     <dl class="recap deux"><div><dt>Créateur</dt><dd>${esc(b.createur)}</dd><dt>E-mail</dt><dd>${esc(b.email)}</dd><dt>Discipline</dt><dd>${esc(b.type)}</dd></div>
@@ -3309,11 +3305,7 @@ function etape4(b) {
     ${b.signature ? `<div class="signee"><img src="${b.signature}" alt="Signature"><div><b>Charte de transparence signée</b><br><span class="muted">Le ${dateFr(b.signeLe)}</span></div></div>` : ""}
     ${b.img ? `<div class="apercu"><img src="${b.img}" alt=""><div><b>${esc(b.imgNom || "Œuvre finale")}</b><br><span class="muted petit-texte">Recevra le sceau PCE et un QR code.</span></div></div>` : ""}`;
 }
-function majDosage(b) {
-  const z = $("#dos"); if (!z) return; const ia = pctIA(b);
-  z.innerHTML = `<div class="barre"><span class="h" style="width:${100 - ia}%"></span><span class="ia" style="width:${ia}%"></span></div><div class="leg"><span>Humain ${100 - ia} %</span><span>Exécution IA ${ia} %</span></div>
-    <div class="verdict info">Répartition déclarée, indicative. La conformité au référentiel (IA en exécution, ${SEUIL} % maximum) est vérifiée par la commission sur vos justificatifs.</div>`;
-}
+function majDosage() {}
 function lireFichier(f) { return new Promise(ok => { const r = new FileReader(); r.onload = () => ok(r.result); r.readAsDataURL(f); }); }
 async function reduireImage(src, max = 1400) {
   const im = await chargerImg(src); const k = Math.min(1, max / Math.max(im.naturalWidth, im.naturalHeight));
@@ -3342,7 +3334,7 @@ function initDepot() {
     const x = $("input[name=expertise]:checked", form); if (x) b.expertise = x.value;
     DB.sauver();
   };
-  const iaUi = () => { const aucun = b.iaMode === "aucun"; if ($("#l-ia")) { $("#l-ia").style.display = aucun ? "none" : ""; $("#l-outils").style.display = aucun ? "none" : ""; if (aucun) { b.ia = 0; $("#ia").value = 0; } } majDosage(b); };
+  const iaUi = () => { if ($("#l-outils")) $("#l-outils").style.display = b.iaMode === "aucun" ? "none" : ""; };
   form.addEventListener("input", ev => { const ch = ev.target.closest(".champ, .article"); if (ch) ch.classList.remove("erreur"); lire(); iaUi(); if (e === 4) { const y = scrollY; $("#d-form").innerHTML = etape4(b); initEtape4(); scrollTo(0, y); } });
   form.addEventListener("change", ev => { const ch = ev.target.closest(".champ, .article"); if (ch) ch.classList.remove("erreur"); lire(); iaUi(); if (e === 4) { const y = scrollY; $("#d-form").innerHTML = etape4(b); initEtape4(); scrollTo(0, y); } });
   if (e === 1) iaUi();
@@ -3374,9 +3366,9 @@ function initDepot() {
 function initEtape4() {
   const b = brouillon();
   $("#dl-devis").onclick = () => {
-    const t = +b.taux || 0, cert = b.formule === "unite" ? TYPES[b.type] : 0, ia = pctIA(b);
-    const l = [["Recherche et intention", b.recherche], ["Création et direction artistique", b.creation], ["Exécution assistée par IA", b.ia]];
-    const html = `<!doctype html><html lang="fr"><meta charset="utf-8"><title>Devis ${esc(b.titre)}</title><body style="font-family:Arial;max-width:720px;margin:40px auto;color:#1F2530"><h1 style="color:#023481">Devis</h1><p><b>${esc(b.createur)}</b><br>${esc(b.titre)} · ${esc(b.type)}</p><table style="width:100%;border-collapse:collapse">${l.map(([n, h]) => `<tr><td style="padding:8px;border-bottom:1px solid #ddd">${n} · ${h} h</td><td style="text-align:right;padding:8px;border-bottom:1px solid #ddd">${eur(h * t)}</td></tr>`).join("")}<tr><td style="padding:8px">Certification PCE</td><td style="text-align:right;padding:8px">${cert ? eur(cert) : "Incluse"}</td></tr><tr><td style="padding:8px;font-weight:bold;color:#023481">Total HT</td><td style="text-align:right;padding:8px;font-weight:bold;color:#023481">${eur((+b.recherche + +b.creation + +b.ia) * t + cert)}</td></tr></table><p>Dosage du processus : humain ${100 - ia} %, exécution assistée par IA ${ia} %.</p><p style="color:#666">Processus certifié PCE · Processus Créatif Éthique</p></body></html>`;
+    const t = +b.taux || 0, cert = b.formule === "unite" ? TYPES[b.type] : 0;
+    const l = [["Recherche et intention", b.recherche], ["Création et direction artistique", b.creation], ["Exécution et finitions", b.ia]];
+    const html = `<!doctype html><html lang="fr"><meta charset="utf-8"><title>Devis ${esc(b.titre)}</title><body style="font-family:Arial;max-width:720px;margin:40px auto;color:#1F2530"><h1 style="color:#023481">Devis</h1><p><b>${esc(b.createur)}</b><br>${esc(b.titre)} · ${esc(b.type)}</p><table style="width:100%;border-collapse:collapse">${l.map(([n, h]) => `<tr><td style="padding:8px;border-bottom:1px solid #ddd">${n} · ${h} h</td><td style="text-align:right;padding:8px;border-bottom:1px solid #ddd">${eur(h * t)}</td></tr>`).join("")}<tr><td style="padding:8px">Certification PCE</td><td style="text-align:right;padding:8px">${cert ? eur(cert) : "Incluse"}</td></tr><tr><td style="padding:8px;font-weight:bold;color:#023481">Total HT</td><td style="text-align:right;padding:8px;font-weight:bold;color:#023481">${eur((+b.recherche + +b.creation + +b.ia) * t + cert)}</td></tr></table><p>Recours à l'IA déclaré : ${IA_LIB[b.iaMode].toLowerCase()}${b.outils ? " (" + esc(b.outils) + ")" : ""}.</p><p style="color:#666">Processus certifié PCE · Processus Créatif Éthique</p></body></html>`;
     telecharger(`devis-${(b.titre || "oeuvre").toLowerCase().replace(/[^a-z0-9]+/g, "-")}.html`, html, "text/html"); toast("Devis téléchargé.");
   };
 }
@@ -3411,7 +3403,7 @@ function vueConfirmation(id) {
 function initConfirmation(id) {
   const o = DB.get(id); if (!o || !$("#dl-ar")) return;
   $("#dl-ch").onclick = () => telechargerCharte(o);
-  $("#dl-ar").onclick = () => { telecharger(`accuse-reception-${o.id}.txt`, `CERTIFICATION PCE · PROCESSUS CRÉATIF ÉTHIQUE\n\nAccusé de réception\n\nNuméro de dossier : ${o.id}\nDéposé le : ${dateFr(o.date)}\nCréateur : ${o.createur}\nŒuvre : ${o.titre} (${o.type})\nRecours à l'IA : ${IA_LIB[o.iaMode]} · ${pctIA(o.dosage)} % du projet\nJustificatifs : ${o.justificatifs.join(", ")}\n\nSuivi : ${BASE}/suivi/${o.id}\n`, "text/plain"); toast("Accusé de réception téléchargé."); };
+  $("#dl-ar").onclick = () => { telecharger(`accuse-reception-${o.id}.txt`, `CERTIFICATION PCE · PROCESSUS CRÉATIF ÉTHIQUE\n\nAccusé de réception\n\nNuméro de dossier : ${o.id}\nDéposé le : ${dateFr(o.date)}\nCréateur : ${o.createur}\nŒuvre : ${o.titre} (${o.type})\nRecours à l'IA déclaré : ${IA_LIB[o.iaMode]}\nJustificatifs : ${o.justificatifs.join(", ")}\n\nSuivi : ${BASE}/suivi/${o.id}\n`, "text/plain"); toast("Accusé de réception téléchargé."); };
 }
 function vueSuivi(id) {
   const o = DB.get(id);
@@ -3453,7 +3445,7 @@ function vuePro() {
 function proTableau() {
   const o = DB.data.oeuvres, c = o.filter(x => x.statut === "certifiee"), enc = o.filter(x => ["deposee", "analyse", "commission"].includes(x.statut));
   const tranch = o.filter(x => ["certifiee", "refusee"].includes(x.statut)), taux = tranch.length ? Math.round(c.length / tranch.length * 100) : 0;
-  const moy = c.length ? (c.reduce((s, x) => s + pctIA(x.dosage), 0) / c.length).toFixed(1).replace(".", ",") : 0;
+  const nbCrea = new Set(c.map(x => x.createur)).size;
   const mois = ["Janv.", "Févr.", "Mars", "Avr.", "Mai", "Juin", "Juil.", "Août", "Sept.", "Oct.", "Nov.", "Déc."];
   const parMois = mois.map((m, i) => c.filter(x => new Date(x.date).getMonth() === i && new Date(x.date).getFullYear() === 2026).length).slice(0, 10), max = Math.max(1, ...parMois);
   const parType = Object.keys(TYPES).map(t => [t, c.filter(x => x.type === t).length]), maxT = Math.max(1, ...parType.map(x => x[1]));
@@ -3461,7 +3453,7 @@ function proTableau() {
       <div class="kpi rev"><b data-compte="${c.length}">0</b><span>Œuvres certifiées</span></div>
       <div class="kpi rev"><b data-compte="${enc.length}">0</b><span>Dossiers en cours</span></div>
       <div class="kpi rev"><b data-compte="${taux}" data-suffixe=" %">0</b><span>Taux de certification</span></div>
-      <div class="kpi rev"><b>${moy} %</b><span>Part IA moyenne des œuvres certifiées</span></div>
+      <div class="kpi rev"><b data-compte="${nbCrea}">0</b><span>Créateurs certifiés</span></div>
     </div>
     <div class="pro-grille">
       <div class="boite-pro rev"><h3>Certifications délivrées en 2026</h3><div class="histo">${parMois.map((v, i) => `<div><em>${v}</em><i style="height:${v / max * 130}px;animation-delay:${i * 60}ms" title="${v} certification(s)"></i><span>${mois[i]}</span></div>`).join("")}</div></div>
@@ -3473,14 +3465,14 @@ function proTableau() {
 function filtrer(seulsEnCours) {
   const q = PRO.q.toLowerCase();
   let l = DB.data.oeuvres.filter(o => (!seulsEnCours || ["deposee", "analyse", "commission"].includes(o.statut)) && (!PRO.statut || o.statut === PRO.statut) && (!PRO.type || o.type === PRO.type) && (!q || (o.id + " " + o.titre + " " + o.createur + " " + o.email).toLowerCase().includes(q)));
-  const v = o => ({ id: o.id, titre: o.titre.toLowerCase(), createur: o.createur.toLowerCase(), type: o.type, ia: pctIA(o.dosage), date: +new Date(o.date), statut: o.statut }[PRO.tri]);
+  const v = o => ({ id: o.id, titre: o.titre.toLowerCase(), createur: o.createur.toLowerCase(), type: o.type, ia: o.iaMode, date: +new Date(o.date), statut: o.statut }[PRO.tri]);
   return l.sort((a, b) => (v(a) > v(b) ? 1 : v(a) < v(b) ? -1 : 0) * PRO.sens);
 }
 function tableau(l, triable = true) {
   if (!l.length) return `<div class="vide-msg" style="border:none">Aucun dossier.</div>`;
-  const col = [["id", "N° PCE"], ["titre", "Œuvre"], ["createur", "Créateur"], ["type", "Type"], ["ia", "Part IA"], ["date", "Date"], ["statut", "Statut"]];
+  const col = [["id", "N° PCE"], ["titre", "Œuvre"], ["createur", "Créateur"], ["type", "Type"], ["ia", "IA déclarée"], ["date", "Date"], ["statut", "Statut"]];
   return `<table class="bdd"><thead><tr>${col.map(([k, t]) => `<th ${triable ? `data-tri="${k}"` : ""} class="${PRO.tri === k && triable ? "trie" : ""}" scope="col">${t}${triable ? `<span class="tri">${PRO.tri === k ? (PRO.sens > 0 ? "▲" : "▼") : "↕"}</span>` : ""}</th>`).join("")}</tr></thead>
-    <tbody>${l.map((o, i) => `<tr data-id="${o.id}" tabindex="0" style="animation-delay:${i * 25}ms"><td class="mono">${o.id}</td><td><div class="t-oeuvre"><span class="mini">${visuel(o)}</span>${esc(o.titre)}</div></td><td>${esc(o.createur)}</td><td>${esc(o.type)}</td><td>${pctIA(o.dosage)} %</td><td>${dateC(o.date)}</td><td><span class="badge b-${o.statut}">${STATUTS[o.statut]}</span></td></tr>`).join("")}</tbody></table>`;
+    <tbody>${l.map((o, i) => `<tr data-id="${o.id}" tabindex="0" style="animation-delay:${i * 25}ms"><td class="mono">${o.id}</td><td><div class="t-oeuvre"><span class="mini">${visuel(o)}</span>${esc(o.titre)}</div></td><td>${esc(o.createur)}</td><td>${esc(o.type)}</td><td>${{ aucun: "Aucune", appui: "En appui", generation: "Génération" }[o.iaMode]}</td><td>${dateC(o.date)}</td><td><span class="badge b-${o.statut}">${STATUTS[o.statut]}</span></td></tr>`).join("")}</tbody></table>`;
 }
 function proBase(enCours) {
   const l = filtrer(enCours), par = 12, nb = Math.max(1, Math.ceil(l.length / par)); PRO.page = Math.min(PRO.page, nb - 1);
@@ -3508,7 +3500,7 @@ function initPro() {
     if ($("#pg-s")) $("#pg-s").onclick = () => { PRO.page++; re(); };
     if ($("#csv")) $("#csv").onclick = () => {
       const l = filtrer(PRO.onglet === "dossiers"), q = s => `"${String(s).replace(/"/g, '""')}"`;
-      const csv = "﻿" + ["Numéro;Œuvre;Créateur;E-mail;Type;Ville;Date;Statut;Heures recherche;Heures création;Heures IA;Part IA %;Recours IA;Formule;Structure;Créations par an;Tarif abonnement HT / mois"].concat(l.map(o => [o.id, o.titre, o.createur, o.email, o.type, o.ville, dateC(o.date), STATUTS[o.statut], o.dosage.recherche, o.dosage.creation, o.dosage.ia, pctIA(o.dosage), IA_LIB[o.iaMode], o.formule === "abonnement" ? "Abonnement" : "Unité", o.taille || "", o.creationsAn || "", o.prixAbo ?? ""].map(q).join(";"))).join("\n");
+      const csv = "﻿" + ["Numéro;Œuvre;Créateur;E-mail;Type;Ville;Date;Statut;Heures recherche (indicatif);Heures création (indicatif);Heures exécution (indicatif);Recours IA déclaré;Formule;Structure;Créations par an;Tarif abonnement HT / mois"].concat(l.map(o => [o.id, o.titre, o.createur, o.email, o.type, o.ville, dateC(o.date), STATUTS[o.statut], o.dosage.recherche, o.dosage.creation, o.dosage.ia, IA_LIB[o.iaMode], o.formule === "abonnement" ? "Abonnement" : "Unité", o.taille || "", o.creationsAn || "", o.prixAbo ?? ""].map(q).join(";"))).join("\n");
       telecharger("base-oeuvres-pce.csv", csv, "text/csv;charset=utf-8"); toast(`${l.length} ligne(s) exportée(s).`);
     };
     if ($("#reset")) $("#reset").onclick = () => { if (confirm("Réinitialiser toutes les données de démonstration ?")) { DB.reset(); DB.data.pro = true; DB.sauver(); re(); toast("Données de démonstration réinitialisées."); } };
@@ -3518,7 +3510,7 @@ function initPro() {
   initPro2();
 }
 function tiroir(id, apres) {
-  const o = DB.get(id); if (!o) return; const ia = pctIA(o.dosage);
+  const o = DB.get(id); if (!o) return;
   const fond = document.createElement("div"); fond.className = "tiroir-fond";
   const t = document.createElement("aside"); t.className = "tiroir"; t.setAttribute("role", "dialog"); t.setAttribute("aria-modal", "true"); t.setAttribute("aria-label", "Dossier " + o.id);
   const actions = { deposee: [["analyse", "Lancer l'analyse", ""]], analyse: [["commission", "Transmettre à la commission", ""]], commission: [["certifiee", "Certifier l'œuvre", "vert"], ["refusee", "Refuser", "danger"]] }[o.statut] || [];
@@ -3531,9 +3523,8 @@ function tiroir(id, apres) {
       <h4>Processus déclaré</h4><p style="font-size:14.5px">${esc(o.description)}</p>
       <h4>Recours à l'IA</h4><p style="font-size:14.5px">${IA_LIB[o.iaMode]}${o.outils ? " · " + esc(o.outils) : ""}</p>
       <h4>Heures déclarées (indicatives)</h4>
-      <table class="devis"><tr><td>Recherche et intention</td><td>${o.dosage.recherche} h</td></tr><tr><td>Création et direction artistique</td><td>${o.dosage.creation} h</td></tr><tr><td>Exécution assistée par IA</td><td>${o.dosage.ia} h</td></tr></table>
-      <div class="dosage"><div class="barre"><span class="h" style="width:${100 - ia}%"></span><span class="ia" style="width:${ia}%"></span></div><div class="leg"><span>Humain ${100 - ia} %</span><span>Exécution IA ${ia} %</span></div>
-      <div class="verdict info">Heures déclarées par le créatif, à titre indicatif. À contrôler sur les justificatifs (croquis, fichiers sources, calques, prompts) avant décision.</div></div>
+      <table class="devis"><tr><td>Recherche et intention</td><td>${o.dosage.recherche} h</td></tr><tr><td>Création et direction artistique</td><td>${o.dosage.creation} h</td></tr><tr><td>Exécution et finitions</td><td>${o.dosage.ia} h</td></tr></table>
+      <div class="verdict info" style="margin-top:12px">Heures déclarées par le créatif, à titre indicatif. La commission vérifie la démarche et le recours à l'IA sur les justificatifs (croquis, fichiers sources, calques, prompts) avant décision.</div>
       <h4 style="margin-top:16px">Charte de transparence</h4>
       ${o.charte ? `<div class="signee">${o.charte.signature ? `<img src="${o.charte.signature}" alt="Signature">` : ""}<div><b>Signée le ${dateFr(o.charte.signeLe || o.date)}</b><br><span class="muted">${esc(o.charte.expertise === "Autre" ? o.charte.expertiseAutre : o.charte.expertise)} · Outils IA : ${esc(o.charte.outilsIA)}</span><br><button type="button" class="lien" id="t-ch">Télécharger la charte signée</button></div></div>` : `<div class="res-ko">Charte non signée.</div>`}
       <h4 style="margin-top:16px">Justificatifs</h4><ul class="fichiers">${o.justificatifs.map(n => `<li><span>📄 ${esc(n)}</span><span class="muted">Reçu</span></li>`).join("")}</ul>

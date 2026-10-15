@@ -11,7 +11,7 @@
 Site complet en un seul fichier. Les données sont enregistrées dans le navigateur.
 
 - **Côté public** : accueil, critères et tarifs avec estimateur d'abonnement, vérification d'une œuvre (rubrique clients), registre des œuvres certifiées, Charte de transparence, FAQ.
-- **Parcours créateur** : dépôt du dossier en 5 étapes, calcul du dosage humain et IA (seuil 10 %), Charte de transparence (version 1.1) remplie et signée en ligne, obligatoire, abonnement sur mesure, devis client transparent, accusé de réception, suivi, certificat, œuvre signée avec sceau et QR code.
+- **Parcours créateur** : dépôt du dossier en 5 étapes, heures indicatives sans test d'IA (vérification par la commission après le dépôt), Charte de transparence (version 1.1) remplie et signée en ligne, obligatoire, abonnement sur mesure, devis client transparent, accusé de réception, suivi, certificat, œuvre signée avec sceau et QR code.
 - **Bouton Livrables** dans l'en-tête : téléchargement du pitch, du business plan et du prototype.
 - **Espace pro** (connexion de démonstration pré-remplie) : tableau de bord, dossiers à traiter, base des œuvres avec recherche, filtres, tri, fiche détaillée avec charte signée, décision de la commission, export CSV.
 
