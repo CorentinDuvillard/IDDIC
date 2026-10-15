@@ -4,18 +4,15 @@
 |---|---|
 | Pitch écrit | [Pitch_PCE.pdf](Pitch_PCE.pdf) |
 | Business plan | [Business_Plan_PCE.xlsx](Business_Plan_PCE.xlsx) (onglet Hypothèses inclus) |
-| Business Model Canvas | [BMC_PCE.pdf](BMC_PCE.pdf) |
-| Charte de transparence | [Charte_de_Transparence_PCE.pdf](Charte_de_Transparence_PCE.pdf) |
-| Présentation | [Presentation_PCE.pdf](Presentation_PCE.pdf) |
 | Prototype | [Prototype_PCE.html](Prototype_PCE.html) : à télécharger puis ouvrir dans Chrome ou Edge, sans connexion |
 
 ## Prototype
 
 Site complet en un seul fichier. Les données sont enregistrées dans le navigateur.
 
-- **Côté public** : accueil, critères et tarifs avec estimateur d'abonnement, page clients, vérification d'une certification, registre des œuvres certifiées, FAQ.
-- **Parcours créateur** : dépôt du dossier en 5 étapes, calcul du dosage humain et IA (seuil 10 %), signature obligatoire de la Charte de transparence, abonnement sur mesure, devis client transparent, accusé de réception, suivi, certificat, œuvre signée avec sceau et QR code.
-- **Bouton Livrables** dans l'en-tête : téléchargement de tous les livrables.
+- **Côté public** : accueil, critères et tarifs avec estimateur d'abonnement, vérification d'une œuvre (rubrique clients), registre des œuvres certifiées, Charte de transparence, FAQ.
+- **Parcours créateur** : dépôt du dossier en 5 étapes, calcul du dosage humain et IA (seuil 10 %), Charte de transparence (version 1.1) remplie et signée en ligne, obligatoire, abonnement sur mesure, devis client transparent, accusé de réception, suivi, certificat, œuvre signée avec sceau et QR code.
+- **Bouton Livrables** dans l'en-tête : téléchargement du pitch, du business plan et du prototype.
 - **Espace pro** (connexion de démonstration pré-remplie) : tableau de bord, dossiers à traiter, base des œuvres avec recherche, filtres, tri, fiche détaillée avec charte signée, décision de la commission, export CSV.
 
 ### Tarifs
@@ -43,7 +40,7 @@ L'abonnement est sur mesure, à partir de 9 € HT par mois. Son tarif dépend d
 ### Certificat et œuvre signée
 ![Certificat](captures/07-certificat.png)
 
-### Vérification
+### Vérifier une œuvre
 ![Vérification](captures/08-verification.png)
 
 ### Registre public

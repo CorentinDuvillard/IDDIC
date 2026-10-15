@@ -1,6 +1,6 @@
 # Audit global du projet PCE
 
-Date : 15 octobre 2026. Périmètre : prototype, pitch, business plan, BMC, charte, mise en ligne. La présentation n'a pas été retravaillée (hors périmètre demandé).
+Date : 15 octobre 2026. Périmètre : prototype, pitch, business plan, BMC, charte, mise en ligne. Livrables retenus : pitch, business plan, prototype. La présentation, le BMC et l'ancienne charte PDF sont rangés dans `archives/`.
 
 ## 1. Compatibilité du prototype
 
@@ -30,6 +30,8 @@ Limites : tests faits dans Chromium (moteur de Chrome et Edge). Firefox et Safar
 | Le pitch parlait de « créatifs indépendants » seulement | Ajout des studios et agences, cohérent avec l'abonnement sur mesure |
 | La charte n'apparaissait pas dans le pitch | Mentionnée dans la solution et la démonstration |
 | Le BP n'expliquait pas ses chiffres | Onglet Hypothèses ajouté |
+| Charte v1.0 : « Label officiel » avant toute accréditation, tirets longs, pas de lien avec le seuil de 10 % | Charte v1.1 dans le site : « Label Processus Créatif Éthique », seuil de 10 % dans l'article 3, engagement d'exactitude des déclarations, retrait des certificats en cas de fraude (article 5), page publique `#/charte` |
+| Deux rubriques « Pour les clients » et « Vérifier une certification » | Fusionnées en « Vérifier une œuvre » |
 
 ## 3. Business plan après correction
 
@@ -44,6 +46,5 @@ Limites : tests faits dans Chromium (moteur de Chrome et Edge). Firefox et Safar
 ## 4. Points restant à votre charge
 
 - **Hypothèses non sourcées** : marché de 250 000 créatifs, grille d'abonnement, coûts AFNOR et COFRAC, subvention de 15 000 €. À vérifier ou à présenter comme hypothèses.
-- **Présentation** : non mise à jour. Elle contient l'ancien prix fixe, les anciens chiffres du BP et l'ancienne charte graphique.
-- **Charte** : document fourni tel quel. Il contient des tirets longs (« Article 1 – … ») et dit « Label Officiel ».
+- **Présentation** (archives) : non mise à jour. Elle contient l'ancien prix fixe, les anciens chiffres du BP et l'ancienne charte graphique.
 - **Revenu moyen de 137 € par client** : prudent pour des studios et agences. Peut être relevé si le jury le questionne.
