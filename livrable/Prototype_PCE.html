@@ -2967,7 +2967,7 @@ function vueAccueil() {
   </div></section>
   <section class="section"><div class="conteneur">
     <div style="display:flex;justify-content:space-between;align-items:end;gap:16px;flex-wrap:wrap" class="rev"><h2 style="margin:0">Dernières œuvres certifiées</h2><a href="#/registre">Consulter le registre →</a></div>
-    <div class="galerie" style="margin-top:22px">${cert.slice(0, 8).map(carteOeuvre).join("")}</div>
+    <div class="galerie" style="margin-top:22px">${vedetteEnTete(cert).slice(0, 8).map(carteOeuvre).join("")}</div>
   </div></section>
   <section class="section fond"><div class="conteneur"><div class="verif-home rev">
     <div><span class="tag">Pour les clients</span><h2 style="margin-top:10px">Vous achetez une création ?</h2><p class="muted" style="margin:0">Saisissez le numéro PCE inscrit sur l'œuvre ou scannez son QR code. La vérification est gratuite.</p></div>
@@ -2982,6 +2982,9 @@ function initAccueil() {
   $("#vh-f").onsubmit = e => { e.preventDefault(); const n = $("#vh-n").value.trim(); if (n) location.hash = "#/verifier/" + encodeURIComponent(n); };
   $$("[data-vh]").forEach(b => b.onclick = () => { location.hash = "#/verifier/" + b.dataset.vh; });
 }
+// « La maison au soleil » toujours en tête des œuvres certifiées
+const VEDETTE = "PCE-2026-000127";
+const vedetteEnTete = l => [...l].sort((a, b) => (b.id === VEDETTE) - (a.id === VEDETTE));
 const carteOeuvre = o => `<a class="oeuvre-c rev" href="#/oeuvre/${o.id}"><div class="vignette">${visuel(o)}<img class="mini-sceau" src="${LOGO}" alt=""><span class="voir">Voir le certificat →</span></div><div class="txt"><b>${esc(o.titre)}</b><small>${esc(o.createur)} · ${esc(o.type)}</small></div></a>`;
 
 function vueCreateurs() {
@@ -3059,7 +3062,7 @@ function vueRegistre() {
 function initRegistre() {
   const f = () => {
     const q = $("#r-q").value.trim().toLowerCase(), t = $("#r-t").value;
-    const l = DB.data.oeuvres.filter(o => o.statut === "certifiee" && (!t || o.type === t) && (!q || (o.titre + " " + o.createur + " " + o.id).toLowerCase().includes(q)));
+    const l = vedetteEnTete(DB.data.oeuvres.filter(o => o.statut === "certifiee" && (!t || o.type === t) && (!q || (o.titre + " " + o.createur + " " + o.id).toLowerCase().includes(q))));
     $("#r-g").innerHTML = l.length ? l.map(carteOeuvre).join("") : `<div class="vide-msg" style="grid-column:1/-1">Aucune œuvre ne correspond à votre recherche.</div>`;
     revele();
   };
