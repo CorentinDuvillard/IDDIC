@@ -14,7 +14,7 @@ Site complet en un seul fichier. Les données sont enregistrées dans le navigat
 - **Dépôt du dossier de l'entreprise**, en 5 étapes : SIRET (contrôle de la clé, refus d'un SIRET déjà enregistré) et identité de l'entreprise, processus créatif, Kbis + portfolio (1 à 3 œuvres) + justificatifs, Charte signée par le représentant, récapitulatif et règlement de la certification annuelle. Aucun test d'IA au dépôt. Pour la démonstration, une barre propose « Remplir cette étape » et « Remplir tout le dossier », signature comprise.
 - **Bouton Livrables** dans l'en-tête : téléchargement du pitch et du business plan.
 - **Espace client** : l'entreprise se connecte avec son SIRET ou son numéro de dossier et son e-mail. Elle voit sa certification et sa validité, ses œuvres certifiées (sceau et QR code téléchargeables), peut déclarer une nouvelle œuvre et télécharger sa charte signée.
-- **Accès commission** (pied de page) : tableau de bord, dossiers à traiter, base des entreprises, base des œuvres, double vérification (analyse IA des fichiers, puis contrôle humain, audit terrain si besoin), décision, export CSV.
+- **Espace pro** (en-tête, à côté de l'espace client) : tableau de bord, dossiers à traiter, base des entreprises, base des œuvres, double vérification (analyse IA des fichiers, puis contrôle humain, audit terrain si besoin), décision, export CSV.
 
 ### Tarifs
 
