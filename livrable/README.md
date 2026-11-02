@@ -8,54 +8,55 @@
 
 ## Prototype
 
-Site complet en un seul fichier. Les données sont enregistrées dans le navigateur.
+Site complet en un seul fichier. Les données sont enregistrées dans le navigateur. La certification est délivrée à une **entreprise** (indépendant, studio, agence), identifiée par son **SIRET**, pour un an.
 
-- **Côté public** : accueil avec moteur « Dernières œuvres et entités vérifiées » (bascule œuvres ou entités, relié au registre et à l'annuaire), critères et tarifs avec estimateur d'abonnement, vérification d'une œuvre (rubrique clients), registre des œuvres certifiées, annuaire des certifiés (recherche par nom, discipline, structure, ville), Charte de transparence, FAQ.
-- **Parcours créateur** : dépôt du dossier en 5 étapes, heures indicatives sans test d'IA (vérification par la commission après le dépôt), Charte de transparence (version 1.1) remplie et signée en ligne, obligatoire, certification annuelle sur mesure, devis client transparent, accusé de réception, suivi, certificat, œuvre signée avec sceau et QR code.
-- **Espace pro** (connexion de démonstration pré-remplie) : tableau de bord, dossiers à traiter, base des œuvres avec recherche, filtres, tri, fiche détaillée avec charte signée, double vérification (analyse IA des fichiers, puis contrôle humain, audit terrain si besoin), décision de la commission, export CSV.
+- **Côté public** : accueil avec moteur « Dernières œuvres et entreprises vérifiées », critères et tarifs avec estimateur du coût annuel, page Vérifier (numéro d'œuvre, numéro d'entreprise, SIRET ou nom), registre des entreprises certifiées, registre des œuvres, Charte de transparence, FAQ.
+- **Dépôt du dossier de l'entreprise**, en 5 étapes : SIRET (contrôle de la clé, refus d'un SIRET déjà enregistré) et identité de l'entreprise, processus créatif, Kbis + portfolio (1 à 3 œuvres) + justificatifs, Charte signée par le représentant, récapitulatif et règlement de la certification annuelle. Aucun test d'IA au dépôt.
+- **Espace client** : l'entreprise se connecte avec son SIRET ou son numéro de dossier et son e-mail. Elle voit sa certification et sa validité, ses œuvres certifiées (sceau et QR code téléchargeables), peut déclarer une nouvelle œuvre et télécharger sa charte signée.
+- **Accès commission** (pied de page) : tableau de bord, dossiers à traiter, base des entreprises, base des œuvres, double vérification (analyse IA des fichiers, puis contrôle humain, audit terrain si besoin), décision, export CSV.
 
 ### Tarifs
 
-La certification est annuelle et sur mesure, à partir de 108 € HT par an. Son coût dépend du nombre de créations à certifier, de la taille de la structure, de l'ampleur du processus créatif et de l'étude du dossier. La certification à l'unité dépend de l'œuvre, de 25 € à 149 € HT. La vérification est gratuite.
+La certification est annuelle et sur mesure, à partir de 108 € HT par an. Son coût dépend du nombre de créations à certifier, de la taille de la structure, de l'ampleur du processus créatif et de l'étude du dossier. La vérification est gratuite.
 
 ### Accueil
 ![Accueil](captures/01-accueil.png)
 
-### Dépôt : processus créatif
-![Dépôt, processus](captures/02-depot-processus.png)
+### Dépôt : l'entreprise et son SIRET
+![Dépôt, entreprise](captures/02-depot-entreprise.png)
 
-### Dépôt : signature de la charte
-![Dépôt, charte](captures/03-depot-charte.png)
+### Dépôt : Kbis, portfolio et justificatifs
+![Dépôt, portfolio](captures/03-depot-portfolio.png)
 
-### Dépôt : abonnement, devis et règlement
-![Dépôt, devis](captures/04-depot-devis.png)
+### Dépôt : charte signée par le représentant
+![Dépôt, charte](captures/04-depot-charte.png)
 
-### Tarifs et estimateur du coût annuel
-![Tarifs](captures/05-tarifs.png)
+### Dépôt : récapitulatif
+![Dépôt, récapitulatif](captures/05-depot-recap.png)
 
 ### Confirmation
 ![Confirmation](captures/06-confirmation.png)
 
-### Certificat et œuvre signée
-![Certificat](captures/07-certificat.png)
+### Registre des entreprises certifiées
+![Registre des entreprises](captures/07-registre-entreprises.png)
 
-### Vérifier une œuvre
-![Vérification](captures/08-verification.png)
+### Fiche d'une entreprise certifiée
+![Fiche entreprise](captures/08-fiche-entreprise.png)
 
-### Registre public
-![Registre](captures/09-registre.png)
+### Registre des œuvres
+![Registre des œuvres](captures/09-registre-oeuvres.png)
 
-### Annuaire des certifiés
-![Annuaire](captures/14-annuaire.png)
+### Vérifier une œuvre ou une entreprise
+![Vérifier](captures/10-verifier.png)
 
-### Espace pro : tableau de bord
-![Tableau de bord](captures/10-pro-tableau.png)
+### Espace client
+![Espace client](captures/11-espace-client.png)
 
-### Espace pro : base des œuvres
-![Base des œuvres](captures/11-pro-base.png)
+### Accès commission
+![Commission](captures/12-commission.png)
 
-### Espace pro : fiche dossier
-![Fiche dossier](captures/12-pro-dossier.png)
+### Commission : dossier d'une entreprise
+![Dossier](captures/13-commission-dossier.png)
 
 ### Mobile
-![Mobile](captures/13-mobile.png)
+![Mobile](captures/14-mobile.png)

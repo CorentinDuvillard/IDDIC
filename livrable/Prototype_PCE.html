@@ -112,13 +112,13 @@ button { font-family: inherit; }
 .galerie { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 22px; }
 .oeuvre-c { border: 1px solid var(--trait-c); background: var(--blanc); text-decoration: none; color: var(--encre); display: block; transition: transform .25s, box-shadow .25s, border-color .25s; }
 .oeuvre-c:hover { transform: translateY(-4px); box-shadow: var(--ombre); border-color: var(--marine); }
-.vignette { position: relative; aspect-ratio: 4 / 3; overflow: hidden; background: var(--fond); }
+.vignette { position: relative; display: block; aspect-ratio: 4 / 3; overflow: hidden; background: var(--fond); }
 .vignette img, .vignette svg { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform .5s; }
 .oeuvre-c:hover .vignette img, .oeuvre-c:hover .vignette svg { transform: scale(1.04); }
 .vignette .mini-sceau { position: absolute; right: 8px; bottom: 8px; width: 40px; height: 40px; border-radius: 50%; background: var(--blanc); box-shadow: 0 2px 6px rgba(0,0,0,.15); }
 .oeuvre-c .txt { padding: 12px 14px 14px; }
 .oeuvre-c b { display: block; color: var(--marine); font-size: 15px; }
-.oeuvre-c small { color: var(--gris); font-size: 13px; }
+.oeuvre-c small { display: block; color: var(--gris); font-size: 13px; }
 .filtres { display: flex; gap: 12px; flex-wrap: wrap; align-items: end; margin: 6px 0 24px; }
 .filtres .champ { margin: 0; }
 .vide-msg { padding: 40px; text-align: center; color: var(--gris); border: 1px dashed var(--trait); }
@@ -298,6 +298,21 @@ table.devis tr.tot td { font-weight: 700; font-size: 16px; border-bottom: 2px so
 .entite-ent { display: flex; gap: 20px; align-items: center; margin-top: 8px; }
 
 
+/* Entreprises et SIRET */
+.siret-l { display: flex; gap: 12px; align-items: center; }
+.siret-l input { max-width: 260px; font-family: "Courier New", monospace; font-size: 17px; letter-spacing: .04em; }
+.siret-etat { font-size: 14px; font-weight: 700; color: var(--gris); }
+.siret-etat.ok { color: var(--vert); } .siret-etat.ko { color: var(--rouge); }
+.radios.cases { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 0 16px; }
+.port-recap { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 12px; }
+.port-recap figure { margin: 0; border: 1px solid var(--trait-c); }
+.port-recap img, .port-recap .mini-v { width: 100%; aspect-ratio: 4 / 3; object-fit: cover; display: block; overflow: hidden; }
+.port-recap .mini-v svg, .port-recap .mini-v img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.port-recap figcaption { font-size: 13px; padding: 6px 8px; }
+.avatar.petit { width: 34px; height: 34px; font-size: 12px; }
+.res-ok .avatar.grand { align-self: start; }
+.apercu input, .apercu select { max-width: 320px; }
+
 /* Confirmation / suivi */
 .etroit { max-width: 720px; margin: 0 auto; padding-bottom: 56px; }
 .succes { display: flex; gap: 16px; align-items: center; border: 1px solid var(--marine); border-left: 5px solid var(--marine); padding: 18px 20px; margin: 10px 0 24px; }
@@ -470,9 +485,9 @@ table.bdd tbody tr:hover { background: var(--pale); }
   <div class="conteneur pied-haut">
     <div><div class="pm"><img class="pied-logo" alt=""><div><b>Certification PCE</b><br><small style="color:#C9D6EE">Processus Créatif Éthique</small></div></div>
       <p>Le label qui certifie le processus créatif : une vision humaine, une IA maîtrisée, une transparence totale pour le client.</p></div>
-    <div><h4>Le label</h4><ul><li><a href="#/">Accueil</a></li><li><a href="#/registre">Registre des œuvres</a></li><li><a href="#/annuaire">Annuaire des certifiés</a></li><li><a href="#/faq">Questions fréquentes</a></li></ul></div>
+    <div><h4>Le label</h4><ul><li><a href="#/">Accueil</a></li><li><a href="#/registre">Registre des œuvres</a></li><li><a href="#/entreprises">Registre des entreprises</a></li><li><a href="#/faq">Questions fréquentes</a></li></ul></div>
     <div><h4>Créateurs</h4><ul><li><a href="#/depot">Déposer mon dossier</a></li><li><a href="#/createurs">Critères et tarifs</a></li><li><a class="lien-charte">Charte de transparence</a></li><li><a href="#/suivi">Suivre mon dossier</a></li></ul></div>
-    <div><h4>Clients</h4><ul><li><a href="#/verifier">Vérifier une œuvre</a></li><li><a href="#/registre">Registre des œuvres</a></li><li><a href="#/pro">Espace pro</a></li></ul></div>
+    <div><h4>Clients</h4><ul><li><a href="#/verifier">Vérifier une œuvre ou une entreprise</a></li><li><a href="#/entreprises">Entreprises certifiées</a></li><li><a href="#/espace">Espace client</a></li><li><a href="#/pro">Accès commission</a></li></ul></div>
   </div>
   <div class="conteneur pied-bas">
     <div><a href="#/faq">Mentions légales</a> · <a href="#/faq">Accessibilité</a> · <a href="#/registre">Plan du site</a> · <a href="#/faq">Contact</a></div>
@@ -2811,7 +2826,7 @@ const STATUTS = {
   deposee: "Déposé", analyse: "Analyse IA des fichiers", commission: "Contrôle humain", audit: "Audit terrain", certifiee: "Certifiée", refusee: "Refusée",
 };
 const IA_LIB = { aucun: "Aucun", appui: "En appui (idées, retouches)", generation: "Génération d'éléments du rendu" };
-const CLE = "pce-demo-v6";
+const CLE = "pce-demo-v7";
 
 /* ---------- Utilitaires ---------- */
 const $ = (s, r = document) => r.querySelector(s);
@@ -2854,68 +2869,97 @@ function qrSvg(texte) {
 const BASE = location.protocol.startsWith("http") ? location.origin : SITE;
 const urlVerif = id => `${BASE}/verifier/${id}`;
 
+const urlVerifE = id => `${BASE}/verifier/${id}`;
+
+/* ---------- SIRET ---------- */
+const siretNu = s => String(s || "").replace(/\s+/g, "");
+function luhnOk(s) { s = siretNu(s); if (!/^\d{14}$/.test(s)) return false; let t = 0; for (let i = 0; i < 14; i++) { let d = +s[13 - i]; if (i % 2) { d *= 2; if (d > 9) d -= 9; } t += d; } return t % 10 === 0; }
+const siretFmt = s => { s = siretNu(s); return s.length === 14 ? `${s.slice(0, 3)} ${s.slice(3, 6)} ${s.slice(6, 9)} ${s.slice(9)}` : s; };
+function genSiret(r) { const b = "9" + Array.from({ length: 12 }, () => Math.floor(r() * 10)).join(""); for (let d = 0; d < 10; d++) if (luhnOk(b + d)) return b + d; return b + "0"; }
+
 /* ---------- Base de données (localStorage) ---------- */
 const PRENOMS = ["Léa", "Hugo", "Inès", "Malo", "Clara", "Nolan", "Jade", "Rayan", "Zoé", "Théo", "Lina", "Sacha", "Maëlle", "Elio", "Romane", "Nathan", "Anaïs", "Yanis", "Lou", "Basile"];
 const NOMS = ["Moreau", "Garnier", "Lefèvre", "Roussel", "Fabre", "Mercier", "Blanchard", "Perrin", "Morel", "Girard", "Vidal", "Caron", "Renaud", "Aubert", "Marchand", "Lemaire", "Barbier", "Collin", "Picard", "Royer"];
 const VILLES = ["Lyon", "Paris", "Bordeaux", "Nantes", "Lille", "Marseille", "Toulouse", "Rennes", "Strasbourg", "Montpellier"];
+const STUDIOS = ["Studio Halo", "Atelier Brume", "Studio Orée", "Atelier Sillon", "Studio Atlas", "Maison Lin", "Studio Onde", "Atelier Fil"];
+const AGENCES = ["Agence Méridienne", "Agence Contraste", "Les Ateliers Bleus", "Agence Parallèle", "Grand Angle"];
+const FORMES = ["Entrepreneur individuel (micro-entreprise)", "EURL", "SARL", "SAS ou SASU", "Association", "Autre"];
 const TITRES = {
   "Illustration": ["Marée basse", "Le jardin suspendu", "Nuit d'octobre", "Les veilleurs", "Cartographie intime", "Éclats de ville", "L'herbier", "Fenêtre sur cour", "Le grand bleu", "Petits matins"],
   "Photographie": ["Lumière rasante", "Quai n° 4", "Silence minéral", "Portrait d'atelier", "Brume sur Loire", "Contre-jour", "Heure bleue", "Les dockers", "Grain de sel", "Vertical"],
-  "Identité visuelle": ["Maison Orée", "Atelier Brume", "Café Sillon", "Studio Halo", "Domaine des Aulnes", "Librairie Fil", "Brasserie Lin", "Galerie Onde", "Fromagerie Roc", "Théâtre Nord"],
+  "Identité visuelle": ["Maison Orée", "Café Sillon", "Domaine des Aulnes", "Librairie Fil", "Brasserie Lin", "Galerie Onde", "Fromagerie Roc", "Théâtre Nord", "Cave Ardoise", "Épicerie Sel"],
   "Tatouage": ["Flash botanique", "Hirondelle", "Ligne de vie", "Pivoine noire", "Vague japonaise", "Serpent d'or", "Rose des vents", "Carpe koï", "Lune et ronces", "Phalène"],
   "Campagne de marque": ["Collection Hiver 2026", "Savoir-faire main", "L'atelier en mouvement", "Héritage", "Matières premières", "Gestes", "Fait à Lyon", "Les mains", "Printemps lent", "Origines"],
 };
+const slug = n => n.toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g, "").replace(/[^a-z0-9]+/g, ".").replace(/^\.|\.$/g, "");
+const AUJ = new Date(2026, 10, 2);
 function seedBase() {
-  const r = rng(2026), liste = [], types = Object.keys(TYPES), vus = {};
+  const r = rng(2026), entites = [], oeuvres = [], types = Object.keys(TYPES), vus = {};
   const statuts = ["certifiee", "certifiee", "certifiee", "certifiee", "certifiee", "certifiee", "certifiee", "analyse", "commission", "refusee", "certifiee", "deposee", "audit", "certifiee"];
-  for (let i = 0; i < 44; i++) {
-    const type = types[Math.floor(r() * types.length)], prenom = PRENOMS[Math.floor(r() * PRENOMS.length)], nom = NOMS[Math.floor(r() * NOMS.length)];
+  let no = 301, ne = 2;
+  const pousserOeuvres = (e, n) => { for (let k = 0; k < n; k++) { const type = e.disciplines[k % e.disciplines.length]; oeuvres.push({ id: "PCE-2026-" + String(no++).padStart(6, "0"), entiteId: e.id, titre: TITRES[type][(vus[type] = (vus[type] ?? -1) + 1) % 10], type, date: e.dateCertif || e.date, img: null, seed: 1 + Math.floor(r() * 100000) }); } };
+  for (let i = 0; i < 36; i++) {
+    const tl = ["Indépendant", "Indépendant", "Indépendant", "Indépendant", "Studio (2 à 10 personnes)", "Agence (11 à 50 personnes)"][Math.floor(r() * 6)];
+    const rep = PRENOMS[Math.floor(r() * PRENOMS.length)] + " " + NOMS[Math.floor(r() * NOMS.length)];
+    const raison = tl === "Indépendant" ? rep : tl.startsWith("Studio") ? STUDIOS[i % STUDIOS.length] : AGENCES[i % AGENCES.length];
+    if (entites.some(x => x.raison === raison)) continue;
     const st = statuts[Math.floor(r() * statuts.length)];
-    const rech = 2 + Math.round(r() * 10), crea = 4 + Math.round(r() * 22);
+    const d1 = types[Math.floor(r() * types.length)], d2 = types[Math.floor(r() * types.length)];
+    const disciplines = tl === "Indépendant" || d1 === d2 ? [d1] : [d1, d2];
     const iaMode = st === "refusee" ? "generation" : r() < .3 ? "aucun" : (r() < .85 ? "appui" : "generation");
-    let ia = iaMode === "aucun" ? 0 : Math.max(1, Math.round((rech + crea) * (st === "refusee" ? .2 + r() * .2 : r() * .1)));
-    const mois = Math.floor(r() * 10), jour = 1 + Math.floor(r() * (mois === 9 ? 13 : 27));
-    liste.push({
-      id: "PCE-2026-" + String(301 + i).padStart(6, "0"), titre: TITRES[type][(vus[type] = (vus[type] ?? -1) + 1) % 10], createur: prenom + " " + nom,
-      email: (prenom + "." + nom).toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g, "") + "@exemple.fr", type,
-      ville: VILLES[Math.floor(r() * VILLES.length)], date: new Date(2026, mois, jour).toISOString(),
-      statut: st, dosage: { recherche: rech, creation: crea, ia }, iaMode,
-      outils: iaMode === "aucun" ? "" : ["Retouche colorimétrique assistée", "Recherche de références", "Détourage automatique", "Variantes de mise en page"][Math.floor(r() * 4)],
-      description: "Recherches documentaires et croquis préparatoires, choix de la palette, trois versions successives validées avec le client, finalisation manuelle.",
-      formule: r() < .7 ? "abonnement" : "unite", seed: 1 + Math.floor(r() * 100000), img: null, audit: st === "audit" || (st === "certifiee" && r() < .12),
-      ...((tl, nb) => ({ taille: tl, creationsAn: nb, prixAbo: estimerAbo(tl, nb, rech + crea + ia).annuel ?? null }))(["Indépendant", "Indépendant", "Indépendant", "Studio (2 à 10 personnes)", "Agence (11 à 50 personnes)"][Math.floor(r() * 5)], 3 + Math.floor(r() * 40)),
-      justificatifs: ["croquis-preparatoires.pdf", "fichier-source.psd"].slice(0, 1 + Math.floor(r() * 2)),
-      motif: st === "refusee" ? "Après examen des justificatifs, la part d'exécution par IA dépasse le seuil du référentiel." : "",
-      charte: { expertise: expertiseDefaut(type), expertiseAutre: type === "Tatouage" ? "Tatouage" : "", outilsTrad: "Crayon, carnet de croquis, tablette graphique, logiciel de retouche", outilsIA: iaMode === "aucun" ? "Aucun" : "Assistant de recherche, retouche assistée", signature: null, signeLe: new Date(2026, mois, jour).toISOString() },
-    });
+    const mois = Math.floor(r() * 9), jour = 1 + Math.floor(r() * 27), date = new Date(2026, mois, jour);
+    const dateCertif = st === "certifiee" ? new Date(2026, mois, Math.min(28, jour + 12 + Math.floor(r() * 10))).toISOString() : null;
+    const h = { recherche: 2 + Math.round(r() * 8), creation: 4 + Math.round(r() * 18), execution: 1 + Math.round(r() * 6) }, nb = 3 + Math.floor(r() * 40);
+    const e = {
+      id: "PCE-E-2026-" + String(ne++).padStart(4, "0"), siret: genSiret(r), raison, forme: tl === "Indépendant" ? FORMES[0] : tl.startsWith("Studio") ? (r() < .5 ? "SARL" : "SAS ou SASU") : "SAS ou SASU",
+      taille: tl, disciplines, ville: VILLES[Math.floor(r() * VILLES.length)], email: slug(raison) + "@exemple.fr", representant: rep, site: "",
+      statut: st, date: date.toISOString(), dateCertif, iaMode, outils: iaMode === "aucun" ? "" : ["Retouche colorimétrique assistée", "Recherche de références", "Détourage automatique", "Variantes de mise en page"][Math.floor(r() * 4)],
+      description: "Recherches documentaires et croquis préparatoires pour chaque projet, choix de la palette, versions successives validées avec le client, finalisation manuelle.",
+      organisation: tl === "Indépendant" ? "Je conçois et réalise seul chaque projet." : "La direction artistique conçoit, l'équipe exécute, chaque rendu est validé par la direction artistique.",
+      heures: h, creationsAn: nb, prixAbo: estimerAbo(tl, nb, h.recherche + h.creation + h.execution).annuel ?? null,
+      kbis: "kbis-" + slug(raison).replace(/\./g, "-") + ".pdf", justificatifs: ["croquis-preparatoires.pdf", "fichiers-sources.zip"].slice(0, 1 + Math.floor(r() * 2)),
+      audit: st === "audit" || (st === "certifiee" && r() < .12), motif: st === "refusee" ? "Après examen des justificatifs, la conception humaine des œuvres du portfolio n'est pas établie." : "", seed: 1 + Math.floor(r() * 100000),
+      charte: { expertise: expertiseDefaut(d1), expertiseAutre: d1 === "Tatouage" ? "Tatouage" : "", outilsTrad: "Crayon, carnet de croquis, tablette graphique, logiciel de retouche", outilsIA: iaMode === "aucun" ? "Aucun" : "Assistant de recherche, retouche assistée", signature: null, signeLe: date.toISOString() },
+    };
+    entites.push(e); pousserOeuvres(e, 1 + Math.floor(r() * 3));
   }
-  liste.push({ id: "PCE-2026-000127", titre: "La maison au soleil", createur: "Studio Lune", email: "contact@studiolune.fr", type: "Illustration", ville: "Lyon",
-    date: new Date(2026, 9, 2).toISOString(), statut: "certifiee", dosage: { recherche: 4, creation: 8, ia: 1 }, iaMode: "appui", outils: "Nettoyage du trait",
-    description: "Croquis au crayon, composition de la scène familiale, mise en couleur à la main, nettoyage du trait assisté.", formule: "abonnement", seed: 7, img: OEUVRE, taille: "Indépendant", creationsAn: 6, prixAbo: 144,
-    justificatifs: ["croquis-maison.jpg", "etapes-couleur.pdf"], motif: "",
-    charte: { expertise: "Design Graphique / Illustration", expertiseAutre: "", outilsTrad: "Crayon, feutres, tablette graphique", outilsIA: "Nettoyage du trait assisté", signature: null, signeLe: new Date(2026, 9, 1).toISOString() } });
-  return liste.sort((a, b) => new Date(b.date) - new Date(a.date));
+  const lune = { id: "PCE-E-2026-0001", siret: genSiret(rng(127)), raison: "Studio Lune", forme: FORMES[0], taille: "Indépendant", disciplines: ["Illustration"], ville: "Lyon", email: "contact@studiolune.fr", representant: "Léa Moreau", site: "https://studiolune.fr",
+    statut: "certifiee", date: new Date(2026, 8, 18).toISOString(), dateCertif: new Date(2026, 9, 2).toISOString(), iaMode: "appui", outils: "Nettoyage du trait",
+    description: "Croquis au crayon, composition des scènes, mise en couleur à la main, nettoyage du trait assisté.", organisation: "Je conçois et réalise seule chaque illustration.",
+    heures: { recherche: 4, creation: 8, execution: 1 }, creationsAn: 6, prixAbo: 144, kbis: "avis-situation-sirene-studio-lune.pdf", justificatifs: ["croquis-maison.jpg", "etapes-couleur.pdf"], audit: false, motif: "", seed: 7,
+    charte: { expertise: "Design Graphique / Illustration", expertiseAutre: "", outilsTrad: "Crayon, feutres, tablette graphique", outilsIA: "Nettoyage du trait assisté", signature: null, signeLe: new Date(2026, 8, 18).toISOString() } };
+  entites.push(lune);
+  oeuvres.push({ id: "PCE-2026-000127", entiteId: lune.id, titre: "La maison au soleil", type: "Illustration", date: lune.dateCertif, img: OEUVRE, seed: 7 });
+  oeuvres.push({ id: "PCE-2026-000128", entiteId: lune.id, titre: "Petits matins", type: "Illustration", date: lune.dateCertif, img: null, seed: 4128 });
+  return { entites: entites.sort((a, b) => new Date(b.date) - new Date(a.date)), oeuvres };
 }
 const DB = {
   data: null,
-  charger() { try { const s = localStorage.getItem(CLE); if (s) { this.data = JSON.parse(s); return; } } catch (e) {} this.data = { oeuvres: seedBase(), compteur: 200, brouillon: null, pro: false }; },
+  charger() { try { const s = localStorage.getItem(CLE); if (s) { this.data = JSON.parse(s); return; } } catch (e) {} const b = seedBase(); this.data = { entites: b.entites, oeuvres: b.oeuvres, compteur: 200, compteurE: 100, brouillon: null, pro: false }; },
   sauver() { try { localStorage.setItem(CLE, JSON.stringify(this.data)); } catch (e) { /* stockage indisponible : la démo continue en mémoire */ } },
-  get(id) { return this.data.oeuvres.find(o => o.id.toLowerCase() === String(id).trim().toLowerCase()); },
-  ajouter(o) { this.data.oeuvres.unshift(o); this.sauver(); },
-  maj(id, champs) { Object.assign(this.get(id), champs); this.sauver(); },
-  nouvelId() { this.data.compteur++; this.sauver(); return "PCE-2026-" + String(this.data.compteur).padStart(6, "0"); },
+  entite(id) { const k = String(id || "").trim().toLowerCase(); return this.data.entites.find(e => e.id.toLowerCase() === k); },
+  parSiret(s) { const k = siretNu(s); return this.data.entites.find(e => e.siret === k); },
+  oeuvre(id) { const k = String(id || "").trim().toLowerCase(); return this.data.oeuvres.find(o => o.id.toLowerCase() === k); },
+  majEntite(id, ch) { Object.assign(this.entite(id), ch); this.sauver(); },
+  nouvelIdOeuvre() { this.data.compteur++; this.sauver(); return "PCE-2026-" + String(this.data.compteur).padStart(6, "0"); },
+  nouvelIdEntite() { this.data.compteurE++; this.sauver(); return "PCE-E-2026-" + String(this.data.compteurE).padStart(4, "0"); },
   reset() { try { localStorage.removeItem(CLE); } catch (e) {} this.data = null; this.charger(); this.sauver(); },
 };
+const entiteDe = o => DB.entite(o.entiteId);
+const certifiee = e => e && e.statut === "certifiee";
+const oeuvresPubliques = () => DB.data.oeuvres.filter(o => certifiee(entiteDe(o)));
+const oeuvresDe = e => DB.data.oeuvres.filter(o => o.entiteId === e.id);
+const finValidite = e => { const d = new Date(e.dateCertif || e.date); d.setFullYear(d.getFullYear() + 1); return d.toISOString(); };
 
 /* ---------- En-tête ---------- */
 function entete(route) {
-  const liens = [["#/", "Le label"], ["#/createurs", "Pour les créateurs"], ["#/verifier", "Vérifier une œuvre"], ["#/registre", "Registre"], ["#/faq", "FAQ"]];
+  const liens = [["#/", "Le label"], ["#/createurs", "Pour les créateurs"], ["#/verifier", "Vérifier"], ["#/registre", "Registres"], ["#/faq", "FAQ"]];
   $("#entete").innerHTML = `<div class="conteneur">
     <a class="marque" href="#/"><img src="${LOGO}" alt=""><span><b>Certification PCE</b><small>Processus Créatif Éthique</small></span></a>
     <button class="menu-btn" aria-expanded="false" aria-controls="nav">☰ Menu</button>
     <nav class="nav" id="nav" aria-label="Navigation principale">
-      ${liens.map(([h, t]) => `<a href="${h}" class="${(h === "#/" ? route === "/" : (route === h.slice(1) || route.startsWith(h.slice(1) + "/") || (h === "#/registre" && /^\/(annuaire|certifie\/)/.test(route)))) ? "actif" : ""}">${t}</a>`).join("")}
-      <a href="#/pro" class="pro ${route.startsWith("/pro") ? "actif" : ""}">Espace pro</a>
+      ${liens.map(([h, t]) => `<a href="${h}" class="${(h === "#/" ? route === "/" : (route === h.slice(1) || route.startsWith(h.slice(1) + "/") || (h === "#/registre" && /^\/(entreprises|entreprise\/|oeuvre\/)/.test(route)))) ? "actif" : ""}">${t}</a>`).join("")}
+      <a href="#/espace" class="pro ${route.startsWith("/espace") ? "actif" : ""}">Espace client</a>
       <a class="btn petit" href="#/depot" style="margin-left:8px">Déposer mon dossier</a>
     </nav></div>`;
   const b = $(".menu-btn"), n = $("#nav");
@@ -2923,92 +2967,98 @@ function entete(route) {
 }
 const ariane = (...p) => `<div class="ariane"><a href="#/">Accueil</a> › ${p.map((x, i) => i < p.length - 1 ? `<a href="${x[0]}">${x[1]}</a>` : esc(x)).join(" › ")}</div>`;
 
+/* ---------- Cartes ---------- */
+const VEDETTE = "PCE-2026-000127", VEDETTE_E = "PCE-E-2026-0001";
+const vedetteEnTete = l => [...l].sort((a, b) => (b.id === VEDETTE) - (a.id === VEDETTE));
+const initiales = n => n.split(/[\s,]+/).filter(Boolean).slice(0, 2).map(x => x[0].toUpperCase()).join("");
+const carteOeuvre = o => { const e = entiteDe(o); return `<a class="oeuvre-c rev" href="#/oeuvre/${o.id}"><div class="vignette">${visuel(o)}<img class="mini-sceau" src="${LOGO}" alt=""><span class="voir">Voir le certificat →</span></div><div class="txt"><b>${esc(o.titre)}</b><small>${esc(e ? e.raison : "")} · ${esc(o.type)}</small></div></a>`; };
+const carteEntite = e => { const n = oeuvresDe(e).length; return `<a class="entite rev" href="#/entreprise/${e.id}"><span class="avatar">${esc(initiales(e.raison))}</span><span><b>${esc(e.raison)}</b><small>${esc(e.taille)}${e.ville ? " · " + esc(e.ville) : ""}</small><span class="tags">${e.disciplines.map(x => `<i>${esc(x)}</i>`).join("")}</span><small>SIRET ${siretFmt(e.siret)}</small><small>${n} œuvre${n > 1 ? "s" : ""} au registre · certifiée depuis ${new Date(e.dateCertif).toLocaleDateString("fr-FR", { month: "long", year: "numeric" })}</small></span></a>`; };
+const entitesCertifiees = () => DB.data.entites.filter(certifiee).sort((a, b) => (b.id === VEDETTE_E) - (a.id === VEDETTE_E) || new Date(b.dateCertif) - new Date(a.dateCertif));
+const txtEntite = e => (e.raison + " " + e.siret + " " + e.id + " " + e.disciplines.join(" ") + " " + (e.ville || "") + " " + e.taille).toLowerCase();
+const txtOeuvre = o => { const e = entiteDe(o); return (o.titre + " " + o.id + " " + o.type + " " + (e ? e.raison + " " + e.siret : "")).toLowerCase(); };
+
 /* ---------- Vues publiques ---------- */
 function vueAccueil() {
-  const o = DB.data.oeuvres, cert = o.filter(x => x.statut === "certifiee");
-  const createurs = new Set(cert.map(x => x.createur)).size;
-  const disciplines = new Set(cert.map(x => x.type)).size;
+  const ents = entitesCertifiees(), oeuv = oeuvresPubliques();
   return `<div class="conteneur">
     ${ariane("Certification PCE")}
     <section class="hero">
       <div>
         <span class="tag">Service en ligne</span>
         <h1 style="margin-top:12px">La certification du processus créatif éthique</h1>
-        <p class="chapo">Un label qui atteste que vos créations sont issues d'un processus créatif documenté, analysé par notre IA de vérification puis examiné par une commission indépendante.</p>
-        <div class="actions"><a class="btn" href="#/depot">Déposer mon dossier <span class="fl">→</span></a><a class="btn sec" href="#/verifier">Vérifier une certification</a></div>
+        <p class="chapo">Un label qui certifie les créatifs, studios et agences, identifiés par leur SIRET, dont le processus créatif est documenté, analysé par notre IA de vérification puis examiné par une commission indépendante.</p>
+        <div class="actions"><a class="btn" href="#/depot">Déposer mon dossier <span class="fl">→</span></a><a class="btn sec" href="#/verifier">Vérifier une œuvre ou une entreprise</a></div>
       </div>
       <div class="hero-visu"><img class="sceau-h" src="${LOGO}" alt="Sceau de la certification PCE"></div>
     </section>
     <div class="chiffres rev">
-      <div><b data-compte="${cert.length}">0</b><span>œuvres certifiées</span></div>
-      <div><b data-compte="${createurs}">0</b><span>créateurs certifiés</span></div>
-      <div><b data-compte="${disciplines}">0</b><span>disciplines représentées</span></div>
-      <div><b>0 €</b><span>pour vérifier une œuvre</span></div>
+      <div><b data-compte="${ents.length}">0</b><span>entreprises certifiées</span></div>
+      <div><b data-compte="${oeuv.length}">0</b><span>œuvres au registre</span></div>
+      <div><b data-compte="${new Set(ents.flatMap(e => e.disciplines)).size}">0</b><span>disciplines représentées</span></div>
+      <div><b>0 €</b><span>pour vérifier</span></div>
     </div>
   </div>
   <section class="section"><div class="conteneur">
     <h2 class="rev">Pourquoi la certification PCE ?</h2>
     <div class="grille3">
-      <div class="carte rev"><div class="ico"><svg viewBox="0 0 24 24"><path d="M12 3l7 3v5c0 4.5-3 8.3-7 10-4-1.7-7-5.5-7-10V6z"/><path d="M8.5 12l2.5 2.5 4.5-5"/></svg></div><h3><span class="pastille">1</span>Rassurer vos clients</h3><p>Le label atteste que le rendu résulte d'un processus créatif réel, documenté et vérifiable.</p></div>
-      <div class="carte rev"><div class="ico"><svg viewBox="0 0 24 24"><path d="M12 3l2.6 5.6 6.1.7-4.5 4.2 1.2 6L12 16.5 6.6 19.5l1.2-6L3.3 9.3l6.1-.7z"/></svg></div><h3><span class="pastille">2</span>Valoriser votre travail</h3><p>Distinguez votre prestation des rendus générés automatiquement, à qualité apparente égale.</p></div>
+      <div class="carte rev"><div class="ico"><svg viewBox="0 0 24 24"><path d="M12 3l7 3v5c0 4.5-3 8.3-7 10-4-1.7-7-5.5-7-10V6z"/><path d="M8.5 12l2.5 2.5 4.5-5"/></svg></div><h3><span class="pastille">1</span>Rassurer vos clients</h3><p>Le label atteste que votre entreprise suit un processus créatif réel, documenté et vérifiable.</p></div>
+      <div class="carte rev"><div class="ico"><svg viewBox="0 0 24 24"><path d="M12 3l2.6 5.6 6.1.7-4.5 4.2 1.2 6L12 16.5 6.6 19.5l1.2-6L3.3 9.3l6.1-.7z"/></svg></div><h3><span class="pastille">2</span>Valoriser votre travail</h3><p>Distinguez vos prestations des rendus générés automatiquement, à qualité apparente égale.</p></div>
       <div class="carte rev"><div class="ico"><svg viewBox="0 0 24 24"><circle cx="9" cy="8" r="3.2"/><path d="M3 20c0-3.3 2.7-6 6-6s6 2.7 6 6"/><circle cx="17" cy="9" r="2.4"/><path d="M15.5 14.2c3 .2 5.5 2.6 5.5 5.8"/></svg></div><h3><span class="pastille">3</span>Une double vérification</h3><p>Chaque dossier est analysé par notre IA de vérification, puis contrôlé par la commission. Un audit terrain est réalisé si besoin.</p></div>
     </div>
   </div></section>
   <section class="section fond"><div class="conteneur">
     <h2 class="rev">Comment obtenir la certification ?</h2>
     <div class="etapes-h rev" id="etapes-h">
-      <div><span class="pastille">1</span><b>Déposer le dossier</b><span>En ligne, environ 15 minutes</span></div>
+      <div><span class="pastille">1</span><b>Déposer le dossier</b><span>Entreprise (SIRET), processus, portfolio</span></div>
       <div><span class="pastille vide">2</span><b>Analyse IA des fichiers</b><span>Métadonnées, calques, historique</span></div>
       <div><span class="pastille vide">3</span><b>Contrôle humain</b><span>Commission, audit terrain si besoin</span></div>
-      <div><span class="pastille vide">4</span><b>Décision</b><span>Remise de la certification PCE</span></div>
+      <div><span class="pastille vide">4</span><b>Décision</b><span>Certification de l'entreprise pour un an</span></div>
     </div>
   </div></section>
   <section class="section"><div class="conteneur">
-    <h2 class="rev">Dernières œuvres et entités vérifiées</h2>
+    <h2 class="rev">Dernières œuvres et entreprises vérifiées</h2>
     <div class="moteur rev">
       <div class="bascule" role="tablist" aria-label="Afficher">
         <button type="button" role="tab" data-vue="oeuvres" aria-selected="true" class="actif">Œuvres</button>
-        <button type="button" role="tab" data-vue="entites" aria-selected="false">Entités</button>
+        <button type="button" role="tab" data-vue="entites" aria-selected="false">Entreprises</button>
       </div>
-      <form id="m-f" class="moteur-f"><label class="sr" for="m-q">Rechercher</label><input id="m-q" type="search" placeholder="Rechercher une œuvre, un créateur, un numéro PCE" autocomplete="off"><button class="btn">Rechercher <span class="fl">→</span></button></form>
+      <form id="m-f" class="moteur-f"><label class="sr" for="m-q">Rechercher</label><input id="m-q" type="search" placeholder="Rechercher une œuvre, une entreprise, un numéro PCE" autocomplete="off"><button class="btn">Rechercher <span class="fl">→</span></button></form>
     </div>
     <p class="muted petit-texte" id="m-n" aria-live="polite" style="margin:10px 0 0"></p>
     <div id="m-g" style="margin-top:14px"></div>
     <p style="margin-top:18px"><a id="m-tout" href="#/registre">Voir tout le registre des œuvres →</a></p>
   </div></section>
   <section class="section fond"><div class="conteneur"><div class="verif-home rev">
-    <div><span class="tag">Pour les clients</span><h2 style="margin-top:10px">Vous achetez une création ?</h2><p class="muted" style="margin:0">Saisissez le numéro PCE inscrit sur l'œuvre ou scannez son QR code. La vérification est gratuite.</p></div>
-    <div><form class="verif-form" id="vh-f"><label class="sr" for="vh-n">Numéro PCE</label><input id="vh-n" type="text" placeholder="PCE-2026-000127" autocomplete="off"><button class="btn">Vérifier <span class="fl">→</span></button></form>
+    <div><span class="tag">Pour les clients</span><h2 style="margin-top:10px">Vous achetez une création ?</h2><p class="muted" style="margin:0">Saisissez le numéro PCE de l'œuvre, le numéro ou le SIRET de l'entreprise, ou scannez le QR code. La vérification est gratuite.</p></div>
+    <div><form class="verif-form" id="vh-f"><label class="sr" for="vh-n">Numéro PCE ou SIRET</label><input id="vh-n" type="text" placeholder="Numéro PCE, SIRET ou nom" autocomplete="off"><button class="btn">Vérifier <span class="fl">→</span></button></form>
       <div class="exemples">Exemple : <button type="button" data-vh="PCE-2026-000127">PCE-2026-000127</button></div></div>
   </div></div></section>
   ${bandeauCta()}`;
 }
-const bandeauCta = () => `<section class="cta"><div class="conteneur"><div><h2>Faites certifier votre processus créatif</h2><p>Dépôt en ligne en 15 minutes, signature de la Charte de transparence, décision de la commission.</p></div>
+const bandeauCta = () => `<section class="cta"><div class="conteneur"><div><h2>Faites certifier votre entreprise</h2><p>Dépôt en ligne en 15 minutes avec votre SIRET, signature de la Charte de transparence, décision de la commission.</p></div>
   <div class="g"><a class="btn blanc" href="#/depot">Déposer mon dossier <span class="fl">→</span></a><a class="btn contour" href="#/charte">Lire la charte</a></div></div></section>`;
 const paramQ = () => decodeURIComponent((location.hash.split("?q=")[1] || "").split("&")[0]);
-const dernierCertif = e => Math.max(...e.oeuvres.map(o => +new Date(o.date)));
 function initMoteur() {
   let vue = "oeuvres";
   const f = () => {
-    const q = $("#m-q").value.trim().toLowerCase();
+    const brut = $("#m-q").value.trim(), q = brut.toLowerCase();
     if (vue === "oeuvres") {
-      const l = vedetteEnTete(DB.data.oeuvres.filter(o => o.statut === "certifiee" && (!q || (o.titre + " " + o.createur + " " + o.type + " " + o.id).toLowerCase().includes(q))).sort((a, b) => new Date(b.date) - new Date(a.date)));
+      const l = vedetteEnTete(oeuvresPubliques().filter(o => !q || txtOeuvre(o).includes(q)).sort((a, b) => new Date(b.date) - new Date(a.date)));
       $("#m-n").textContent = q ? `${l.length} œuvre${l.length > 1 ? "s" : ""} trouvée${l.length > 1 ? "s" : ""}` : "Les dernières œuvres certifiées";
       $("#m-g").innerHTML = l.length ? `<div class="galerie">${l.slice(0, 8).map(carteOeuvre).join("")}</div>` : `<div class="vide-msg">Aucune œuvre ne correspond à votre recherche.</div>`;
     } else {
-      const l = entites().filter(e => !q || (e.nom + " " + [...e.types].join(" ") + " " + (e.ville || "") + " " + e.taille).toLowerCase().includes(q))
-        .sort((a, b) => (b.oeuvres.some(o => o.id === VEDETTE)) - (a.oeuvres.some(o => o.id === VEDETTE)) || dernierCertif(b) - dernierCertif(a));
-      $("#m-n").textContent = q ? `${l.length} entité${l.length > 1 ? "s" : ""} trouvée${l.length > 1 ? "s" : ""}` : "Les dernières entités certifiées : créatifs, studios et agences";
-      $("#m-g").innerHTML = l.length ? `<div class="entites">${l.slice(0, 6).map(carteEntite).join("")}</div>` : `<div class="vide-msg">Aucune entité ne correspond à votre recherche.</div>`;
+      const l = entitesCertifiees().filter(e => !q || txtEntite(e).includes(q.replace(/\s+/g, "")) || txtEntite(e).includes(q));
+      $("#m-n").textContent = q ? `${l.length} entreprise${l.length > 1 ? "s" : ""} trouvée${l.length > 1 ? "s" : ""}` : "Les dernières entreprises certifiées : créatifs, studios et agences";
+      $("#m-g").innerHTML = l.length ? `<div class="entites">${l.slice(0, 6).map(carteEntite).join("")}</div>` : `<div class="vide-msg">Aucune entreprise ne correspond à votre recherche.</div>`;
     }
-    const cible = vue === "oeuvres" ? "#/registre" : "#/annuaire";
-    $("#m-tout").href = cible + (q ? "?q=" + encodeURIComponent($("#m-q").value.trim()) : "");
-    $("#m-tout").textContent = vue === "oeuvres" ? "Voir tout le registre des œuvres →" : "Voir tout l'annuaire des certifiés →";
+    const cible = vue === "oeuvres" ? "#/registre" : "#/entreprises";
+    $("#m-tout").href = cible + (q ? "?q=" + encodeURIComponent(brut) : "");
+    $("#m-tout").textContent = vue === "oeuvres" ? "Voir tout le registre des œuvres →" : "Voir tout le registre des entreprises certifiées →";
     revele();
   };
   $$(".bascule button").forEach(b => b.onclick = () => {
     vue = b.dataset.vue; $$(".bascule button").forEach(x => { x.classList.toggle("actif", x === b); x.setAttribute("aria-selected", x === b); });
-    $("#m-q").placeholder = vue === "oeuvres" ? "Rechercher une œuvre, un créateur, un numéro PCE" : "Rechercher un créatif, un studio, une agence, une ville";
+    $("#m-q").placeholder = vue === "oeuvres" ? "Rechercher une œuvre, une entreprise, un numéro PCE" : "Rechercher une entreprise, un SIRET, une ville";
     f();
   });
   $("#m-q").addEventListener("input", f);
@@ -3020,25 +3070,21 @@ function initAccueil() {
   $("#vh-f").onsubmit = e => { e.preventDefault(); const n = $("#vh-n").value.trim(); if (n) location.hash = "#/verifier/" + encodeURIComponent(n); };
   $$("[data-vh]").forEach(b => b.onclick = () => { location.hash = "#/verifier/" + b.dataset.vh; });
 }
-// « La maison au soleil » toujours en tête des œuvres certifiées
-const VEDETTE = "PCE-2026-000127";
-const vedetteEnTete = l => [...l].sort((a, b) => (b.id === VEDETTE) - (a.id === VEDETTE));
-const carteOeuvre = o => `<a class="oeuvre-c rev" href="#/oeuvre/${o.id}"><div class="vignette">${visuel(o)}<img class="mini-sceau" src="${LOGO}" alt=""><span class="voir">Voir le certificat →</span></div><div class="txt"><b>${esc(o.titre)}</b><small>${esc(o.createur)} · ${esc(o.type)}</small></div></a>`;
 
 function vueCreateurs() {
   return `<div class="conteneur">${ariane("Pour les créateurs")}
-    <h1>Pour les créateurs</h1><p class="muted" style="max-width:720px;font-size:17px">La certification PCE atteste que votre vision est humaine et que l'IA, si vous l'utilisez, reste un outil d'exécution.</p>
+    <h1>Pour les créateurs</h1><p class="muted" style="max-width:720px;font-size:17px">La certification PCE est délivrée à une entreprise, identifiée par son SIRET : créatif indépendant, studio ou agence. Elle atteste que sa vision est humaine et que l'IA, si elle est utilisée, reste un outil d'exécution.</p>
     <h2 style="margin-top:36px">Critères d'obtention</h2>
     <div class="grille4">
-      <div class="carte rev"><h3><span class="pastille">1</span>Processus documenté</h3><p>Recherches, croquis, versions successives, choix de style.</p></div>
-      <div class="carte rev"><h3><span class="pastille">2</span>Conception humaine</h3><p>L'intention, la composition et les choix artistiques sont les vôtres.</p></div>
-      <div class="carte rev"><h3><span class="pastille">3</span>IA maîtrisée</h3><p>L'IA reste un outil d'exécution, dans la limite de ${SEUIL} % du projet fixée par le référentiel. La commission le vérifie après le dépôt, sur vos justificatifs.</p></div>
-      <div class="carte rev"><h3><span class="pastille">4</span>Justificatifs</h3><p>Croquis, fichiers sources ou étapes intermédiaires, au format PDF, JPG ou PNG.</p></div>
+      <div class="carte rev"><h3><span class="pastille">1</span>Entreprise immatriculée</h3><p>Un SIRET actif, avec un extrait Kbis ou un avis de situation SIRENE.</p></div>
+      <div class="carte rev"><h3><span class="pastille">2</span>Processus documenté</h3><p>Recherches, croquis, versions successives : votre façon de créer, décrite et prouvée.</p></div>
+      <div class="carte rev"><h3><span class="pastille">3</span>IA maîtrisée</h3><p>La conception est humaine, l'IA reste un outil d'exécution, dans la limite fixée par le référentiel. La commission le vérifie après le dépôt.</p></div>
+      <div class="carte rev"><h3><span class="pastille">4</span>Portfolio et justificatifs</h3><p>Des œuvres représentatives et leurs fichiers de travail (calques, sources, croquis).</p></div>
     </div>
     <h2 style="margin-top:44px">Tarifs</h2>
     <div style="margin-bottom:24px;max-width:760px">
       <div class="carte rev"><h3>Certification annuelle sur mesure</h3><p style="font-size:34px;font-weight:700;color:var(--marine);margin:4px 0"><span style="font-size:16px">À partir de</span> 108 € <span style="font-size:16px">HT / an</span></p>
-        <p>Le tarif dépend du nombre de créations à certifier, de la taille de votre structure, de l'ampleur de votre processus créatif et de l'étude de votre dossier. Certifications incluses, profil dans le registre, devis transparents.</p>
+        <p>Le coût dépend du nombre de créations à certifier par an, de la taille de votre structure, de l'ampleur de votre processus créatif et de l'étude de votre dossier. La certification couvre l'entreprise pendant un an, ses œuvres figurent au registre.</p>
         <div class="estim" id="estim">
           <div class="champ"><label for="es-t">Taille de la structure</label><select id="es-t">${Object.keys(TAILLES).map(x => `<option>${x}</option>`).join("")}</select></div>
           <div class="deux"><div class="champ"><label for="es-c">Créations à certifier par an</label><input id="es-c" type="number" min="1" value="6"></div>
@@ -3047,12 +3093,12 @@ function vueCreateurs() {
         </div>
         <a class="btn" href="#/depot">Déposer mon dossier <span class="fl">→</span></a></div>
     </div>
-    <p class="muted petit-texte rev" style="margin:0 0 18px">Estimation indicative. Le tarif définitif est confirmé après l'étude du dossier par la commission.</p>
-    <div class="info rev" style="margin-bottom:56px"><span class="i">i</span><span>La signature de la <a href="#/charte">Charte de transparence et d'éthique créative</a> est obligatoire pour déposer un dossier. Elle se signe en ligne, à l'étape 4 du dépôt.</span></div>
+    <p class="muted petit-texte rev" style="margin:0 0 18px">Estimation indicative. Le coût définitif est confirmé après l'étude du dossier par la commission.</p>
+    <div class="info rev" style="margin-bottom:56px"><span class="i">i</span><span>La signature de la <a href="#/charte">Charte de transparence et d'éthique créative</a> par le représentant de l'entreprise est obligatoire. Elle se signe en ligne, à l'étape 4 du dépôt.</span></div>
     </div>${bandeauCta()}`;
 }
 function detailEstim(e, creations) {
-  if (e.surDevis) return `<b>Sur devis</b><span>Au-delà de 50 personnes, le tarif est établi après l'étude de votre dossier par la commission.</span>`;
+  if (e.surDevis) return `<b>Sur devis</b><span>Au-delà de 50 personnes, le coût est établi après l'étude de votre dossier par la commission.</span>`;
   return `<b>${libAbo(e)}</b><span>Base ${eur(e.base)} · ${e.inclus} créations par an incluses${e.supp ? ` · ${+creations - e.inclus} créations supplémentaires : +${eur(e.supp)}` : ""} · Processus ${e.procLib} : ${e.proc ? "+" + eur(e.proc) : "inclus"}<br>Étude du dossier : ${e.etude ? eur(e.etude) + " HT, une seule fois" : "incluse"}</span>`;
 }
 function initCreateurs() {
@@ -3062,50 +3108,41 @@ function initCreateurs() {
 function vueCharte() {
   return `<div class="conteneur etroit">${ariane("Charte de transparence")}
     <div class="charte rev">
-      <div class="charte-ent"><img src="${LOGO}" alt=""><div><span class="tag">Version 1.1</span><h2>Charte de transparence et d'éthique créative</h2><small>Label Processus Créatif Éthique (PCE)</small></div></div>
+      <div class="charte-ent"><img src="${LOGO}" alt=""><div><span class="tag">Version 1.2</span><h2>Charte de transparence et d'éthique créative</h2><small>Label Processus Créatif Éthique (PCE)</small></div></div>
       <div class="charte-corps">
         <p class="preambule"><b>Préambule.</b> ${PREAMBULE}</p>
-        <div class="article"><h3><span class="pastille">1</span>Déclaration d'identité et d'expertise</h3><p>Le créatif déclare son domaine d'expertise principal pour lequel il demande la certification PCE : ${EXPERTISES.slice(0, 3).join(", ")} ou autre domaine à préciser.</p></div>
-        <div class="article"><h3><span class="pastille">2</span>Déclaration des outils et logiciels</h3><p>Le créatif déclare les outils qu'il utilise de manière régulière : outils traditionnels et numériques (hors IA générative) et outils intégrant de l'Intelligence Artificielle.</p></div>
+        <div class="article"><h3><span class="pastille">1</span>Déclaration d'identité et d'expertise</h3><p>Le représentant de l'entreprise déclare sa raison sociale, son SIRET et son domaine d'expertise principal : ${EXPERTISES.slice(0, 3).join(", ")} ou autre domaine à préciser.</p></div>
+        <div class="article"><h3><span class="pastille">2</span>Déclaration des outils et logiciels</h3><p>L'entreprise déclare les outils qu'elle utilise de manière régulière : outils traditionnels et numériques (hors IA générative) et outils intégrant de l'Intelligence Artificielle.</p></div>
         ${ARTICLES_3_5}
       </div>
-      <div class="signature-zone"><p style="margin:0 0 12px">La charte se remplit et se signe en ligne, à l'étape 4 du dépôt de dossier. Sa signature est obligatoire.</p><a class="btn" href="#/depot">Déposer mon dossier et signer la charte <span class="fl">→</span></a></div>
+      <div class="signature-zone"><p style="margin:0 0 12px">La charte se remplit et se signe en ligne par le représentant de l'entreprise, à l'étape 4 du dépôt. Sa signature est obligatoire.</p><a class="btn" href="#/depot">Déposer mon dossier et signer la charte <span class="fl">→</span></a></div>
     </div><div style="height:56px"></div></div>`;
 }
 function vueFaq() {
   const q = [
-    ["Qu'est-ce que la certification PCE ?", "Un label qui certifie le processus créatif : la conception est humaine, l'IA reste un outil d'exécution, dans la limite de " + SEUIL + " % du temps du projet."],
+    ["Qu'est-ce que la certification PCE ?", "Un label délivré à une entreprise créative (indépendant, studio, agence), identifiée par son SIRET. Il certifie son processus créatif pendant un an : la conception est humaine, l'IA reste un outil d'exécution."],
+    ["Pourquoi certifier une entreprise et non une œuvre ?", "Parce que c'est la façon de créer qui est vérifiée. La certification couvre l'entreprise et toutes les œuvres qu'elle déclare au registre pendant sa validité. Le SIRET garantit l'identité de l'entreprise certifiée."],
     ["La certification est-elle contre l'IA ?", "Non. PCE certifie une IA maîtrisée par l'humain. Vous pouvez utiliser l'IA en appui, à condition de le déclarer."],
-    ["Combien de temps dure l'examen ?", "Le dépôt prend environ 15 minutes. Le dossier passe ensuite par l'analyse, l'étude par la commission, puis la décision."],
-    ["Combien coûte la certification ?", "La certification est annuelle et sur mesure, à partir de 108 € HT par an pour un indépendant. Son coût dépend du nombre de créations à certifier, de la taille de la structure, de l'ampleur du processus créatif et de l'étude du dossier. La certification à l'unité dépend de l'œuvre, de 25 € à 149 € HT. La vérification est gratuite."],
-    ["Comment un acheteur vérifie-t-il une œuvre ?", "En scannant le QR code apposé sur l'œuvre ou en saisissant le numéro PCE sur la page Vérifier une certification."],
-    ["Pourquoi signer la Charte de transparence ?", "La charte engage le créateur sur l'usage de l'IA, la transparence des devis, le respect de la propriété intellectuelle et l'acceptation des audits. Sa signature est obligatoire pour déposer un dossier."],
-    ["Comment vérifiez-vous un dossier ?", "Par une double vérification. Notre IA de vérification analyse d'abord les fichiers (métadonnées, calques, historique, traces de génération, similarité). La commission contrôle ensuite le dossier et décide. Si un doute subsiste, un membre de l'équipe réalise un audit terrain. Cette double vérification garantit la fiabilité à moindre coût, ce qui rend le label abordable."],
-    ["Les heures déclarées suffisent-elles à obtenir le label ?", "Non. Les heures sont indicatives : elles servent au devis client et à l'estimation du coût annuel de la certification. Aucun test d'IA n'est fait au dépôt : la commission vérifie ensuite la démarche sur les justificatifs (croquis, fichiers sources, calques, prompts)."],
+    ["Combien de temps dure l'examen ?", "Le dépôt prend environ 15 minutes. Le dossier passe ensuite par l'analyse IA des fichiers, le contrôle humain, puis la décision."],
+    ["Combien coûte la certification ?", "La certification est annuelle et sur mesure, à partir de 108 € HT par an pour un indépendant. Son coût dépend du nombre de créations à certifier, de la taille de la structure, de l'ampleur du processus créatif et de l'étude du dossier. La vérification est gratuite."],
+    ["Comment un acheteur vérifie-t-il ?", "En scannant le QR code de l'œuvre, ou en saisissant sur la page Vérifier le numéro PCE de l'œuvre, le numéro ou le SIRET de l'entreprise, ou son nom."],
+    ["Pourquoi signer la Charte de transparence ?", "La charte engage l'entreprise sur l'usage de l'IA, la transparence des devis, le respect de la propriété intellectuelle et l'acceptation des audits. Sa signature par le représentant est obligatoire."],
+    ["Comment vérifiez-vous un dossier ?", "Par une double vérification. Notre IA de vérification analyse d'abord les fichiers du portfolio (métadonnées, calques, historique, traces de génération, similarité). La commission contrôle ensuite le dossier et décide. Si un doute subsiste, un membre de l'équipe réalise un audit terrain. Cette double vérification garantit la fiabilité à moindre coût."],
+    ["Les heures déclarées suffisent-elles à obtenir le label ?", "Non. Les heures moyennes par création sont indicatives : elles servent à estimer le coût annuel. Aucun test d'IA n'est fait au dépôt : la commission vérifie ensuite la démarche sur les justificatifs."],
     ["Que se passe-t-il en cas de refus ?", "Le motif vous est communiqué. Vous pouvez compléter votre dossier et le déposer à nouveau."],
   ];
   return `<div class="conteneur etroit">${ariane("FAQ")}<h1>Questions fréquentes</h1>${q.map(([a, b]) => `<details class="rev"><summary>${a}</summary><p>${b}</p></details>`).join("")}<div style="height:56px"></div></div>`;
 }
 
-const ongletsRegistre = actif => `<div class="onglets-pub" role="tablist"><a href="#/registre" class="${actif === "oeuvres" ? "actif" : ""}">Œuvres certifiées</a><a href="#/annuaire" class="${actif === "annuaire" ? "actif" : ""}">Annuaire des certifiés</a></div>`;
-const slugEntite = n => n.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
-const initiales = n => n.split(/[\s,]+/).filter(Boolean).slice(0, 2).map(x => x[0].toUpperCase()).join("");
-function entites() {
-  const m = new Map();
-  DB.data.oeuvres.filter(o => o.statut === "certifiee").forEach(o => {
-    const k = slugEntite(o.createur); if (!m.has(k)) m.set(k, { slug: k, nom: o.createur, ville: o.ville, taille: o.taille || "Indépendant", types: new Set(), oeuvres: [], depuis: o.date });
-    const e = m.get(k); e.types.add(o.type); e.oeuvres.push(o); if (new Date(o.date) < new Date(e.depuis)) e.depuis = o.date; if (!e.ville && o.ville) e.ville = o.ville;
-  });
-  return [...m.values()].sort((a, b) => (b.oeuvres.some(o => o.id === VEDETTE)) - (a.oeuvres.some(o => o.id === VEDETTE)) || b.oeuvres.length - a.oeuvres.length || a.nom.localeCompare(b.nom));
-}
-const carteEntite = e => `<a class="entite rev" href="#/certifie/${e.slug}"><span class="avatar">${esc(initiales(e.nom))}</span><span><b>${esc(e.nom)}</b><small>${esc(e.taille)}${e.ville ? " · " + esc(e.ville) : ""}</small><span class="tags">${[...e.types].map(x => `<i>${esc(x)}</i>`).join("")}</span><small>${e.oeuvres.length} œuvre${e.oeuvres.length > 1 ? "s" : ""} certifiée${e.oeuvres.length > 1 ? "s" : ""} · certifié depuis ${new Date(e.depuis).toLocaleDateString("fr-FR", { month: "long", year: "numeric" })}</small></span></a>`;
-function vueAnnuaire() {
-  const villes = [...new Set(entites().map(e => e.ville).filter(Boolean))].sort();
-  return `<div class="conteneur">${ariane(["#/registre", "Registre"], "Annuaire des certifiés")}
-    <h1>Annuaire des certifiés</h1><p class="muted">Trouvez un créatif, un studio ou une agence certifiés PCE.</p>
-    ${ongletsRegistre("annuaire")}
+/* ---------- Registres ---------- */
+const ongletsRegistre = actif => `<div class="onglets-pub" role="tablist"><a href="#/entreprises" class="${actif === "entreprises" ? "actif" : ""}">Registre des entreprises certifiées</a><a href="#/registre" class="${actif === "oeuvres" ? "actif" : ""}">Registre des œuvres</a></div>`;
+function vueEntreprises() {
+  const villes = [...new Set(entitesCertifiees().map(e => e.ville).filter(Boolean))].sort();
+  return `<div class="conteneur">${ariane(["#/registre", "Registres"], "Entreprises certifiées")}
+    <h1>Registre des entreprises certifiées</h1><p class="muted">Créatifs indépendants, studios et agences certifiés PCE, avec leur SIRET.</p>
+    ${ongletsRegistre("entreprises")}
     <div class="filtres">
-      <div class="champ" style="flex:1;min-width:220px"><label for="a-q">Rechercher un certifié</label><input id="a-q" type="search" placeholder="Nom, studio, agence, discipline, ville"></div>
+      <div class="champ" style="flex:1;min-width:220px"><label for="a-q">Rechercher une entreprise</label><input id="a-q" type="search" placeholder="Nom, SIRET, numéro PCE, discipline, ville"></div>
       <div class="champ"><label for="a-t">Discipline</label><select id="a-t"><option value="">Toutes</option>${Object.keys(TYPES).map(t => `<option>${t}</option>`).join("")}</select></div>
       <div class="champ"><label for="a-s">Structure</label><select id="a-s"><option value="">Toutes</option>${Object.keys(TAILLES).map(t => `<option>${t}</option>`).join("")}</select></div>
       <div class="champ"><label for="a-v">Ville</label><select id="a-v"><option value="">Toutes</option>${villes.map(v => `<option>${esc(v)}</option>`).join("")}</select></div>
@@ -3113,32 +3150,52 @@ function vueAnnuaire() {
     <p class="muted petit-texte" id="a-n" aria-live="polite"></p>
     <div class="entites" id="a-g"></div><div style="height:56px"></div></div>`;
 }
-function initAnnuaire() {
+function initEntreprises() {
   const f = () => {
     const q = $("#a-q").value.trim().toLowerCase(), t = $("#a-t").value, s = $("#a-s").value, v = $("#a-v").value;
-    const l = entites().filter(e => (!t || e.types.has(t)) && (!s || e.taille === s) && (!v || e.ville === v) && (!q || (e.nom + " " + [...e.types].join(" ") + " " + (e.ville || "") + " " + e.taille).toLowerCase().includes(q)));
-    $("#a-n").textContent = `${l.length} certifié${l.length > 1 ? "s" : ""}`;
-    $("#a-g").innerHTML = l.length ? l.map(carteEntite).join("") : `<div class="vide-msg" style="grid-column:1/-1">Aucun certifié ne correspond à votre recherche.</div>`;
+    const l = entitesCertifiees().filter(e => (!t || e.disciplines.includes(t)) && (!s || e.taille === s) && (!v || e.ville === v) && (!q || txtEntite(e).includes(q) || txtEntite(e).includes(q.replace(/\s+/g, ""))));
+    $("#a-n").textContent = `${l.length} entreprise${l.length > 1 ? "s" : ""} certifiée${l.length > 1 ? "s" : ""}`;
+    $("#a-g").innerHTML = l.length ? l.map(carteEntite).join("") : `<div class="vide-msg" style="grid-column:1/-1">Aucune entreprise ne correspond à votre recherche.</div>`;
     revele();
   };
   $("#a-q").value = paramQ(); ["#a-q", "#a-t", "#a-s", "#a-v"].forEach(x => $(x).addEventListener("input", f)); f();
 }
-function vueEntite(slug) {
-  const e = entites().find(x => x.slug === slug);
-  if (!e) return `<div class="conteneur etroit">${ariane(["#/annuaire", "Annuaire des certifiés"], "Introuvable")}<h1>Certifié introuvable</h1><p>Ce créatif n'a pas d'œuvre certifiée au registre.</p><a class="btn" href="#/annuaire">Retour à l'annuaire</a><div style="height:56px"></div></div>`;
-  return `<div class="conteneur">${ariane(["#/annuaire", "Annuaire des certifiés"], e.nom)}
-    <div class="entite-ent"><span class="avatar grand">${esc(initiales(e.nom))}</span><div><span class="badge b-certifiee">Certifié PCE</span><h1 style="margin:8px 0 4px">${esc(e.nom)}</h1>
-      <p class="muted" style="margin:0">${esc(e.taille)}${e.ville ? " · " + esc(e.ville) : ""} · ${[...e.types].map(esc).join(", ")}</p>
-      <p class="muted petit-texte" style="margin:4px 0 0">${e.oeuvres.length} œuvre${e.oeuvres.length > 1 ? "s" : ""} certifiée${e.oeuvres.length > 1 ? "s" : ""} · certifié depuis le ${dateFr(e.depuis)}</p></div></div>
-    <h2 style="margin-top:28px">Œuvres certifiées</h2>
-    <div class="galerie">${vedetteEnTete(e.oeuvres).map(carteOeuvre).join("")}</div><div style="height:56px"></div></div>`;
+function blocCertifEntite(e) {
+  return `<div class="certificat">
+    <div class="ent"><img src="${LOGO}" alt="Sceau PCE"><div><span class="badge b-certifiee">Certification valide</span><h2 style="margin:6px 0 0;font-size:21px">Certificat Processus Créatif Éthique</h2></div></div>
+    <dl>
+      <dt>Numéro</dt><dd class="mono">${e.id}</dd>
+      <dt>Entreprise</dt><dd>${esc(e.raison)}</dd>
+      <dt>SIRET</dt><dd class="mono">${siretFmt(e.siret)}</dd>
+      <dt>Forme</dt><dd>${esc(e.forme)}</dd>
+      <dt>Structure</dt><dd>${esc(e.taille)}${e.ville ? " · " + esc(e.ville) : ""}</dd>
+      <dt>Disciplines</dt><dd>${e.disciplines.map(esc).join(", ")}</dd>
+      <dt>Recours à l'IA</dt><dd>${IA_LIB[e.iaMode]}</dd>
+      <dt>Certifiée le</dt><dd>${dateFr(e.dateCertif)}</dd>
+      <dt>Valable jusqu'au</dt><dd>${dateFr(finValidite(e))}</dd>
+    </dl>
+  </div>`;
+}
+function vueEntreprise(id) {
+  const e = DB.entite(id);
+  if (!e || !certifiee(e)) return `<div class="conteneur etroit">${ariane(["#/entreprises", "Entreprises certifiées"], "Introuvable")}<h1>Entreprise non certifiée</h1><p>Cette entreprise ne figure pas au registre des entreprises certifiées.</p><a class="btn" href="#/entreprises">Retour au registre</a><div style="height:56px"></div></div>`;
+  const oe = vedetteEnTete(oeuvresDe(e));
+  return `<div class="conteneur">${ariane(["#/entreprises", "Entreprises certifiées"], e.raison)}
+    <div class="fiche">
+      <div><div class="entite-ent"><span class="avatar grand">${esc(initiales(e.raison))}</span><div><span class="badge b-certifiee">Entreprise certifiée PCE</span><h1 style="margin:8px 0 4px">${esc(e.raison)}</h1>
+        <p class="muted" style="margin:0">${esc(e.taille)}${e.ville ? " · " + esc(e.ville) : ""} · ${e.disciplines.map(esc).join(", ")}</p>
+        ${e.site ? `<p class="petit-texte" style="margin:4px 0 0"><a href="${esc(e.site)}" rel="noopener">${esc(e.site)}</a></p>` : ""}</div></div>
+        <h2 style="margin-top:28px">Œuvres au registre</h2>
+        <div class="galerie">${oe.map(carteOeuvre).join("") || `<div class="vide-msg">Aucune œuvre déclarée pour le moment.</div>`}</div></div>
+      <div>${blocCertifEntite(e)}<div class="pile" style="margin-top:18px"><a class="btn sec" href="#/verifier/${e.id}">Vérifier cette certification</a></div></div>
+    </div><div style="height:56px"></div></div>`;
 }
 function vueRegistre() {
-  return `<div class="conteneur">${ariane("Registre")}
-    <h1>Registre des œuvres certifiées</h1><p class="muted">Toutes les œuvres certifiées PCE, consultables librement.</p>
+  return `<div class="conteneur">${ariane("Registres")}
+    <h1>Registre des œuvres</h1><p class="muted">Les œuvres des entreprises certifiées PCE, consultables librement.</p>
     ${ongletsRegistre("oeuvres")}
     <div class="filtres">
-      <div class="champ" style="flex:1;min-width:220px"><label for="r-q">Rechercher</label><input id="r-q" type="search" placeholder="Titre, créateur, numéro PCE"></div>
+      <div class="champ" style="flex:1;min-width:220px"><label for="r-q">Rechercher</label><input id="r-q" type="search" placeholder="Titre, entreprise, numéro PCE"></div>
       <div class="champ"><label for="r-t">Type d'œuvre</label><select id="r-t"><option value="">Tous les types</option>${Object.keys(TYPES).map(t => `<option>${t}</option>`).join("")}</select></div>
     </div>
     <div class="galerie" id="r-g"></div><div style="height:56px"></div></div>`;
@@ -3146,87 +3203,105 @@ function vueRegistre() {
 function initRegistre() {
   const f = () => {
     const q = $("#r-q").value.trim().toLowerCase(), t = $("#r-t").value;
-    const l = vedetteEnTete(DB.data.oeuvres.filter(o => o.statut === "certifiee" && (!t || o.type === t) && (!q || (o.titre + " " + o.createur + " " + o.id).toLowerCase().includes(q))));
+    const l = vedetteEnTete(oeuvresPubliques().filter(o => (!t || o.type === t) && (!q || txtOeuvre(o).includes(q))));
     $("#r-g").innerHTML = l.length ? l.map(carteOeuvre).join("") : `<div class="vide-msg" style="grid-column:1/-1">Aucune œuvre ne correspond à votre recherche.</div>`;
     revele();
   };
   $("#r-q").value = paramQ(); $("#r-q").oninput = f; $("#r-t").onchange = f; f();
 }
 
+/* ---------- Vérifier une œuvre ou une entreprise ---------- */
 function vueVerifier(id) {
-  return `<div class="conteneur">${ariane("Vérifier une œuvre")}
+  const enCours = DB.data.entites.find(e => e.statut === "commission"), refusee = DB.data.entites.find(e => e.statut === "refusee"), lune = DB.entite(VEDETTE_E);
+  return `<div class="conteneur">${ariane("Vérifier")}
     <span class="tag">Pour les clients</span>
-    <h1 style="margin-top:10px">Vérifier une œuvre</h1><p class="muted" style="max-width:720px;font-size:17px">Vous achetez une création ? Saisissez le numéro PCE inscrit sur l'œuvre ou scannez son QR code. La vérification est gratuite et ouverte à tous.</p>
-    <form class="verif-form" id="v-f"><label class="sr" for="v-n">Numéro PCE</label><input id="v-n" type="text" placeholder="PCE-2026-000127" value="${esc(id || "")}" autocomplete="off"><button class="btn">Vérifier <span class="fl">→</span></button></form>
-    <div class="exemples">Exemples : ${["PCE-2026-000127", DB.data.oeuvres.find(o => o.statut === "commission")?.id, DB.data.oeuvres.find(o => o.statut === "refusee")?.id, "PCE-2026-999999"].filter(Boolean).map(x => `<button type="button" data-ex="${x}">${x}</button>`).join("")}</div>
+    <h1 style="margin-top:10px">Vérifier une œuvre ou une entreprise</h1><p class="muted" style="max-width:760px;font-size:17px">Saisissez le numéro PCE d'une œuvre, le numéro ou le SIRET d'une entreprise, ou son nom. Vous pouvez aussi scanner le QR code de l'œuvre. La vérification est gratuite et ouverte à tous.</p>
+    <form class="verif-form" id="v-f"><label class="sr" for="v-n">Numéro PCE, SIRET ou nom</label><input id="v-n" type="text" placeholder="Numéro PCE, SIRET ou nom" value="${esc(id || "")}" autocomplete="off"><button class="btn">Vérifier <span class="fl">→</span></button></form>
+    <div class="exemples">Exemples : ${[["PCE-2026-000127", "œuvre"], [lune && lune.id, "entreprise"], [lune && siretFmt(lune.siret), "SIRET"], ["Studio", "nom"], [enCours && enCours.id, "en cours"], [refusee && refusee.id, "refusée"], ["PCE-2026-999999", "inconnu"]].filter(x => x[0]).map(([x, l]) => `<button type="button" data-ex="${esc(x)}" title="${l}">${esc(x)}</button>`).join("")}</div>
     <div id="v-r" aria-live="polite"></div>
-    <h2 style="margin-top:48px">Comment vérifier une œuvre ?</h2>
+    <h2 style="margin-top:48px">Comment vérifier ?</h2>
     <div class="grille3" style="margin:6px 0 24px">
-      <div class="carte rev"><h3><span class="pastille">1</span>Repérez le sceau</h3><p>Chaque œuvre certifiée porte le sceau PCE et un QR code unique.</p></div>
-      <div class="carte rev"><h3><span class="pastille">2</span>Scannez ou saisissez</h3><p>Le QR code ou le numéro PCE mène au certificat de l'œuvre.</p></div>
-      <div class="carte rev"><h3><span class="pastille">3</span>Consultez le certificat</h3><p>Créateur, discipline, recours à l'IA déclaré et date de certification par la commission.</p></div>
+      <div class="carte rev"><h3><span class="pastille">1</span>Repérez le sceau</h3><p>Chaque œuvre au registre porte le sceau PCE, son numéro et un QR code unique.</p></div>
+      <div class="carte rev"><h3><span class="pastille">2</span>Scannez ou saisissez</h3><p>Le QR code, le numéro PCE ou le SIRET mènent au certificat de l'entreprise et de l'œuvre.</p></div>
+      <div class="carte rev"><h3><span class="pastille">3</span>Consultez le certificat</h3><p>Entreprise, SIRET, disciplines, recours à l'IA déclaré, date et validité de la certification.</p></div>
     </div>
-    <div class="info" style="margin-bottom:56px"><span class="i">i</span><span>Le <a href="#/registre">registre public</a> recense toutes les œuvres certifiées.</span></div></div>`;
+    <div class="info" style="margin-bottom:56px"><span class="i">i</span><span>Consultez le <a href="#/entreprises">registre des entreprises certifiées</a> et le <a href="#/registre">registre des œuvres</a>.</span></div></div>`;
+}
+function resultatEntite(e) {
+  if (e.statut === "certifiee") return `<div class="resultat-v res-ok"><span class="avatar grand">${esc(initiales(e.raison))}</span><div><span class="badge b-certifiee">Entreprise certifiée</span><h3 style="margin-top:10px">${esc(e.raison)}</h3><p>SIRET ${siretFmt(e.siret)} · ${esc(e.taille)} · ${e.disciplines.map(esc).join(", ")}<br><span class="muted">Certifiée le ${dateFr(e.dateCertif)}, valable jusqu'au ${dateFr(finValidite(e))} · ${oeuvresDe(e).length} œuvre(s) au registre</span></p><a class="btn petit" href="#/entreprise/${e.id}">Voir le certificat <span class="fl">→</span></a></div></div>`;
+  if (e.statut === "refusee") return `<div class="resultat-v res-ko"><span class="badge b-refusee">Non certifiée</span><h3 style="margin-top:10px">${esc(e.raison)}</h3><p>SIRET ${siretFmt(e.siret)}. Le dossier de cette entreprise a été examiné et n'a pas obtenu la certification PCE.</p></div>`;
+  return `<div class="resultat-v res-att"><span class="badge b-commission">En cours d'examen</span><h3 style="margin-top:10px">${esc(e.raison)}</h3><p>SIRET ${siretFmt(e.siret)}. Le dossier est en cours d'examen (${STATUTS[e.statut].toLowerCase()}). L'entreprise n'est pas encore certifiée.</p></div>`;
+}
+function chercher(n) {
+  const o = DB.oeuvre(n); if (o) return { o };
+  const e = DB.entite(n) || (siretNu(n).length === 14 ? DB.parSiret(n) : null); if (e) return { e };
+  const q = n.toLowerCase(); if (q.length < 3) return {};
+  return { liste: [...entitesCertifiees().filter(x => txtEntite(x).includes(q)).map(x => ({ e: x })), ...oeuvresPubliques().filter(x => txtOeuvre(x).includes(q)).map(x => ({ o: x }))].slice(0, 8) };
 }
 function initVerifier(id) {
   const go = () => {
     const n = $("#v-n").value.trim(); if (!n) return;
-    const o = DB.get(n), r = $("#v-r");
+    const r = $("#v-r"), res = chercher(n);
     r.innerHTML = `<div class="resultat-v"><div class="rond"></div></div>`;
     setTimeout(() => {
-      if (!o) r.innerHTML = `<div class="resultat-v res-ko"><h3 style="color:var(--rouge)">Aucune certification trouvée</h3><p>Le numéro ${esc(n)} ne figure pas au registre PCE. Cette œuvre n'est pas certifiée.</p></div>`;
-      else if (o.statut === "certifiee") r.innerHTML = `<div class="resultat-v res-ok"><div class="vignette">${visuel(o)}</div><div><span class="badge b-certifiee">Certification valide</span><h3 style="margin-top:10px">${esc(o.titre)}</h3><p>${esc(o.createur)} · ${esc(o.type)}<br><span class="muted">Certifiée le ${dateFr(o.date)} · Recours à l'IA déclaré : ${IA_LIB[o.iaMode].toLowerCase()}</span></p><a class="btn petit" href="#/oeuvre/${o.id}">Voir le certificat <span class="fl">→</span></a></div></div>`;
-      else if (o.statut === "refusee") r.innerHTML = `<div class="resultat-v res-ko"><span class="badge b-refusee">Non certifiée</span><h3 style="margin-top:10px">${esc(o.titre)}</h3><p>Ce dossier a été examiné et n'a pas obtenu la certification PCE.</p></div>`;
-      else r.innerHTML = `<div class="resultat-v res-att"><span class="badge b-commission">En cours d'examen</span><h3 style="margin-top:10px">${esc(o.titre)}</h3><p>Ce dossier est en cours d'examen (${STATUTS[o.statut].toLowerCase()}). L'œuvre n'est pas encore certifiée.</p></div>`;
-    }, 500);
+      if (res.o) {
+        const o = res.o, e = entiteDe(o);
+        r.innerHTML = certifiee(e) ? `<div class="resultat-v res-ok"><div class="vignette">${visuel(o)}</div><div><span class="badge b-certifiee">Œuvre d'une entreprise certifiée</span><h3 style="margin-top:10px">${esc(o.titre)}</h3><p>${esc(e.raison)} · SIRET ${siretFmt(e.siret)} · ${esc(o.type)}<br><span class="muted">Entreprise certifiée jusqu'au ${dateFr(finValidite(e))} · Recours à l'IA déclaré : ${IA_LIB[e.iaMode].toLowerCase()}</span></p><a class="btn petit" href="#/oeuvre/${o.id}">Voir le certificat <span class="fl">→</span></a></div></div>`
+          : `<div class="resultat-v res-att"><span class="badge b-commission">Non certifiée à ce jour</span><h3 style="margin-top:10px">${esc(o.titre)}</h3><p>L'entreprise ${esc(e ? e.raison : "")} n'est pas certifiée. Cette œuvre ne figure pas au registre public.</p></div>`;
+      } else if (res.e) r.innerHTML = resultatEntite(res.e);
+      else if (res.liste && res.liste.length) r.innerHTML = `<div class="resultat-v"><p class="muted">${res.liste.length} résultat(s) pour « ${esc(n)} »</p><div class="entites">${res.liste.map(x => x.e ? carteEntite(x.e) : carteOeuvre(x.o)).join("")}</div></div>`;
+      else r.innerHTML = `<div class="resultat-v res-ko"><h3 style="color:var(--rouge)">Aucune certification trouvée</h3><p>« ${esc(n)} » ne correspond à aucune œuvre ni entreprise certifiée PCE.</p></div>`;
+      revele();
+    }, 450);
   };
   $("#v-f").onsubmit = e => { e.preventDefault(); history.replaceState(null, "", "#/verifier/" + encodeURIComponent($("#v-n").value.trim())); go(); };
   $$("[data-ex]").forEach(b => b.onclick = () => { $("#v-n").value = b.dataset.ex; $("#v-f").requestSubmit(); });
   if (id) go(); else $("#v-n").focus();
 }
 
-/* ---------- Fiche œuvre et certificat ---------- */
-function blocCertificat(o) {
+/* ---------- Fiche œuvre ---------- */
+function blocCertifOeuvre(o, e) {
   return `<div class="certificat">
-    <div class="ent"><img src="${LOGO}" alt="Sceau PCE"><div><span class="badge b-certifiee">Certification valide</span><h2 style="margin:6px 0 0;font-size:21px">Certificat Processus Créatif Éthique</h2></div></div>
+    <div class="ent"><img src="${LOGO}" alt="Sceau PCE"><div><span class="badge b-certifiee">Certification valide</span><h2 style="margin:6px 0 0;font-size:21px">Œuvre au registre PCE</h2></div></div>
     <dl>
-      <dt>Numéro</dt><dd class="mono">${o.id}</dd>
+      <dt>Numéro de l'œuvre</dt><dd class="mono">${o.id}</dd>
       <dt>Œuvre</dt><dd>${esc(o.titre)}</dd>
-      <dt>Créateur</dt><dd>${esc(o.createur)}</dd>
       <dt>Type</dt><dd>${esc(o.type)}</dd>
-      <dt>Recours à l'IA</dt><dd>${IA_LIB[o.iaMode]}</dd>
-      <dt>Délivré le</dt><dd>${dateFr(o.date)}</dd>
+      <dt>Entreprise</dt><dd><a href="#/entreprise/${e.id}">${esc(e.raison)}</a></dd>
+      <dt>SIRET</dt><dd class="mono">${siretFmt(e.siret)}</dd>
+      <dt>Certification</dt><dd class="mono">${e.id}</dd>
+      <dt>Recours à l'IA</dt><dd>${IA_LIB[e.iaMode]}</dd>
+      <dt>Valable jusqu'au</dt><dd>${dateFr(finValidite(e))}</dd>
     </dl>
   </div>`;
 }
+const cartel = (o, e) => `<figcaption class="cartel"><img class="s" src="${LOGO}" alt="Sceau PCE"><div><b>${esc(o.titre)}</b><small>${esc(e.raison)} · ${esc(o.type)}</small><small class="mono">PCE n° ${o.id}</small></div><div class="qr">${qrSvg(urlVerif(o.id))}</div></figcaption>`;
 function vueOeuvre(id) {
-  const o = DB.get(id);
+  const o = DB.oeuvre(id), e = o && entiteDe(o);
   if (!o) return `<div class="conteneur etroit">${ariane("Œuvre")}<h1>Œuvre introuvable</h1><p>Ce numéro ne figure pas au registre.</p><a class="btn" href="#/registre">Consulter le registre</a><div style="height:56px"></div></div>`;
-  if (o.statut !== "certifiee") return `<div class="conteneur etroit">${ariane(["#/registre", "Registre"], o.id)}<h1>${esc(o.titre)}</h1><div class="res-att"><span class="badge b-${o.statut}">${STATUTS[o.statut]}</span><p style="margin-top:10px">Cette œuvre n'est pas certifiée.</p></div><div style="height:56px"></div></div>`;
-  return `<div class="conteneur">${ariane(["#/registre", "Registre"], o.titre)}
+  if (!certifiee(e)) return `<div class="conteneur etroit">${ariane(["#/registre", "Registre des œuvres"], o.id)}<h1>${esc(o.titre)}</h1><div class="res-att"><p style="margin:0">L'entreprise de cette œuvre n'est pas certifiée. L'œuvre ne figure pas au registre public.</p></div><div style="height:56px"></div></div>`;
+  return `<div class="conteneur">${ariane(["#/registre", "Registre des œuvres"], o.titre)}
     <div class="fiche">
-      <figure class="cadre" style="margin:0">
-        <div class="art">${visuel(o)}</div>
-        <figcaption class="cartel"><img class="s" src="${LOGO}" alt="Sceau PCE"><div><b>${esc(o.titre)}</b><small>${esc(o.createur)} · ${esc(o.type)}</small><small class="mono">Certifiée PCE n° ${o.id}</small></div><div class="qr">${qrSvg(urlVerif(o.id))}</div></figcaption>
-      </figure>
+      <figure class="cadre" style="margin:0"><div class="art">${visuel(o)}</div>${cartel(o, e)}</figure>
       <div>
-        ${blocCertificat(o)}
+        ${blocCertifOeuvre(o, e)}
         <div class="pile" style="margin-top:18px">
           <button class="btn" id="dl-oeuvre">Télécharger l'œuvre signée (PNG)</button>
           <button class="btn sec" id="dl-cert">Imprimer le certificat</button>
-          <a class="btn sec" href="#/verifier/${o.id}">Vérifier cette certification</a>
+          <a class="btn sec" href="#/entreprise/${e.id}">Voir l'entreprise certifiée</a>
         </div>
         <p class="petit-texte muted" style="margin-top:12px">QR code : ${urlVerif(o.id)}</p>
       </div>
     </div></div>`;
 }
 function initOeuvre(id) {
-  const o = DB.get(id); if (!o || o.statut !== "certifiee") return;
+  const o = DB.oeuvre(id), e = o && entiteDe(o); if (!o || !certifiee(e)) return;
   $("#dl-oeuvre").onclick = () => oeuvreSignee(o);
-  $("#dl-cert").onclick = () => { const z = $("#impression"); z.hidden = false; z.innerHTML = blocCertificat(o) + `<div style="margin-top:16px;width:120px">${qrSvg(urlVerif(o.id))}</div>`; window.print(); setTimeout(() => { z.hidden = true; z.innerHTML = ""; }, 300); };
+  $("#dl-cert").onclick = () => { const z = $("#impression"); z.hidden = false; z.innerHTML = blocCertifOeuvre(o, e) + `<div style="margin-top:16px;width:120px">${qrSvg(urlVerif(o.id))}</div>`; window.print(); setTimeout(() => { z.hidden = true; z.innerHTML = ""; }, 300); };
 }
 function chargerImg(src) { return new Promise((ok, ko) => { const i = new Image(); i.onload = () => ok(i); i.onerror = ko; i.src = src; }); }
 async function oeuvreSignee(o) {
+  const e = entiteDe(o);
   const src = o.img || "data:image/svg+xml;charset=utf-8," + encodeURIComponent(art(o.seed).replace("<svg ", '<svg width="1200" height="900" '));
   const im = await chargerImg(src), logo = await chargerImg(LOGO);
   const W = Math.max(1200, im.naturalWidth || 1200), H = Math.round(W * (im.naturalHeight || 900) / (im.naturalWidth || 1200)), band = Math.round(W * .16);
@@ -3238,15 +3313,18 @@ async function oeuvreSignee(o) {
   g.fillStyle = "#fff"; g.fillRect(qx, qy, s, s); g.fillStyle = "#1F2530";
   for (let y = 0; y < n; y++) for (let x = 0; x < n; x++) if (d(x, y)) g.fillRect(qx + (x + 1) * cell, qy + (y + 1) * cell, Math.ceil(cell), Math.ceil(cell));
   g.fillStyle = "#023481"; g.font = `bold ${Math.round(band * .2)}px Arial`; g.fillText(o.titre, m * 2 + s, H + band * .42);
-  g.fillStyle = "#666"; g.font = `${Math.round(band * .14)}px Arial`; g.fillText(`${o.createur} · Certifiée PCE n° ${o.id}`, m * 2 + s, H + band * .66);
+  g.fillStyle = "#666"; g.font = `${Math.round(band * .14)}px Arial`; g.fillText(`${e.raison} · Entreprise certifiée PCE · Œuvre n° ${o.id}`, m * 2 + s, H + band * .66);
   c.toBlob(b => { telecharger(`${o.id}.png`, b); toast("Œuvre signée téléchargée."); }, "image/png");
 }
 
-/* ---------- Parcours de dépôt ---------- */
-const ETAPES = ["Votre activité", "Votre processus créatif", "Justificatifs", "Charte de transparence", "Récapitulatif et règlement"];
+/* ---------- Parcours de dépôt : certification d'une entreprise ---------- */
+const ETAPES = ["Votre entreprise", "Votre processus créatif", "Justificatifs et portfolio", "Charte de transparence", "Récapitulatif et règlement"];
 const N = ETAPES.length;
-const brouillonVide = () => ({ etape: 0, createur: "", email: "", type: "Illustration", ville: "", site: "", titre: "", description: "", iaMode: "appui", recherche: 4, creation: 8, ia: 1, outils: "", img: null, imgNom: "", justificatifs: [], formule: "abonnement", taux: 45, taille: "Indépendant", creationsAn: 6, expertise: "", expertiseAutre: "", outilsTrad: "", outilsIA: "", charteOk: false, signature: null, signeLe: null });
-function brouillon() { const d = DB.data.brouillon; if (d && d.complet) return d; DB.data.brouillon = Object.assign(brouillonVide(), d || {}, { complet: true }); return DB.data.brouillon; }
+const brouillonVide = () => ({ etape: 0, siret: "", raison: "", forme: FORMES[0], taille: "Indépendant", disciplines: ["Illustration"], ville: "", email: "", representant: "", site: "",
+  description: "", organisation: "", iaMode: "appui", outils: "", creationsAn: 6, recherche: 4, creation: 8, execution: 2,
+  kbis: "", portfolio: [], justificatifs: [], expertise: "", expertiseAutre: "", outilsTrad: "", outilsIA: "", charteOk: false, signature: null, signeLe: null });
+function brouillon() { const d = DB.data.brouillon; if (d && d.complet2) return d; DB.data.brouillon = Object.assign(brouillonVide(), d && d.siret !== undefined ? d : {}, { complet2: true }); return DB.data.brouillon; }
+const heuresB = b => (+b.recherche || 0) + (+b.creation || 0) + (+b.execution || 0);
 function vueDepot() {
   const b = brouillon(), e = b.etape;
   return `<div class="conteneur">${ariane("Déposer mon dossier")}
@@ -3254,7 +3332,7 @@ function vueDepot() {
       <div>
         <div class="progression">
           ${e > 0 ? `<button class="lien" id="d-retour" style="font-size:14px;margin-bottom:8px">‹ Retour</button>` : ""}
-          <div class="num">Étape ${e + 1} sur ${N}</div><h1>${ETAPES[e]}</h1>
+          <div class="num">Étape ${e + 1} sur ${N} · Certification d'une entreprise</div><h1>${ETAPES[e]}</h1>
           <div class="barres">${ETAPES.map((t, i) => `<div class="pas ${i < e ? "fait" : i === e ? "cur" : ""}"><span class="${i < e ? "ok" : ""}" data-b="${i}"><i></i></span><small>${t}</small></div>`).join("")}</div>
           ${e < N - 1 ? `<div class="suiv">Étape suivante : ${ETAPES[e + 1]}</div>` : ""}
         </div>
@@ -3265,77 +3343,86 @@ function vueDepot() {
         </div>
       </div>
       <aside class="cote">
-        <div class="bloc"><h3>Avant de commencer</h3><ul>${ETAPES.map((t, i) => `<li class="${i < e ? "ok" : i === e ? "cur" : ""}"><span class="ck">${i < e ? "✓" : ""}</span>${["Présentation de votre activité", "Description de votre processus créatif", "Justificatifs (croquis, fichiers sources)", "Signature de la Charte de transparence", "Récapitulatif et règlement"][i]}</li>`).join("")}</ul></div>
-        <div class="info"><span class="i">i</span><span>Durée estimée : 15 minutes.<br>Votre dossier est enregistré automatiquement.</span></div>
+        <div class="bloc"><h3>Avant de commencer</h3><ul>${ETAPES.map((t, i) => `<li class="${i < e ? "ok" : i === e ? "cur" : ""}"><span class="ck">${i < e ? "✓" : ""}</span>${["SIRET et identité de l'entreprise", "Processus créatif de l'entreprise", "Kbis, portfolio et justificatifs", "Signature de la Charte par le représentant", "Récapitulatif et règlement"][i]}</li>`).join("")}</ul></div>
+        <div class="info"><span class="i">i</span><span>Munissez-vous de votre SIRET et d'un extrait Kbis ou d'un avis de situation SIRENE.<br>Durée estimée : 15 minutes. Votre dossier est enregistré automatiquement.</span></div>
         <p style="margin-top:14px"><a href="#/createurs">Consulter les critères d'obtention</a></p>
       </aside>
     </div></div>`;
 }
 const champ = (id, lab, html, aide = "", err = "Ce champ est obligatoire.") => `<div class="champ" data-c="${id}"><label for="${id}">${lab}</label>${aide ? `<span class="aide">${aide}</span>` : ""}${html}<div class="msg-err">${err}</div></div>`;
 function etape1(b) {
-  return champ("createur", "Nom ou nom d'artiste *", `<input id="createur" type="text" value="${esc(b.createur)}" autocomplete="name">`)
-    + champ("email", "Adresse e-mail *", `<input id="email" type="email" value="${esc(b.email)}" autocomplete="email">`, "L'accusé de réception vous sera envoyé à cette adresse.", "Saisissez une adresse e-mail valide.")
-    + `<div class="deux">` + champ("type", "Discipline *", `<select id="type">${Object.keys(TYPES).map(t => `<option ${t === b.type ? "selected" : ""}>${t}</option>`).join("")}</select>`)
-    + champ("ville", "Ville", `<input id="ville" type="text" value="${esc(b.ville)}">`) + `</div>`
-    + `<div class="deux">` + champ("taille", "Taille de la structure *", `<select id="taille">${Object.keys(TAILLES).map(x => `<option ${x === b.taille ? "selected" : ""}>${x}</option>`).join("")}</select>`)
-    + champ("creationsAn", "Créations à certifier par an *", `<input id="creationsAn" type="number" min="1" value="${b.creationsAn}">`, "", "Indiquez au moins une création.") + `</div>`
-    + champ("site", "Portfolio ou site", `<input id="site" type="text" value="${esc(b.site)}" placeholder="https://">`);
+  return `<div class="champ" data-c="siret"><label for="siret">Numéro SIRET *</label><span class="aide">14 chiffres. L'entreprise certifiée est identifiée par son SIRET.</span>
+      <div class="siret-l"><input id="siret" type="text" inputmode="numeric" maxlength="17" value="${esc(siretFmt(b.siret))}" placeholder="123 456 789 00012" autocomplete="off"><span id="siret-etat" class="siret-etat" aria-live="polite"></span></div>
+      <button type="button" class="lien" id="ex-siret" style="margin-top:8px">Utiliser un SIRET de démonstration</button>
+      <div class="msg-err" id="siret-err">Saisissez un SIRET valide de 14 chiffres.</div></div>`
+    + champ("raison", "Raison sociale ou nom commercial *", `<input id="raison" type="text" value="${esc(b.raison)}" autocomplete="organization">`)
+    + `<div class="deux">` + champ("forme", "Forme juridique *", `<select id="forme">${FORMES.map(x => `<option ${x === b.forme ? "selected" : ""}>${x}</option>`).join("")}</select>`)
+    + champ("taille", "Taille de la structure *", `<select id="taille">${Object.keys(TAILLES).map(x => `<option ${x === b.taille ? "selected" : ""}>${x}</option>`).join("")}</select>`) + `</div>`
+    + `<div class="champ" data-c="disciplines"><span class="lab">Disciplines de l'entreprise *</span><div class="radios cases">${Object.keys(TYPES).map(t => `<label><input type="checkbox" name="disciplines" value="${t}" ${b.disciplines.includes(t) ? "checked" : ""}> ${t}</label>`).join("")}</div><div class="msg-err">Cochez au moins une discipline.</div></div>`
+    + `<div class="deux">` + champ("representant", "Représentant légal *", `<input id="representant" type="text" value="${esc(b.representant)}" autocomplete="name">`, "Il signera la Charte de transparence.")
+    + champ("ville", "Ville du siège *", `<input id="ville" type="text" value="${esc(b.ville)}">`) + `</div>`
+    + `<div class="deux">` + champ("email", "Adresse e-mail *", `<input id="email" type="email" value="${esc(b.email)}" autocomplete="email">`, "", "Saisissez une adresse e-mail valide.")
+    + champ("site", "Site ou portfolio en ligne", `<input id="site" type="text" value="${esc(b.site)}" placeholder="https://">`) + `</div>`;
 }
 function etape2(b) {
-  return champ("titre", "Titre de l'œuvre *", `<input id="titre" type="text" value="${esc(b.titre)}">`)
-    + champ("description", "Décrivez votre processus, de l'idée au rendu *", `<textarea id="description" placeholder="Ex : recherches, croquis, choix de style, versions successives, outils utilisés…">${esc(b.description)}</textarea>`, "", "Décrivez votre processus en 40 caractères minimum.")
-    + `<div class="champ"><span class="lab">Recours à l'IA dans votre travail *</span><div class="radios">${Object.entries(IA_LIB).map(([k, v]) => `<label><input type="radio" name="iaMode" value="${k}" ${b.iaMode === k ? "checked" : ""}> ${v}</label>`).join("")}</div></div>
-    <div class="champ"><span class="lab">Temps consacré au projet (heures, à titre indicatif)</span><span class="aide">Ces heures servent uniquement au devis client et à l'estimation du coût annuel de la certification. Aucun test d'IA n'est fait au dépôt : la commission vérifie votre démarche après le dépôt, sur vos justificatifs.</span>
+  return champ("description", "Décrivez le processus créatif de votre entreprise, de l'idée au rendu *", `<textarea id="description" placeholder="Ex : recherches, croquis, choix de style, versions successives, validation client, outils utilisés…">${esc(b.description)}</textarea>`, "", "Décrivez votre processus en 40 caractères minimum.")
+    + champ("organisation", "Organisation de la création", `<textarea id="organisation" style="min-height:80px" placeholder="Ex : qui conçoit, qui exécute, qui valide le rendu final">${esc(b.organisation)}</textarea>`, "Utile pour les studios et agences.")
+    + `<div class="champ"><span class="lab">Recours à l'IA dans l'entreprise *</span><div class="radios">${Object.entries(IA_LIB).map(([k, v]) => `<label><input type="radio" name="iaMode" value="${k}" ${b.iaMode === k ? "checked" : ""}> ${v}</label>`).join("")}</div></div>`
+    + `<div id="l-outils">` + champ("outils", "Outils d'IA utilisés et pour quoi faire", `<input id="outils" type="text" value="${esc(b.outils)}" placeholder="Ex : retouche colorimétrique, détourage">`) + `</div>`
+    + champ("creationsAn", "Créations à certifier par an *", `<input id="creationsAn" type="number" min="1" value="${b.creationsAn}">`, "", "Indiquez au moins une création.")
+    + `<div class="champ"><span class="lab">Temps moyen par création (heures, à titre indicatif)</span><span class="aide">Ces heures servent uniquement à estimer le coût annuel de la certification. Aucun test d'IA n'est fait au dépôt : la commission vérifie votre démarche après le dépôt, sur vos justificatifs.</span>
       <div class="ligne-h"><label for="recherche">Recherche et intention</label><input id="recherche" type="number" min="0" value="${b.recherche}"></div>
       <div class="ligne-h"><label for="creation">Création et direction artistique</label><input id="creation" type="number" min="0" value="${b.creation}"></div>
-      <div class="ligne-h" id="l-ia"><label for="ia">Exécution et finitions</label><input id="ia" type="number" min="0" value="${b.ia}"></div>
-      <div class="dosage" id="dos"></div></div>`
-    + `<div id="l-outils">` + champ("outils", "Outils d'IA utilisés et pour quoi faire", `<input id="outils" type="text" value="${esc(b.outils)}" placeholder="Ex : retouche colorimétrique, détourage">`) + `</div>`;
+      <div class="ligne-h"><label for="execution">Exécution et finitions</label><input id="execution" type="number" min="0" value="${b.execution}"></div></div>`;
 }
 function etape3(b) {
-  return `<div class="champ" data-c="img"><span class="lab">Œuvre finale *</span><span class="aide">L'œuvre qui recevra le sceau PCE et son QR code.</span>
-      <div class="depose" id="z-img" tabindex="0" role="button"><b>⬆ Glisser l'œuvre ici</b><small>ou Parcourir · JPG, PNG</small></div>
-      <input type="file" id="f-img" accept="image/*" hidden>
-      <button type="button" class="lien" id="ex-img" style="margin-top:8px">Utiliser l'œuvre d'exemple</button>
-      <div id="ap-img"></div><div class="msg-err">Ajoutez l'œuvre finale.</div></div>
-    <div class="champ" data-c="just"><span class="lab">Justificatifs (croquis, fichiers sources) *</span>
-      <div class="depose" id="z-just" tabindex="0" role="button"><b>⬆ Glisser un fichier ici</b><small>ou Parcourir · PDF, JPG, PNG</small></div>
+  return `<div class="champ" data-c="kbis"><span class="lab">Extrait Kbis ou avis de situation SIRENE *</span><span class="aide">Document de moins de 3 mois, au nom de l'entreprise.</span>
+      <div class="depose" id="z-kbis" tabindex="0" role="button"><b>⬆ Glisser le document ici</b><small>ou Parcourir · PDF, JPG, PNG</small></div>
+      <input type="file" id="f-kbis" accept=".pdf,image/*" hidden>
+      <button type="button" class="lien" id="ex-kbis" style="margin-top:8px">Utiliser un document de démonstration</button>
+      <ul class="fichiers" id="l-kbis"></ul><div class="msg-err">Ajoutez l'extrait Kbis ou l'avis de situation SIRENE.</div></div>
+    <div class="champ" data-c="portfolio"><span class="lab">Portfolio : 1 à 3 œuvres représentatives *</span><span class="aide">Elles seront analysées puis inscrites au registre des œuvres si l'entreprise est certifiée.</span>
+      <div class="depose" id="z-port" tabindex="0" role="button"><b>⬆ Glisser une œuvre ici</b><small>ou Parcourir · JPG, PNG</small></div>
+      <input type="file" id="f-port" accept="image/*" multiple hidden>
+      <button type="button" class="lien" id="ex-port" style="margin-top:8px">Utiliser l'œuvre d'exemple</button>
+      <div id="l-port"></div><div class="msg-err">Ajoutez au moins une œuvre et donnez-lui un titre.</div></div>
+    <div class="champ" data-c="just"><span class="lab">Justificatifs du processus (croquis, fichiers sources, calques) *</span>
+      <div class="depose" id="z-just" tabindex="0" role="button"><b>⬆ Glisser un fichier ici</b><small>ou Parcourir · PDF, JPG, PNG, ZIP</small></div>
       <input type="file" id="f-just" multiple hidden>
-      <ul class="fichiers" id="l-just"></ul><div class="msg-err">Ajoutez au moins un justificatif.</div></div>
-`;
+      <ul class="fichiers" id="l-just"></ul><div class="msg-err">Ajoutez au moins un justificatif.</div></div>`;
 }
 /* ---------- Charte de transparence ---------- */
 const EXPERTISES = ["Direction Artistique (DA)", "Photographie", "Design Graphique / Illustration", "Autre"];
 const expertiseDefaut = t => ({ "Photographie": "Photographie", "Illustration": "Design Graphique / Illustration", "Identité visuelle": "Design Graphique / Illustration", "Campagne de marque": "Direction Artistique (DA)" }[t] || "Autre");
 const ARTICLES_3_5 = `
-  <div class="article"><h3><span class="pastille">3</span>Engagement de transparence</h3><p>Je m'engage légalement et moralement à faire preuve d'une transparence absolue envers le label PCE et mes futurs clients. À ce titre, je certifie que :</p>
-    <ul><li><b>L'IA comme assistant, pas comme créateur :</b> l'Intelligence Artificielle n'est utilisée que comme un outil d'assistance (recherche, inspiration, exécution de tâches répétitives, retouches mineures), dans la limite de ${SEUIL} % du temps total de chaque projet, conformément au référentiel PCE.</li>
-    <li><b>La réflexion humaine prédomine :</b> la direction artistique, le concept originel, le message et la structure de l'œuvre finale sont à 100 % le fruit de mon travail intellectuel humain.</li>
-    <li><b>Transparence des devis :</b> je m'engage à utiliser le devis certifié PCE pour indiquer clairement à mon client les étapes de mon processus de travail et les outils d'IA utilisés.</li>
-    <li><b>Sincérité des déclarations :</b> je m'engage à déclarer de bonne foi, à titre indicatif, le temps consacré à la recherche, à la création et à l'exécution, et à fournir les justificatifs permettant à la commission de vérifier ma démarche et mon recours à l'IA.</li></ul></div>
-  <div class="article"><h3><span class="pastille">4</span>Respect de la Propriété Intellectuelle</h3><p>Je certifie ne jamais utiliser de générateurs d'images ou de textes dans le but de reproduire, plagier ou piller le travail d'un autre créateur. Je m'assure que les contenus générés par IA que j'inclus dans mon travail final respectent les droits d'auteur en vigueur.</p></div>
-  <div class="article" style="border:none"><h3><span class="pastille">5</span>Consentement à l'Audit et aux contrôles</h3><p>J'accepte que l'organisme PCE puisse, de manière aléatoire ou sur demande d'un client, réaliser un audit de mon processus créatif. Je m'engage à fournir sur demande les fichiers sources (calques, croquis, rushs, prompts) permettant de prouver la part de travail humain sur une œuvre certifiée. En cas de fraude avérée, je reconnais que le label PCE me sera immédiatement retiré, ainsi que les certificats des œuvres concernées, qui seront signalés comme retirés dans le registre public.</p></div>`;
-const PREAMBULE = "Le label Processus Créatif Éthique (PCE) a pour vocation de défendre la valeur du savoir-faire humain et de garantir aux clients une transparence totale sur l'utilisation de l'Intelligence Artificielle. En signant cette charte, le Créatif s'engage à faire de l'IA un outil d'assistance, et non un outil de substitution à sa réflexion artistique.";
+  <div class="article"><h3><span class="pastille">3</span>Engagement de transparence</h3><p>Je m'engage légalement et moralement, au nom de l'entreprise, à faire preuve d'une transparence absolue envers le label PCE et nos clients. À ce titre, je certifie que :</p>
+    <ul><li><b>L'IA comme assistant, pas comme créateur :</b> l'Intelligence Artificielle n'est utilisée que comme un outil d'assistance (recherche, inspiration, exécution de tâches répétitives, retouches mineures), conformément au référentiel PCE.</li>
+    <li><b>La réflexion humaine prédomine :</b> la direction artistique, le concept originel, le message et la structure des œuvres sont à 100 % le fruit du travail intellectuel humain de l'entreprise.</li>
+    <li><b>Transparence des devis :</b> l'entreprise utilise le devis certifié PCE pour indiquer clairement à ses clients les étapes de son processus de travail et les outils d'IA utilisés.</li>
+    <li><b>Sincérité des déclarations :</b> les informations de ce dossier, dont le temps de travail indiqué, sont déclarées de bonne foi, et l'entreprise fournit les justificatifs permettant à la commission de vérifier sa démarche et son recours à l'IA.</li></ul></div>
+  <div class="article"><h3><span class="pastille">4</span>Respect de la Propriété Intellectuelle</h3><p>Je certifie que l'entreprise n'utilise jamais de générateurs d'images ou de textes dans le but de reproduire, plagier ou piller le travail d'un autre créateur, et que les contenus générés par IA inclus dans ses œuvres respectent les droits d'auteur en vigueur.</p></div>
+  <div class="article" style="border:none"><h3><span class="pastille">5</span>Consentement à l'Audit et aux contrôles</h3><p>J'accepte que l'organisme PCE puisse, de manière aléatoire ou sur demande d'un client, réaliser un audit du processus créatif de l'entreprise, y compris sur place. L'entreprise fournit sur demande les fichiers sources (calques, croquis, rushs, prompts) permettant de prouver la part de travail humain. En cas de fraude avérée, je reconnais que la certification de l'entreprise sera immédiatement retirée et signalée dans le registre public.</p></div>`;
+const PREAMBULE = "Le label Processus Créatif Éthique (PCE) a pour vocation de défendre la valeur du savoir-faire humain et de garantir aux clients une transparence totale sur l'utilisation de l'Intelligence Artificielle. En signant cette charte, le représentant engage son entreprise à faire de l'IA un outil d'assistance, et non un outil de substitution à la réflexion artistique.";
 function etapeCharte(b) {
-  if (!b.expertise) b.expertise = expertiseDefaut(b.type);
+  if (!b.expertise) b.expertise = expertiseDefaut(b.disciplines[0]);
   if (!b.outilsIA) b.outilsIA = b.iaMode === "aucun" ? "Aucun" : b.outils;
   return `<div class="charte">
-    <div class="charte-ent"><img src="${LOGO}" alt=""><div><span class="tag">Version 1.1</span><h2>Charte de transparence et d'éthique créative</h2><small>Label Processus Créatif Éthique (PCE)</small></div></div>
+    <div class="charte-ent"><img src="${LOGO}" alt=""><div><span class="tag">Version 1.2</span><h2>Charte de transparence et d'éthique créative</h2><small>Label Processus Créatif Éthique (PCE)</small></div></div>
     <div class="charte-corps">
       <p class="preambule"><b>Préambule.</b> ${PREAMBULE}</p>
       <div class="article" data-c="expertise"><h3><span class="pastille">1</span>Déclaration d'identité et d'expertise</h3>
-        <p>Je soussigné(e), <b>${esc(b.createur)}</b>, certifie que mon domaine d'expertise principal pour lequel je demande la certification PCE est :</p>
+        <p>Je soussigné(e), <b>${esc(b.representant)}</b>, représentant légal de <b>${esc(b.raison)}</b> (SIRET <span class="mono">${siretFmt(b.siret)}</span>), certifie que le domaine d'expertise principal pour lequel l'entreprise demande la certification PCE est :</p>
         <div class="radios">${EXPERTISES.map(x => `<label><input type="radio" name="expertise" value="${x}" ${b.expertise === x ? "checked" : ""}> ${x}</label>`).join("")}</div>
-        <div id="l-autre" style="${b.expertise === "Autre" ? "" : "display:none"}">${champ("expertiseAutre", "Précisez", `<input id="expertiseAutre" type="text" value="${esc(b.expertiseAutre || (b.expertise === "Autre" ? b.type : ""))}">`)}</div></div>
-      <div class="article"><h3><span class="pastille">2</span>Déclaration des outils et logiciels</h3><p>Dans le cadre de mon processus créatif, je déclare utiliser de manière régulière les outils suivants :</p>
+        <div id="l-autre" style="${b.expertise === "Autre" ? "" : "display:none"}">${champ("expertiseAutre", "Précisez", `<input id="expertiseAutre" type="text" value="${esc(b.expertiseAutre || (b.expertise === "Autre" ? b.disciplines[0] : ""))}">`)}</div></div>
+      <div class="article"><h3><span class="pastille">2</span>Déclaration des outils et logiciels</h3><p>Dans le cadre de son processus créatif, l'entreprise utilise de manière régulière les outils suivants :</p>
         ${champ("outilsTrad", "Outils traditionnels et numériques (hors IA générative) *", `<input id="outilsTrad" type="text" value="${esc(b.outilsTrad)}" placeholder="Ex : crayon, tablette graphique, logiciel de retouche">`)}
         ${champ("outilsIA", "Outils intégrant de l'Intelligence Artificielle *", `<input id="outilsIA" type="text" value="${esc(b.outilsIA)}" placeholder="Ex : outil de détourage, assistant de recherche. Indiquez Aucun si besoin.">`)}</div>
       ${ARTICLES_3_5}
     </div>
     <div class="signature-zone">
-      <div class="lignes"><div><span class="muted">Fait pour valoir ce que de droit, par</span><br><b>${esc(b.createur)}</b></div><div><span class="muted">Date</span><br><b>${dateFr(new Date())}</b></div></div>
-      <div class="champ" data-c="charteOk"><label style="display:flex;gap:10px;font-weight:400;align-items:flex-start"><input type="checkbox" id="charteOk" ${b.charteOk ? "checked" : ""} style="margin-top:2px"> En apposant ma signature, j'accepte les termes de la Charte PCE et engage ma responsabilité professionnelle.</label><div class="msg-err">Vous devez accepter les termes de la charte.</div></div>
-      <div class="champ" data-c="signature" style="margin:0"><span class="lab">Signature *</span><span class="aide">Signez dans le cadre avec la souris ou le doigt.</span>
+      <div class="lignes"><div><span class="muted">Fait pour valoir ce que de droit, par</span><br><b>${esc(b.representant)}</b>, pour ${esc(b.raison)}</div><div><span class="muted">Date</span><br><b>${dateFr(new Date())}</b></div></div>
+      <div class="champ" data-c="charteOk"><label style="display:flex;gap:10px;font-weight:400;align-items:flex-start"><input type="checkbox" id="charteOk" ${b.charteOk ? "checked" : ""} style="margin-top:2px"> En apposant ma signature, j'accepte les termes de la Charte PCE au nom de l'entreprise et engage sa responsabilité professionnelle.</label><div class="msg-err">Vous devez accepter les termes de la charte.</div></div>
+      <div class="champ" data-c="signature" style="margin:0"><span class="lab">Signature du représentant *</span><span class="aide">Signez dans le cadre avec la souris ou le doigt.</span>
         <div class="pad ${b.signature ? "signe" : ""}" id="pad"><canvas aria-label="Zone de signature"></canvas><span class="indice">Signez ici</span></div>
         <div style="display:flex;justify-content:space-between;margin-top:8px"><button type="button" class="lien" id="pad-eff">Effacer la signature</button><span class="muted petit-texte" id="pad-etat">${b.signature ? "Signature enregistrée" : ""}</span></div>
         <div class="msg-err">La signature est obligatoire pour déposer votre dossier.</div></div>
@@ -3343,8 +3430,8 @@ function etapeCharte(b) {
 }
 function initCharte() {
   const b = brouillon(), pad = $("#pad"), c = $("canvas", pad), g = c.getContext("2d");
-  const taille = () => { const r = pad.getBoundingClientRect(), k = devicePixelRatio || 1; c.width = r.width * k; c.height = r.height * k; g.setTransform(k, 0, 0, k, 0, 0); g.lineWidth = 2.2; g.lineCap = g.lineJoin = "round"; g.strokeStyle = "#023481"; if (b.signature) chargerImg(b.signature).then(im => g.drawImage(im, 0, 0, r.width, r.height)); };
-  taille();
+  const r0 = pad.getBoundingClientRect(), k = devicePixelRatio || 1; c.width = r0.width * k; c.height = r0.height * k; g.setTransform(k, 0, 0, k, 0, 0); g.lineWidth = 2.2; g.lineCap = g.lineJoin = "round"; g.strokeStyle = "#023481";
+  if (b.signature) chargerImg(b.signature).then(im => g.drawImage(im, 0, 0, r0.width, r0.height));
   let trace = false, dernier = null;
   const pos = e => { const r = c.getBoundingClientRect(); return [e.clientX - r.left, e.clientY - r.top]; };
   c.addEventListener("pointerdown", e => { trace = true; c.setPointerCapture(e.pointerId); dernier = pos(e); g.beginPath(); g.arc(dernier[0], dernier[1], 1.1, 0, 7); g.fillStyle = "#023481"; g.fill(); });
@@ -3354,45 +3441,32 @@ function initCharte() {
   $("#pad-eff").onclick = () => { g.clearRect(0, 0, c.width, c.height); b.signature = null; b.signeLe = null; DB.sauver(); pad.classList.remove("signe"); $("#pad-etat").textContent = ""; };
   $$("input[name=expertise]").forEach(r => r.onchange = () => { b.expertise = r.value; $("#l-autre").style.display = r.value === "Autre" ? "" : "none"; DB.sauver(); });
 }
-function charteSigneeHtml(o) {
-  const ch = o.charte || {};
-  return `<!doctype html><html lang="fr"><meta charset="utf-8"><title>Charte PCE signée · ${esc(o.createur)}</title>
-<style>body{font-family:Arial,sans-serif;color:#1F2530;max-width:760px;margin:36px auto;padding:0 20px;font-size:14px;line-height:1.5}h1{color:#023481;font-size:22px;margin:0}h2{color:#023481;font-size:15px;margin:18px 0 6px}.ent{display:flex;gap:16px;align-items:center;border-bottom:3px solid #023481;padding-bottom:14px}.ent img{width:70px}.pre{background:#E8EEF8;padding:10px 12px;border-left:4px solid #023481}.sig{margin-top:22px;border:1px solid #023481;padding:14px;display:flex;justify-content:space-between;gap:20px;align-items:flex-end}.sig img{height:90px}.pied{margin-top:18px;font-size:12px;color:#666;border-top:1px solid #ddd;padding-top:8px}@media print{body{margin:0 auto}}</style>
-<div class="ent"><img src="${LOGO}" alt=""><div><h1>Charte de transparence et d'éthique créative</h1><div>Label Processus Créatif Éthique (PCE) · Version 1.1</div></div></div>
+function charteSigneeHtml(e) {
+  const ch = e.charte || {};
+  return `<!doctype html><html lang="fr"><meta charset="utf-8"><title>Charte PCE signée · ${esc(e.raison)}</title>
+<style>body{font-family:Arial,sans-serif;color:#1F2530;max-width:760px;margin:36px auto;padding:0 20px;font-size:14px;line-height:1.5}h1{color:#023481;font-size:22px;margin:0}h2{color:#023481;font-size:15px;margin:18px 0 6px}.ent{display:flex;gap:16px;align-items:center;border-bottom:3px solid #023481;padding-bottom:14px}.ent img{width:70px}.pre{background:#E8EEF8;padding:10px 12px;border-left:4px solid #023481}.sig{margin-top:22px;border:1px solid #023481;padding:14px;display:flex;justify-content:space-between;gap:20px;align-items:flex-end}.sig img{height:90px}.pied{margin-top:18px;font-size:12px;color:#666;border-top:1px solid #ddd;padding-top:8px}</style>
+<div class="ent"><img src="${LOGO}" alt=""><div><h1>Charte de transparence et d'éthique créative</h1><div>Label Processus Créatif Éthique (PCE) · Version 1.2</div></div></div>
 <p class="pre"><b>Préambule.</b> ${PREAMBULE}</p>
-<h2>Article 1 · Déclaration d'identité et d'expertise</h2><p>Je soussigné(e), <b>${esc(o.createur)}</b>, certifie que mon domaine d'expertise principal pour lequel je demande la certification PCE est : <b>${esc(ch.expertise === "Autre" ? "Autre : " + (ch.expertiseAutre || "") : ch.expertise || "")}</b>.</p>
+<h2>Article 1 · Déclaration d'identité et d'expertise</h2><p>Je soussigné(e), <b>${esc(e.representant)}</b>, représentant légal de <b>${esc(e.raison)}</b> (SIRET ${siretFmt(e.siret)}), certifie que le domaine d'expertise principal pour lequel l'entreprise demande la certification PCE est : <b>${esc(ch.expertise === "Autre" ? "Autre : " + (ch.expertiseAutre || "") : ch.expertise || "")}</b>.</p>
 <h2>Article 2 · Déclaration des outils et logiciels</h2><p>Outils traditionnels et numériques (hors IA générative) : <b>${esc(ch.outilsTrad || "")}</b><br>Outils intégrant de l'Intelligence Artificielle : <b>${esc(ch.outilsIA || "")}</b></p>
 ${ARTICLES_3_5.replace(/<div class="article"[^>]*><h3><span class="pastille">(\d)<\/span>([^<]+)<\/h3>/g, "<h2>Article $1 · $2</h2>").replace(/<\/div>/g, "")}
-<div class="sig"><div>Fait pour valoir ce que de droit.<br>Le <b>${dateFr(ch.signeLe || o.date)}</b>, par <b>${esc(o.createur)}</b><br><small>En apposant ma signature, j'accepte les termes de la Charte PCE et engage ma responsabilité professionnelle.</small><br><small>Dossier ${o.id}</small></div>
+<div class="sig"><div>Fait pour valoir ce que de droit.<br>Le <b>${dateFr(ch.signeLe || e.date)}</b>, par <b>${esc(e.representant)}</b>, pour ${esc(e.raison)}<br><small>Dossier ${e.id}</small></div>
 <div>${ch.signature ? `<img src="${ch.signature}" alt="Signature">` : "<i>Signature électronique enregistrée</i>"}</div></div>
-<div class="pied">Label PCE · Charte de transparence, version 1.1</div></html>`;
+<div class="pied">Label PCE · Charte de transparence, version 1.2</div></html>`;
 }
-const telechargerCharte = o => { telecharger(`charte-signee-${o.id}.html`, charteSigneeHtml(o), "text/html"); toast("Charte signée téléchargée."); };
+const telechargerCharte = e => { telecharger(`charte-signee-${e.id}.html`, charteSigneeHtml(e), "text/html"); toast("Charte signée téléchargée."); };
 function etape4(b) {
-  const unite = TYPES[b.type], est = estimerAbo(b.taille, b.creationsAn, (+b.recherche || 0) + (+b.creation || 0) + (+b.ia || 0));
-  const h = (+b.recherche || 0) + (+b.creation || 0) + (+b.ia || 0), t = +b.taux || 0, cert = b.formule === "unite" ? unite : 0;
-  return `<h3>Votre formule</h3>
-    <div class="formules">
-      <label class="formule"><input type="radio" name="formule" value="abonnement" ${b.formule === "abonnement" ? "checked" : ""}>Certification annuelle sur mesure<b>${libAbo(est)}</b><small class="muted">${est.surDevis ? "Tarif établi après l'étude du dossier" : `${b.creationsAn} créations par an · processus ${est.procLib}${est.etude ? ` · étude ${eur(est.etude)} HT` : ""}`}</small></label>
-      <label class="formule"><input type="radio" name="formule" value="unite" ${b.formule === "unite" ? "checked" : ""}>Certification à l'unité<b>${eur(unite)} HT</b><small class="muted">Tarif ${esc(b.type.toLowerCase())}</small></label>
-    </div>
-    <p class="muted petit-texte" style="margin-top:8px">Le coût annuel de la certification dépend du nombre de créations à certifier, de la taille de votre structure (${esc(b.taille.toLowerCase())}), de l'ampleur de votre processus créatif et de l'étude de votre dossier. Il est confirmé après l'étude du dossier.</p>
-    <h3 style="margin-top:28px">Devis client transparent</h3>
-    <div class="ligne-h" style="border:none"><label for="taux">Votre taux horaire (€ HT)</label><input id="taux" type="number" min="0" value="${b.taux}"></div>
-    <table class="devis"><tr><th>Poste</th><th>Montant HT</th></tr>
-      <tr><td>Recherche et intention · ${b.recherche} h</td><td>${eur(b.recherche * t)}</td></tr>
-      <tr><td>Création et direction artistique · ${b.creation} h</td><td>${eur(b.creation * t)}</td></tr>
-      <tr><td>Exécution et finitions · ${b.ia} h</td><td>${eur(b.ia * t)}</td></tr>
-      <tr><td>Certification PCE</td><td>${cert ? eur(cert) : "Incluse"}</td></tr>
-      <tr class="tot"><td>Total HT</td><td>${eur(h * t + cert)}</td></tr></table>
-    <button type="button" class="btn sec petit" id="dl-devis" style="margin-top:10px">Télécharger le devis</button>
+  const est = estimerAbo(b.taille, b.creationsAn, heuresB(b));
+  return `<h3>Votre certification</h3>
+    <div class="formule" style="cursor:default;border-color:var(--marine);background:var(--pale)">Certification annuelle sur mesure de l'entreprise<b>${libAbo(est)}</b><small class="muted">${est.surDevis ? "Coût établi après l'étude du dossier" : `${b.creationsAn} créations par an · processus ${est.procLib}${est.etude ? ` · étude du dossier ${eur(est.etude)} HT, une seule fois` : ""}`}</small></div>
+    <p class="muted petit-texte" style="margin-top:8px">Le coût annuel dépend du nombre de créations à certifier, de la taille de votre structure (${esc(b.taille.toLowerCase())}), de l'ampleur de votre processus créatif et de l'étude de votre dossier. Il est confirmé après l'étude du dossier.</p>
     <h3 style="margin-top:28px">Récapitulatif</h3>
-    <dl class="recap deux"><div><dt>Créateur</dt><dd>${esc(b.createur)}</dd><dt>E-mail</dt><dd>${esc(b.email)}</dd><dt>Discipline</dt><dd>${esc(b.type)}</dd></div>
-    <div><dt>Œuvre</dt><dd>${esc(b.titre)}</dd><dt>Recours à l'IA</dt><dd>${IA_LIB[b.iaMode]}</dd><dt>Justificatifs</dt><dd>${b.justificatifs.length} fichier(s)</dd></div></dl>
-    ${b.signature ? `<div class="signee"><img src="${b.signature}" alt="Signature"><div><b>Charte de transparence signée</b><br><span class="muted">Le ${dateFr(b.signeLe)}</span></div></div>` : ""}
-    ${b.img ? `<div class="apercu"><img src="${b.img}" alt=""><div><b>${esc(b.imgNom || "Œuvre finale")}</b><br><span class="muted petit-texte">Recevra le sceau PCE et un QR code.</span></div></div>` : ""}`;
+    <dl class="recap deux"><div><dt>Entreprise</dt><dd>${esc(b.raison)}</dd><dt>SIRET</dt><dd class="mono">${siretFmt(b.siret)}</dd><dt>Forme juridique</dt><dd>${esc(b.forme)}</dd><dt>Représentant</dt><dd>${esc(b.representant)}</dd></div>
+    <div><dt>Structure</dt><dd>${esc(b.taille)} · ${esc(b.ville)}</dd><dt>Disciplines</dt><dd>${b.disciplines.map(esc).join(", ")}</dd><dt>Recours à l'IA</dt><dd>${IA_LIB[b.iaMode]}</dd><dt>Justificatifs</dt><dd>Kbis · ${b.justificatifs.length} fichier(s)</dd></div></dl>
+    <h4>Portfolio (${b.portfolio.length} œuvre${b.portfolio.length > 1 ? "s" : ""})</h4>
+    <div class="port-recap">${b.portfolio.map(p => `<figure><img src="${p.img}" alt=""><figcaption>${esc(p.titre)}</figcaption></figure>`).join("")}</div>
+    ${b.signature ? `<div class="signee" style="margin-top:14px"><img src="${b.signature}" alt="Signature"><div><b>Charte de transparence signée</b><br><span class="muted">Par ${esc(b.representant)}, le ${dateFr(b.signeLe)}</span></div></div>` : ""}`;
 }
-function majDosage() {}
 function lireFichier(f) { return new Promise(ok => { const r = new FileReader(); r.onload = () => ok(r.result); r.readAsDataURL(f); }); }
 async function reduireImage(src, max = 1400) {
   const im = await chargerImg(src); const k = Math.min(1, max / Math.max(im.naturalWidth, im.naturalHeight));
@@ -3408,6 +3482,15 @@ function zone(zoneId, inputId, onFiles) {
   ["dragleave", "drop"].forEach(ev => z.addEventListener(ev, e => { e.preventDefault(); z.classList.remove("survol"); }));
   z.addEventListener("drop", e => onFiles([...e.dataTransfer.files]));
 }
+function etatSiret(b) {
+  const z = $("#siret-etat"); if (!z) return;
+  const s = siretNu(b.siret), deja = DB.parSiret(s);
+  if (!s) { z.textContent = ""; z.className = "siret-etat"; return; }
+  if (s.length < 14) { z.textContent = `${s.length} / 14 chiffres`; z.className = "siret-etat"; return; }
+  if (!luhnOk(s)) { z.textContent = "Clé de contrôle invalide"; z.className = "siret-etat ko"; return; }
+  if (deja) { z.textContent = deja.statut === "certifiee" ? "Entreprise déjà certifiée" : "Un dossier existe déjà pour ce SIRET"; z.className = "siret-etat ko"; return; }
+  z.textContent = "✓ SIRET valide"; z.className = "siret-etat ok";
+}
 function initDepot() {
   const b = brouillon(), e = b.etape;
   requestAnimationFrame(() => $$(".barres span[data-b]").forEach((s, i) => { if (i <= e) setTimeout(() => s.classList.add("ok"), 80 * i); if (i === e) s.classList.remove("ok"); }));
@@ -3415,31 +3498,50 @@ function initDepot() {
   const form = $("#d-form");
   const lire = () => {
     $$("input[type=text], input[type=email], input[type=number], textarea, select", form).forEach(x => { if (x.id && x.id in b) b[x.id] = x.type === "number" ? Math.max(0, +x.value || 0) : x.value; });
+    if ($("#siret")) b.siret = siretNu($("#siret").value);
     const r = $("input[name=iaMode]:checked", form); if (r) b.iaMode = r.value;
-    const f = $("input[name=formule]:checked", form); if (f) b.formule = f.value;
+    if ($("input[name=disciplines]", form)) b.disciplines = $$("input[name=disciplines]:checked", form).map(x => x.value);
     const a = $("#charteOk"); if (a) b.charteOk = a.checked;
     const x = $("input[name=expertise]:checked", form); if (x) b.expertise = x.value;
+    $$("[data-pt]", form).forEach(i => { const p = b.portfolio[+i.dataset.pt]; if (p) p.titre = i.value; });
     DB.sauver();
   };
   const iaUi = () => { if ($("#l-outils")) $("#l-outils").style.display = b.iaMode === "aucun" ? "none" : ""; };
-  form.addEventListener("input", ev => { const ch = ev.target.closest(".champ, .article"); if (ch) ch.classList.remove("erreur"); lire(); iaUi(); if (e === 4) { const y = scrollY; $("#d-form").innerHTML = etape4(b); initEtape4(); scrollTo(0, y); } });
-  form.addEventListener("change", ev => { const ch = ev.target.closest(".champ, .article"); if (ch) ch.classList.remove("erreur"); lire(); iaUi(); if (e === 4) { const y = scrollY; $("#d-form").innerHTML = etape4(b); initEtape4(); scrollTo(0, y); } });
+  const surSaisie = ev => { const ch = ev.target.closest(".champ, .article"); if (ch) ch.classList.remove("erreur"); lire(); iaUi(); etatSiret(b); };
+  form.addEventListener("input", surSaisie); form.addEventListener("change", surSaisie);
+  if (e === 0) {
+    etatSiret(b);
+    $("#siret").addEventListener("blur", () => { $("#siret").value = siretFmt($("#siret").value); });
+    $("#ex-siret").onclick = () => { let s; const r = rng(Date.now() % 100000); do { s = genSiret(r); } while (DB.parSiret(s)); b.siret = s; $("#siret").value = siretFmt(s); DB.sauver(); etatSiret(b); $('[data-c="siret"]').classList.remove("erreur"); };
+  }
   if (e === 1) iaUi();
   if (e === 2) {
-    const apImg = () => { $("#ap-img").innerHTML = b.img ? `<div class="apercu"><img src="${b.img}" alt=""><div><b>${esc(b.imgNom)}</b><br><button type="button" class="lien" id="rm-img">Retirer</button></div></div>` : ""; if ($("#rm-img")) $("#rm-img").onclick = () => { b.img = null; b.imgNom = ""; DB.sauver(); apImg(); }; };
+    const lk = () => { $("#l-kbis").innerHTML = b.kbis ? `<li><span>📄 ${esc(b.kbis)}</span><button type="button" class="lien" id="rm-kbis">Retirer</button></li>` : ""; if ($("#rm-kbis")) $("#rm-kbis").onclick = () => { b.kbis = ""; DB.sauver(); lk(); }; };
+    const lp = () => {
+      $("#l-port").innerHTML = b.portfolio.map((p, i) => `<div class="apercu"><img src="${p.img}" alt=""><div><label class="sr" for="pt${i}">Titre de l'œuvre ${i + 1}</label><input id="pt${i}" data-pt="${i}" type="text" value="${esc(p.titre)}" placeholder="Titre de l'œuvre"><select data-ptype="${i}" aria-label="Type de l'œuvre ${i + 1}" style="margin-top:6px">${b.disciplines.map(t => `<option ${t === p.type ? "selected" : ""}>${t}</option>`).join("")}</select><br><button type="button" class="lien" data-rmp="${i}" style="margin-top:6px">Retirer</button></div></div>`).join("");
+      $$("[data-rmp]").forEach(x => x.onclick = () => { b.portfolio.splice(+x.dataset.rmp, 1); DB.sauver(); lp(); });
+      $$("[data-ptype]").forEach(x => x.onchange = () => { b.portfolio[+x.dataset.ptype].type = x.value; DB.sauver(); });
+    };
     const lj = () => { $("#l-just").innerHTML = b.justificatifs.map((n, i) => `<li><span>📄 ${esc(n)}</span><button type="button" class="lien" data-rm="${i}">Retirer</button></li>`).join(""); $$("[data-rm]").forEach(x => x.onclick = () => { b.justificatifs.splice(+x.dataset.rm, 1); DB.sauver(); lj(); }); };
-    zone("#z-img", "#f-img", async fs => { const f = fs.find(x => x.type.startsWith("image/")); if (!f) return toast("Choisissez une image JPG ou PNG."); b.img = await reduireImage(await lireFichier(f)); b.imgNom = f.name; DB.sauver(); apImg(); });
+    const ajouterPort = (img, titre) => { if (b.portfolio.length >= 3) return toast("Le portfolio contient au plus 3 œuvres."); b.portfolio.push({ img, titre, type: b.disciplines[0] }); DB.sauver(); lp(); $('[data-c="portfolio"]').classList.remove("erreur"); };
+    zone("#z-kbis", "#f-kbis", fs => { if (fs[0]) { b.kbis = fs[0].name; DB.sauver(); lk(); $('[data-c="kbis"]').classList.remove("erreur"); } });
+    zone("#z-port", "#f-port", async fs => { for (const f of fs.filter(x => x.type.startsWith("image/"))) ajouterPort(await reduireImage(await lireFichier(f)), f.name.replace(/\.[^.]+$/, "")); });
     zone("#z-just", "#f-just", fs => { fs.forEach(f => b.justificatifs.push(f.name)); DB.sauver(); lj(); });
-    $("#ex-img").onclick = () => { b.img = OEUVRE; b.imgNom = "la-maison-au-soleil.png"; if (!b.justificatifs.length) b.justificatifs.push("croquis-preparatoires.pdf"); DB.sauver(); apImg(); lj(); };
-    apImg(); lj();
+    $("#ex-kbis").onclick = () => { b.kbis = "avis-situation-sirene.pdf"; DB.sauver(); lk(); $('[data-c="kbis"]').classList.remove("erreur"); };
+    $("#ex-port").onclick = () => { ajouterPort(OEUVRE, "La maison au soleil"); if (!b.justificatifs.length) { b.justificatifs.push("croquis-preparatoires.pdf"); lj(); } };
+    lk(); lp(); lj();
   }
   if (e === 3) initCharte();
-  if (e === 4) initEtape4();
   const valider = () => {
     lire(); let ok = true; const err = (c, cond) => { const z = $(`[data-c="${c}"]`); if (z) z.classList.toggle("erreur", !cond); if (!cond) ok = false; };
-    if (e === 0) { err("createur", b.createur.trim()); err("email", /^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(b.email)); err("creationsAn", +b.creationsAn >= 1); }
-    if (e === 1) { err("titre", b.titre.trim()); err("description", b.description.trim().length >= 40); }
-    if (e === 2) { err("img", b.img); err("just", b.justificatifs.length); }
+    if (e === 0) {
+      const s = siretNu(b.siret), deja = DB.parSiret(s);
+      if (deja && luhnOk(s)) $("#siret-err").textContent = deja.statut === "certifiee" ? "Cette entreprise est déjà certifiée." : "Un dossier existe déjà pour ce SIRET.";
+      else $("#siret-err").textContent = "Saisissez un SIRET valide de 14 chiffres.";
+      err("siret", luhnOk(s) && !deja); err("raison", b.raison.trim()); err("disciplines", b.disciplines.length); err("representant", b.representant.trim()); err("ville", b.ville.trim()); err("email", /^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(b.email));
+    }
+    if (e === 1) { err("description", b.description.trim().length >= 40); err("creationsAn", +b.creationsAn >= 1); }
+    if (e === 2) { err("kbis", b.kbis); err("portfolio", b.portfolio.length && b.portfolio.every(p => p.titre.trim())); err("just", b.justificatifs.length); }
     if (e === 3) { err("expertise", b.expertise && (b.expertise !== "Autre" || b.expertiseAutre.trim())); err("outilsTrad", b.outilsTrad.trim()); err("outilsIA", b.outilsIA.trim()); err("charteOk", b.charteOk); err("signature", b.signature); }
     if (!ok) { const p = $(".erreur"); if (p) { p.scrollIntoView({ behavior: "smooth", block: "center" }); const i = $("input, textarea, select", p); if (i) i.focus({ preventScroll: true }); } }
     return ok;
@@ -3450,136 +3552,140 @@ function initDepot() {
   if ($("#d-retour")) $("#d-retour").onclick = () => aller(e - 1);
   $("#d-plus-tard").onclick = () => { lire(); toast("Dossier enregistré. Vous pourrez le reprendre depuis cet appareil."); };
 }
-function initEtape4() {
-  const b = brouillon();
-  $("#dl-devis").onclick = () => {
-    const t = +b.taux || 0, cert = b.formule === "unite" ? TYPES[b.type] : 0;
-    const l = [["Recherche et intention", b.recherche], ["Création et direction artistique", b.creation], ["Exécution et finitions", b.ia]];
-    const html = `<!doctype html><html lang="fr"><meta charset="utf-8"><title>Devis ${esc(b.titre)}</title><body style="font-family:Arial;max-width:720px;margin:40px auto;color:#1F2530"><h1 style="color:#023481">Devis</h1><p><b>${esc(b.createur)}</b><br>${esc(b.titre)} · ${esc(b.type)}</p><table style="width:100%;border-collapse:collapse">${l.map(([n, h]) => `<tr><td style="padding:8px;border-bottom:1px solid #ddd">${n} · ${h} h</td><td style="text-align:right;padding:8px;border-bottom:1px solid #ddd">${eur(h * t)}</td></tr>`).join("")}<tr><td style="padding:8px">Certification PCE</td><td style="text-align:right;padding:8px">${cert ? eur(cert) : "Incluse"}</td></tr><tr><td style="padding:8px;font-weight:bold;color:#023481">Total HT</td><td style="text-align:right;padding:8px;font-weight:bold;color:#023481">${eur((+b.recherche + +b.creation + +b.ia) * t + cert)}</td></tr></table><p>Recours à l'IA déclaré : ${IA_LIB[b.iaMode].toLowerCase()}${b.outils ? " (" + esc(b.outils) + ")" : ""}.</p><p style="color:#666">Processus certifié PCE · Processus Créatif Éthique</p></body></html>`;
-    telecharger(`devis-${(b.titre || "oeuvre").toLowerCase().replace(/[^a-z0-9]+/g, "-")}.html`, html, "text/html"); toast("Devis téléchargé.");
-  };
-}
 function payer() {
   const b = brouillon(), v = document.createElement("div"); v.className = "voile";
-  v.innerHTML = `<div class="boite" role="dialog" aria-modal="true" aria-label="Dépôt en cours"><div class="rond"></div><h3 id="p-t">Règlement sécurisé…</h3><p class="muted" id="p-s">${b.formule === "abonnement" ? "Certification annuelle · " + libAbo(estimerAbo(b.taille, b.creationsAn, +b.recherche + +b.creation + +b.ia)) : "Certification à l'unité · " + eur(TYPES[b.type]) + " HT"}</p></div>`;
+  const est = estimerAbo(b.taille, b.creationsAn, heuresB(b));
+  v.innerHTML = `<div class="boite" role="dialog" aria-modal="true" aria-label="Dépôt en cours"><div class="rond"></div><h3 id="p-t">Règlement sécurisé…</h3><p class="muted" id="p-s">Certification annuelle · ${libAbo(est)}</p></div>`;
   document.body.append(v);
-  setTimeout(() => { $("#p-t").textContent = "Transmission du dossier…"; $("#p-s").textContent = "Envoi de l'œuvre et des justificatifs"; }, 1100);
+  setTimeout(() => { $("#p-t").textContent = "Transmission du dossier…"; $("#p-s").textContent = "Envoi du Kbis, du portfolio et des justificatifs"; }, 1100);
   setTimeout(() => {
-    const id = DB.nouvelId();
-    DB.ajouter({ id, titre: b.titre, createur: b.createur, email: b.email, type: b.type, ville: b.ville, date: new Date().toISOString(), statut: "deposee",
-      dosage: { recherche: +b.recherche, creation: +b.creation, ia: +b.ia }, iaMode: b.iaMode, outils: b.outils, description: b.description, formule: b.formule,
-      seed: Math.floor(Math.random() * 1e5), img: b.img, justificatifs: [...b.justificatifs], motif: "", taux: b.taux,
-      taille: b.taille, creationsAn: +b.creationsAn, prixAbo: (e => e.surDevis ? null : e.annuel)(estimerAbo(b.taille, b.creationsAn, +b.recherche + +b.creation + +b.ia)),
+    const id = DB.nouvelIdEntite(), date = new Date().toISOString();
+    DB.data.entites.unshift({ id, siret: siretNu(b.siret), raison: b.raison.trim(), forme: b.forme, taille: b.taille, disciplines: [...b.disciplines], ville: b.ville.trim(), email: b.email.trim(), representant: b.representant.trim(), site: b.site.trim(),
+      statut: "deposee", date, dateCertif: null, iaMode: b.iaMode, outils: b.outils, description: b.description, organisation: b.organisation,
+      heures: { recherche: +b.recherche, creation: +b.creation, execution: +b.execution }, creationsAn: +b.creationsAn, prixAbo: est.surDevis ? null : est.annuel,
+      kbis: b.kbis, justificatifs: [...b.justificatifs], audit: false, motif: "", seed: Math.floor(Math.random() * 1e5),
       charte: { expertise: b.expertise, expertiseAutre: b.expertiseAutre, outilsTrad: b.outilsTrad, outilsIA: b.outilsIA, signature: b.signature, signeLe: b.signeLe } });
+    b.portfolio.forEach(p => DB.data.oeuvres.push({ id: DB.nouvelIdOeuvre(), entiteId: id, titre: p.titre.trim(), type: p.type || b.disciplines[0], date, img: p.img, seed: Math.floor(Math.random() * 1e5) }));
     DB.data.brouillon = null; DB.sauver(); v.remove(); location.hash = "#/confirmation/" + id;
   }, 2200);
 }
-function frise(o) {
-  const avecAudit = o.audit || o.statut === "audit";
-  const etapes = [["deposee", "Dossier déposé", dateFr(o.date)], ["analyse", "Analyse IA des fichiers", "Métadonnées, calques, historique des fichiers"], ["commission", "Contrôle humain", "La commission examine le dossier et l'analyse"]];
+function frise(e) {
+  const avecAudit = e.audit || e.statut === "audit";
+  const etapes = [["deposee", "Dossier déposé", dateFr(e.date)], ["analyse", "Analyse IA des fichiers", "Kbis, portfolio, métadonnées, calques, historique"], ["commission", "Contrôle humain", "La commission examine le dossier et l'analyse"]];
   if (avecAudit) etapes.push(["audit", "Audit terrain", "Vérification sur place par un membre de l'équipe"]);
-  etapes.push(["decision", "Décision et remise de la certification", o.statut === "certifiee" ? "Certification délivrée" : o.statut === "refusee" ? "Certification refusée" : ""]);
-  const i = o.statut === "certifiee" || o.statut === "refusee" ? etapes.length : etapes.findIndex(x => x[0] === o.statut) + 1;
+  etapes.push(["decision", "Décision et certification de l'entreprise", e.statut === "certifiee" ? "Certification délivrée pour un an" : e.statut === "refusee" ? "Certification refusée" : ""]);
+  const i = e.statut === "certifiee" || e.statut === "refusee" ? etapes.length : etapes.findIndex(x => x[0] === e.statut) + 1;
   return `<ol class="frise">${etapes.map(([, t, s], k) => `<li class="${k < i ? "fait" : k === i ? "cours" : ""}"><span class="pt"></span><b>${t}</b><small>${k === i ? "Prochaine étape" : s}</small></li>`).join("")}</ol>`;
 }
 function vueConfirmation(id) {
-  const o = DB.get(id); if (!o) return vueOeuvre(id);
+  const e = DB.entite(id); if (!e) return vueSuivi();
   return `<div class="conteneur etroit">${ariane("Dossier déposé")}
-    <div class="succes"><span class="check"><svg viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></span><div><h2 style="margin:0;font-size:21px">Votre dossier a bien été déposé</h2><p class="muted" style="margin:4px 0 0">Un accusé de réception a été envoyé à ${esc(o.email)}.</p></div></div>
-    <h3 style="color:var(--encre)">Numéro de dossier</h3><div class="numero mono">${o.id}</div><p class="muted petit-texte" style="font-style:italic;margin-top:8px">Conservez ce numéro pour suivre votre demande.</p>
-    <h3 style="margin-top:22px">Suivi de votre demande</h3>${frise(o)}
-    <div class="pile"><a class="btn" href="#/suivi/${o.id}">Suivre mon dossier <span class="fl">→</span></a><button class="btn sec" id="dl-ar">Télécharger l'accusé de réception</button><button class="btn sec" id="dl-ch">Télécharger la charte signée</button><a href="#/" style="text-align:center;font-size:14px;color:var(--encre)">Retour à l'accueil</a></div><div style="height:56px"></div></div>`;
+    <div class="succes"><span class="check"><svg viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></span><div><h2 style="margin:0;font-size:21px">Le dossier de ${esc(e.raison)} a bien été déposé</h2><p class="muted" style="margin:4px 0 0">Un accusé de réception a été envoyé à ${esc(e.email)}.</p></div></div>
+    <h3 style="color:var(--encre)">Numéro de dossier</h3><div class="numero mono">${e.id}</div><p class="muted petit-texte" style="font-style:italic;margin-top:8px">SIRET ${siretFmt(e.siret)}. Conservez ce numéro pour suivre votre demande.</p>
+    <h3 style="margin-top:22px">Suivi de votre demande</h3>${frise(e)}
+    <div class="pile"><a class="btn" href="#/suivi/${e.id}">Suivre mon dossier <span class="fl">→</span></a><button class="btn sec" id="dl-ar">Télécharger l'accusé de réception</button><button class="btn sec" id="dl-ch">Télécharger la charte signée</button><a href="#/" style="text-align:center;font-size:14px;color:var(--encre)">Retour à l'accueil</a></div><div style="height:56px"></div></div>`;
 }
 function initConfirmation(id) {
-  const o = DB.get(id); if (!o || !$("#dl-ar")) return;
-  $("#dl-ch").onclick = () => telechargerCharte(o);
-  $("#dl-ar").onclick = () => { telecharger(`accuse-reception-${o.id}.txt`, `CERTIFICATION PCE · PROCESSUS CRÉATIF ÉTHIQUE\n\nAccusé de réception\n\nNuméro de dossier : ${o.id}\nDéposé le : ${dateFr(o.date)}\nCréateur : ${o.createur}\nŒuvre : ${o.titre} (${o.type})\nRecours à l'IA déclaré : ${IA_LIB[o.iaMode]}\nJustificatifs : ${o.justificatifs.join(", ")}\n\nSuivi : ${BASE}/suivi/${o.id}\n`, "text/plain"); toast("Accusé de réception téléchargé."); };
+  const e = DB.entite(id); if (!e || !$("#dl-ar")) return;
+  $("#dl-ch").onclick = () => telechargerCharte(e);
+  $("#dl-ar").onclick = () => { telecharger(`accuse-reception-${e.id}.txt`, `CERTIFICATION PCE · PROCESSUS CRÉATIF ÉTHIQUE\n\nAccusé de réception\n\nNuméro de dossier : ${e.id}\nDéposé le : ${dateFr(e.date)}\nEntreprise : ${e.raison}\nSIRET : ${siretFmt(e.siret)}\nForme juridique : ${e.forme}\nReprésentant : ${e.representant}\nDisciplines : ${e.disciplines.join(", ")}\nRecours à l'IA déclaré : ${IA_LIB[e.iaMode]}\nKbis : ${e.kbis}\nPortfolio : ${oeuvresDe(e).map(o => o.titre).join(", ")}\nJustificatifs : ${e.justificatifs.join(", ")}\n\nSuivi : ${BASE}/suivi/${e.id}\n`, "text/plain"); toast("Accusé de réception téléchargé."); };
 }
 function vueSuivi(id) {
-  const o = DB.get(id);
-  if (!o) return `<div class="conteneur etroit">${ariane("Suivre mon dossier")}<h1>Suivre mon dossier</h1><form class="verif-form" id="s-f"><input id="s-n" type="text" placeholder="PCE-2026-000201"><button class="btn">Suivre</button></form>${id ? `<p style="color:var(--rouge);margin-top:12px">Aucun dossier ne correspond à ce numéro.</p>` : ""}<div style="height:56px"></div></div>`;
-  const fini = o.statut === "certifiee" || o.statut === "refusee";
-  return `<div class="conteneur ${o.statut === "certifiee" ? "" : "etroit"}">${ariane("Suivre mon dossier")}
-    <div style="display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap"><h1 style="margin:0">${esc(o.titre)}</h1><span class="badge b-${o.statut}">${STATUTS[o.statut]}</span></div>
-    <p class="muted mono" style="margin-top:6px">${o.id}</p>
-    ${o.statut === "certifiee" ? `<div class="succes"><span class="check"><svg viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></span><div><h2 style="margin:0;font-size:21px">Félicitations, votre œuvre est certifiée PCE</h2><p class="muted" style="margin:4px 0 0">Votre œuvre porte désormais le sceau PCE et son QR code de vérification.</p></div></div>
-      <div class="fiche"><figure class="cadre" style="margin:0"><div class="art">${visuel(o)}</div><figcaption class="cartel"><img class="s" src="${LOGO}" alt="Sceau PCE"><div><b>${esc(o.titre)}</b><small>${esc(o.createur)} · ${esc(o.type)}</small><small class="mono">Certifiée PCE n° ${o.id}</small></div><div class="qr">${qrSvg(urlVerif(o.id))}</div></figcaption></figure>
-      <div>${blocCertificat(o)}<div class="pile" style="margin-top:18px"><button class="btn" id="dl-oeuvre">Télécharger l'œuvre signée (PNG)</button><a class="btn sec" href="#/oeuvre/${o.id}">Voir la page publique de l'œuvre</a></div></div></div>`
-    : `${frise(o)}${o.statut === "refusee" ? `<div class="res-ko"><b>Motif</b><p style="margin:6px 0 0">${esc(o.motif)}</p></div>` : `<div class="info"><span class="i">i</span><span>Démonstration : la commission traite les dossiers depuis l'espace pro. Vous pouvez aussi faire avancer ce dossier ci-dessous.</span></div>
+  const e = id && (DB.entite(id) || DB.parSiret(id));
+  if (!e) return `<div class="conteneur etroit">${ariane("Suivre mon dossier")}<h1>Suivre mon dossier</h1><p class="muted">Saisissez votre numéro de dossier ou votre SIRET.</p><form class="verif-form" id="s-f"><input id="s-n" type="text" placeholder="PCE-E-2026-0101 ou SIRET"><button class="btn">Suivre</button></form>${id ? `<p style="color:var(--rouge);margin-top:12px">Aucun dossier ne correspond.</p>` : ""}<div style="height:56px"></div></div>`;
+  const oe = oeuvresDe(e);
+  return `<div class="conteneur ${e.statut === "certifiee" ? "" : "etroit"}">${ariane("Suivre mon dossier")}
+    <div style="display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap"><h1 style="margin:0">${esc(e.raison)}</h1><span class="badge b-${e.statut}">${STATUTS[e.statut]}</span></div>
+    <p class="muted mono" style="margin-top:6px">${e.id} · SIRET ${siretFmt(e.siret)}</p>
+    ${e.statut === "certifiee" ? `<div class="succes"><span class="check"><svg viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></span><div><h2 style="margin:0;font-size:21px">Félicitations, votre entreprise est certifiée PCE</h2><p class="muted" style="margin:4px 0 0">Valable jusqu'au ${dateFr(finValidite(e))}. Vos œuvres figurent au registre avec le sceau PCE et leur QR code.</p></div></div>
+      <div class="fiche"><div><h2>Œuvres au registre</h2><div class="galerie">${oe.map(o => `<div class="oeuvre-c"><div class="vignette">${visuel(o)}<img class="mini-sceau" src="${LOGO}" alt=""></div><div class="txt"><b>${esc(o.titre)}</b><small class="mono">${o.id}</small><button type="button" class="lien" data-sig="${o.id}" style="margin-top:6px">Télécharger l'œuvre signée</button></div></div>`).join("")}</div></div>
+      <div>${blocCertifEntite(e)}<div class="pile" style="margin-top:18px"><a class="btn sec" href="#/entreprise/${e.id}">Voir la page publique de l'entreprise</a></div></div></div>`
+    : `${frise(e)}${e.statut === "refusee" ? `<div class="res-ko"><b>Motif</b><p style="margin:6px 0 0">${esc(e.motif)}</p></div>` : `<div class="info"><span class="i">i</span><span>Démonstration : la commission traite les dossiers depuis l'espace pro. Vous pouvez aussi faire avancer ce dossier ci-dessous.</span></div>
       <div class="pile" style="margin-top:16px"><button class="btn" id="avancer">Simuler l'étape suivante <span class="fl">→</span></button><a class="btn sec" href="#/pro">Ouvrir l'espace pro</a></div>`}`}
     <div style="height:56px"></div></div>`;
 }
 function initSuivi(id) {
-  if ($("#s-f")) { $("#s-f").onsubmit = e => { e.preventDefault(); location.hash = "#/suivi/" + $("#s-n").value.trim(); }; return; }
-  const o = DB.get(id); if (!o) return;
-  if ($("#dl-oeuvre")) $("#dl-oeuvre").onclick = () => oeuvreSignee(o);
+  if ($("#s-f")) { $("#s-f").onsubmit = ev => { ev.preventDefault(); location.hash = "#/suivi/" + encodeURIComponent($("#s-n").value.trim()); }; return; }
+  const e = DB.entite(id) || DB.parSiret(id); if (!e) return;
+  $$("[data-sig]").forEach(x => x.onclick = () => oeuvreSignee(DB.oeuvre(x.dataset.sig)));
   if ($("#avancer")) $("#avancer").onclick = () => {
-    const suite = { deposee: "analyse", analyse: "commission", commission: "certifiee", audit: "certifiee" }[o.statut];
-    DB.maj(o.id, suite === "certifiee" ? { statut: "certifiee", date: new Date().toISOString() } : { statut: suite });
+    const suite = { deposee: "analyse", analyse: "commission", commission: "certifiee", audit: "certifiee" }[e.statut];
+    DB.majEntite(e.id, suite === "certifiee" ? { statut: "certifiee", dateCertif: new Date().toISOString() } : { statut: suite });
     rendre(); toast(suite === "certifiee" ? "Certification délivrée par la commission." : "Dossier mis à jour.");
   };
 }
 
 /* ---------- Espace pro ---------- */
 const PRO = { onglet: "tableau", q: "", statut: "", type: "", tri: "date", sens: -1, page: 0 };
+const EN_COURS = ["deposee", "analyse", "commission", "audit"];
 function vuePro() {
-  if (!DB.data.pro) return `<div class="conteneur">${ariane("Espace pro")}
+  if (!DB.data.pro) return `<div class="conteneur">${ariane("Accès commission")}
     <div class="connexion"><div class="carte" style="padding:28px"><h1 style="font-size:26px">Espace commission</h1><p class="muted">Accès réservé aux membres de la commission et aux vérificateurs PCE.</p>
     <form id="login" novalidate>${champ("ident", "Identifiant", `<input id="ident" type="text" value="commission@certification-pce.fr" autocomplete="username">`)}${champ("mdp", "Mot de passe", `<input id="mdp" type="password" value="demonstration" autocomplete="current-password">`)}
     <button class="btn" style="width:100%;justify-content:center">Se connecter <span class="fl">→</span></button></form></div></div></div>`;
   return `<div class="pro-bandeau"><div class="conteneur"><div class="pro-onglets" role="tablist">
-      ${[["tableau", "Tableau de bord"], ["dossiers", "Dossiers à traiter"], ["base", "Base des œuvres"]].map(([k, t]) => `<button role="tab" aria-selected="${PRO.onglet === k}" class="${PRO.onglet === k ? "actif" : ""}" data-o="${k}">${t}</button>`).join("")}
+      ${[["tableau", "Tableau de bord"], ["dossiers", "Dossiers à traiter"], ["base", "Base des entreprises"], ["oeuvres", "Base des œuvres"]].map(([k, t]) => `<button role="tab" aria-selected="${PRO.onglet === k}" class="${PRO.onglet === k ? "actif" : ""}" data-o="${k}">${t}</button>`).join("")}
     </div><div style="display:flex;gap:16px;align-items:center"><span>Commission PCE</span><button class="lien" id="logout" style="color:#fff">Se déconnecter</button></div></div></div>
-    <div class="conteneur" id="pro-c">${PRO.onglet === "tableau" ? proTableau() : proBase(PRO.onglet === "dossiers")}</div>`;
+    <div class="conteneur" id="pro-c">${contenuPro()}</div>`;
 }
+const contenuPro = () => PRO.onglet === "tableau" ? proTableau() : PRO.onglet === "oeuvres" ? proOeuvres() : proBase(PRO.onglet === "dossiers");
 function proTableau() {
-  const o = DB.data.oeuvres, c = o.filter(x => x.statut === "certifiee"), enc = o.filter(x => ["deposee", "analyse", "commission"].includes(x.statut));
-  const tranch = o.filter(x => ["certifiee", "refusee"].includes(x.statut)), taux = tranch.length ? Math.round(c.length / tranch.length * 100) : 0;
-  const nbCrea = new Set(c.map(x => x.createur)).size;
+  const l = DB.data.entites, c = l.filter(certifiee), enc = l.filter(x => EN_COURS.includes(x.statut));
+  const tr = l.filter(x => ["certifiee", "refusee"].includes(x.statut)), taux = tr.length ? Math.round(c.length / tr.length * 100) : 0;
   const mois = ["Janv.", "Févr.", "Mars", "Avr.", "Mai", "Juin", "Juil.", "Août", "Sept.", "Oct.", "Nov.", "Déc."];
-  const parMois = mois.map((m, i) => c.filter(x => new Date(x.date).getMonth() === i && new Date(x.date).getFullYear() === 2026).length).slice(0, 10), max = Math.max(1, ...parMois);
-  const parType = Object.keys(TYPES).map(t => [t, c.filter(x => x.type === t).length]), maxT = Math.max(1, ...parType.map(x => x[1]));
+  const parMois = mois.map((m, i) => c.filter(x => new Date(x.dateCertif).getMonth() === i && new Date(x.dateCertif).getFullYear() === 2026).length).slice(0, 11), max = Math.max(1, ...parMois);
+  const parType = Object.keys(TYPES).map(t => [t, c.filter(x => x.disciplines.includes(t)).length]), maxT = Math.max(1, ...parType.map(x => x[1]));
   return `<div class="kpis">
-      <div class="kpi rev"><b data-compte="${c.length}">0</b><span>Œuvres certifiées</span></div>
+      <div class="kpi rev"><b data-compte="${c.length}">0</b><span>Entreprises certifiées</span></div>
       <div class="kpi rev"><b data-compte="${enc.length}">0</b><span>Dossiers en cours</span></div>
       <div class="kpi rev"><b data-compte="${taux}" data-suffixe=" %">0</b><span>Taux de certification</span></div>
-      <div class="kpi rev"><b data-compte="${nbCrea}">0</b><span>Créateurs certifiés</span></div>
+      <div class="kpi rev"><b data-compte="${oeuvresPubliques().length}">0</b><span>Œuvres au registre</span></div>
     </div>
     <div class="pro-grille">
-      <div class="boite-pro rev"><h3>Certifications délivrées en 2026</h3><div class="histo">${parMois.map((v, i) => `<div><em>${v}</em><i style="height:${v / max * 130}px;animation-delay:${i * 60}ms" title="${v} certification(s)"></i><span>${mois[i]}</span></div>`).join("")}</div></div>
-      <div class="boite-pro rev"><h3>Œuvres certifiées par type</h3><div class="repart" style="margin-top:16px">${parType.map(([t, v], i) => `<div><span>${t}</span><span class="jauge"><i style="width:${v / maxT * 100}%;animation-delay:${i * 80}ms"></i></span><b>${v}</b></div>`).join("")}</div></div>
+      <div class="boite-pro rev"><h3>Entreprises certifiées en 2026</h3><div class="histo">${parMois.map((v, i) => `<div><em>${v}</em><i style="height:${v / max * 130}px;animation-delay:${i * 60}ms" title="${v} certification(s)"></i><span>${mois[i]}</span></div>`).join("")}</div></div>
+      <div class="boite-pro rev"><h3>Entreprises certifiées par discipline</h3><div class="repart" style="margin-top:16px">${parType.map(([t, v], i) => `<div><span>${t}</span><span class="jauge"><i style="width:${v / maxT * 100}%;animation-delay:${i * 80}ms"></i></span><b>${v}</b></div>`).join("")}</div></div>
     </div>
     <div class="boite-pro rev" style="margin-bottom:56px"><div style="display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap"><h3 style="margin:0">Dossiers en attente de décision</h3><button class="btn petit" data-o2="dossiers">Traiter les dossiers →</button></div>
       <div class="table-env" style="margin-top:14px">${tableau(enc.slice(0, 5), false)}</div></div>`;
 }
 function filtrer(seulsEnCours) {
   const q = PRO.q.toLowerCase();
-  let l = DB.data.oeuvres.filter(o => (!seulsEnCours || ["deposee", "analyse", "commission"].includes(o.statut)) && (!PRO.statut || o.statut === PRO.statut) && (!PRO.type || o.type === PRO.type) && (!q || (o.id + " " + o.titre + " " + o.createur + " " + o.email).toLowerCase().includes(q)));
-  const v = o => ({ id: o.id, titre: o.titre.toLowerCase(), createur: o.createur.toLowerCase(), type: o.type, ia: o.iaMode, date: +new Date(o.date), statut: o.statut }[PRO.tri]);
+  const l = DB.data.entites.filter(e => (!seulsEnCours || EN_COURS.includes(e.statut)) && (!PRO.statut || e.statut === PRO.statut) && (!PRO.type || e.disciplines.includes(PRO.type)) && (!q || (txtEntite(e) + " " + e.email + " " + e.representant.toLowerCase()).includes(q) || e.siret.includes(q.replace(/\s+/g, ""))));
+  const v = e => ({ id: e.id, raison: e.raison.toLowerCase(), siret: e.siret, taille: e.taille, ia: e.iaMode, date: +new Date(e.date), statut: e.statut }[PRO.tri]);
   return l.sort((a, b) => (v(a) > v(b) ? 1 : v(a) < v(b) ? -1 : 0) * PRO.sens);
 }
+const IA_COURT = { aucun: "Aucune", appui: "En appui", generation: "Génération" };
 function tableau(l, triable = true) {
   if (!l.length) return `<div class="vide-msg" style="border:none">Aucun dossier.</div>`;
-  const col = [["id", "N° PCE"], ["titre", "Œuvre"], ["createur", "Créateur"], ["type", "Type"], ["ia", "IA déclarée"], ["date", "Date"], ["statut", "Statut"]];
+  const col = [["id", "N° dossier"], ["raison", "Entreprise"], ["siret", "SIRET"], ["taille", "Structure"], ["ia", "IA déclarée"], ["date", "Dépôt"], ["statut", "Statut"]];
   return `<table class="bdd"><thead><tr>${col.map(([k, t]) => `<th ${triable ? `data-tri="${k}"` : ""} class="${PRO.tri === k && triable ? "trie" : ""}" scope="col">${t}${triable ? `<span class="tri">${PRO.tri === k ? (PRO.sens > 0 ? "▲" : "▼") : "↕"}</span>` : ""}</th>`).join("")}</tr></thead>
-    <tbody>${l.map((o, i) => `<tr data-id="${o.id}" tabindex="0" style="animation-delay:${i * 25}ms"><td class="mono">${o.id}</td><td><div class="t-oeuvre"><span class="mini">${visuel(o)}</span>${esc(o.titre)}</div></td><td>${esc(o.createur)}</td><td>${esc(o.type)}</td><td>${{ aucun: "Aucune", appui: "En appui", generation: "Génération" }[o.iaMode]}</td><td>${dateC(o.date)}</td><td><span class="badge b-${o.statut}">${STATUTS[o.statut]}</span></td></tr>`).join("")}</tbody></table>`;
+    <tbody>${l.map((e, i) => `<tr data-id="${e.id}" tabindex="0" style="animation-delay:${i * 25}ms"><td class="mono">${e.id}</td><td><div class="t-oeuvre"><span class="avatar petit">${esc(initiales(e.raison))}</span><span>${esc(e.raison)}<br><small class="muted">${e.disciplines.map(esc).join(", ")}</small></span></div></td><td class="mono">${siretFmt(e.siret)}</td><td>${esc(e.taille.split(" (")[0])}</td><td>${IA_COURT[e.iaMode]}</td><td>${dateC(e.date)}</td><td><span class="badge b-${e.statut}">${STATUTS[e.statut]}</span></td></tr>`).join("")}</tbody></table>`;
 }
 function proBase(enCours) {
   const l = filtrer(enCours), par = 12, nb = Math.max(1, Math.ceil(l.length / par)); PRO.page = Math.min(PRO.page, nb - 1);
-  return `<div style="display:flex;justify-content:space-between;align-items:end;gap:12px;flex-wrap:wrap;margin:26px 0 16px"><div><h1 style="font-size:28px;margin:0">${enCours ? "Dossiers à traiter" : "Base des œuvres"}</h1><p class="muted" style="margin:4px 0 0">${l.length} ${enCours ? "dossier(s) en cours d'examen" : "enregistrement(s)"}</p></div>
+  return `<div style="display:flex;justify-content:space-between;align-items:end;gap:12px;flex-wrap:wrap;margin:26px 0 16px"><div><h1 style="font-size:28px;margin:0">${enCours ? "Dossiers à traiter" : "Base des entreprises"}</h1><p class="muted" style="margin:4px 0 0">${l.length} ${enCours ? "dossier(s) en cours d'examen" : "entreprise(s)"}</p></div>
       <div style="display:flex;gap:10px"><button class="btn sec petit" id="csv">Exporter en CSV</button>${enCours ? "" : `<button class="btn sec petit" id="reset">Réinitialiser la démo</button>`}</div></div>
-    <div class="outils"><label class="sr" for="p-q">Rechercher</label><input id="p-q" type="search" placeholder="N°, œuvre, créateur, e-mail" value="${esc(PRO.q)}">
+    <div class="outils"><label class="sr" for="p-q">Rechercher</label><input id="p-q" type="search" placeholder="N°, entreprise, SIRET, e-mail" value="${esc(PRO.q)}">
       ${enCours ? "" : `<label class="sr" for="p-s">Statut</label><select id="p-s"><option value="">Tous les statuts</option>${Object.entries(STATUTS).map(([k, v]) => `<option value="${k}" ${PRO.statut === k ? "selected" : ""}>${v}</option>`).join("")}</select>`}
-      <label class="sr" for="p-t">Type</label><select id="p-t"><option value="">Tous les types</option>${Object.keys(TYPES).map(t => `<option ${PRO.type === t ? "selected" : ""}>${t}</option>`).join("")}</select></div>
+      <label class="sr" for="p-t">Discipline</label><select id="p-t"><option value="">Toutes les disciplines</option>${Object.keys(TYPES).map(t => `<option ${PRO.type === t ? "selected" : ""}>${t}</option>`).join("")}</select></div>
     <div class="table-env">${tableau(l.slice(PRO.page * par, PRO.page * par + par))}</div>
+    <div class="pagination"><span>Page ${PRO.page + 1} sur ${nb}</span><div class="g"><button class="btn sec petit" id="pg-p" ${PRO.page === 0 ? "disabled" : ""}>‹ Précédente</button><button class="btn sec petit" id="pg-s" ${PRO.page >= nb - 1 ? "disabled" : ""}>Suivante ›</button></div></div><div style="height:40px"></div>`;
+}
+function proOeuvres() {
+  const q = PRO.q.toLowerCase(), l = DB.data.oeuvres.filter(o => (!PRO.type || o.type === PRO.type) && (!q || txtOeuvre(o).includes(q))).sort((a, b) => new Date(b.date) - new Date(a.date));
+  const par = 12, nb = Math.max(1, Math.ceil(l.length / par)); PRO.page = Math.min(PRO.page, nb - 1);
+  return `<div style="margin:26px 0 16px"><h1 style="font-size:28px;margin:0">Base des œuvres</h1><p class="muted" style="margin:4px 0 0">${l.length} œuvre(s) déclarée(s) par les entreprises</p></div>
+    <div class="outils"><label class="sr" for="p-q">Rechercher</label><input id="p-q" type="search" placeholder="N°, titre, entreprise" value="${esc(PRO.q)}">
+      <label class="sr" for="p-t">Type</label><select id="p-t"><option value="">Tous les types</option>${Object.keys(TYPES).map(t => `<option ${PRO.type === t ? "selected" : ""}>${t}</option>`).join("")}</select></div>
+    <div class="table-env"><table class="bdd"><thead><tr><th>N° PCE</th><th>Œuvre</th><th>Entreprise</th><th>Type</th><th>Statut de l'entreprise</th></tr></thead>
+    <tbody>${l.slice(PRO.page * par, PRO.page * par + par).map((o, i) => { const e = entiteDe(o); return `<tr data-id="${e.id}" tabindex="0" style="animation-delay:${i * 25}ms"><td class="mono">${o.id}</td><td><div class="t-oeuvre"><span class="mini">${visuel(o)}</span>${esc(o.titre)}</div></td><td>${esc(e.raison)}</td><td>${esc(o.type)}</td><td><span class="badge b-${e.statut}">${STATUTS[e.statut]}</span></td></tr>`; }).join("")}</tbody></table></div>
     <div class="pagination"><span>Page ${PRO.page + 1} sur ${nb}</span><div class="g"><button class="btn sec petit" id="pg-p" ${PRO.page === 0 ? "disabled" : ""}>‹ Précédente</button><button class="btn sec petit" id="pg-s" ${PRO.page >= nb - 1 ? "disabled" : ""}>Suivante ›</button></div></div><div style="height:40px"></div>`;
 }
 function initPro() {
   if ($("#login")) { $("#login").onsubmit = e => { e.preventDefault(); DB.data.pro = true; DB.sauver(); rendre(); toast("Connexion réussie."); }; return; }
-  $$("[data-o]").forEach(b => b.onclick = () => { PRO.onglet = b.dataset.o; PRO.page = 0; PRO.statut = ""; rendre(); });
-  $$("[data-o2]").forEach(b => b.onclick = () => { PRO.onglet = b.dataset.o2; PRO.page = 0; rendre(); });
+  $$("[data-o]").forEach(b => b.onclick = () => { PRO.onglet = b.dataset.o; PRO.page = 0; PRO.statut = ""; PRO.q = ""; rendre(); });
   $("#logout").onclick = () => { DB.data.pro = false; DB.sauver(); rendre(); };
-  const re = () => { const c = $("#pro-c"); c.innerHTML = PRO.onglet === "tableau" ? proTableau() : proBase(PRO.onglet === "dossiers"); initPro2(); };
+  const re = () => { $("#pro-c").innerHTML = contenuPro(); initPro2(); };
   const initPro2 = () => {
     $$("tr[data-id]").forEach(r => { r.onclick = () => tiroir(r.dataset.id, re); r.onkeydown = e => { if (e.key === "Enter") tiroir(r.dataset.id, re); }; });
     $$("th[data-tri]").forEach(th => th.onclick = () => { const k = th.dataset.tri; PRO.sens = PRO.tri === k ? -PRO.sens : 1; PRO.tri = k; re(); });
@@ -3589,9 +3695,9 @@ function initPro() {
     if ($("#pg-p")) $("#pg-p").onclick = () => { PRO.page--; re(); };
     if ($("#pg-s")) $("#pg-s").onclick = () => { PRO.page++; re(); };
     if ($("#csv")) $("#csv").onclick = () => {
-      const l = filtrer(PRO.onglet === "dossiers"), q = s => `"${String(s).replace(/"/g, '""')}"`;
-      const csv = "﻿" + ["Numéro;Œuvre;Créateur;E-mail;Type;Ville;Date;Statut;Heures recherche (indicatif);Heures création (indicatif);Heures exécution (indicatif);Recours IA déclaré;Formule;Structure;Créations par an;Coût annuel de la certification HT"].concat(l.map(o => [o.id, o.titre, o.createur, o.email, o.type, o.ville, dateC(o.date), STATUTS[o.statut], o.dosage.recherche, o.dosage.creation, o.dosage.ia, IA_LIB[o.iaMode], o.formule === "abonnement" ? "Annuelle" : "Unité", o.taille || "", o.creationsAn || "", o.prixAbo ?? ""].map(q).join(";"))).join("\n");
-      telecharger("base-oeuvres-pce.csv", csv, "text/csv;charset=utf-8"); toast(`${l.length} ligne(s) exportée(s).`);
+      const l = filtrer(PRO.onglet === "dossiers"), q = s => `"${String(s ?? "").replace(/"/g, '""')}"`;
+      const csv = "﻿" + ["Numéro;Entreprise;SIRET;Forme juridique;Structure;Disciplines;Ville;Représentant;E-mail;Dépôt;Statut;Certifiée le;Recours IA déclaré;Créations par an;Coût annuel de la certification HT;Œuvres"].concat(l.map(e => [e.id, e.raison, siretFmt(e.siret), e.forme, e.taille, e.disciplines.join(", "), e.ville, e.representant, e.email, dateC(e.date), STATUTS[e.statut], e.dateCertif ? dateC(e.dateCertif) : "", IA_LIB[e.iaMode], e.creationsAn, e.prixAbo ?? "Sur devis", oeuvresDe(e).length].map(q).join(";"))).join("\n");
+      telecharger("base-entreprises-pce.csv", csv, "text/csv;charset=utf-8"); toast(`${l.length} ligne(s) exportée(s).`);
     };
     if ($("#reset")) $("#reset").onclick = () => { if (confirm("Réinitialiser toutes les données de démonstration ?")) { DB.reset(); DB.data.pro = true; DB.sauver(); re(); toast("Données de démonstration réinitialisées."); } };
     $$("[data-o2]").forEach(b => b.onclick = () => { PRO.onglet = b.dataset.o2; PRO.page = 0; rendre(); });
@@ -3600,65 +3706,137 @@ function initPro() {
   initPro2();
 }
 /* Analyse IA des fichiers : premier niveau de la double vérification, réservé à la commission */
-function analyseIA(o) {
-  const r = rng(o.seed * 7 + 3), sev = o.statut === "refusee" ? 2 : (o.audit || o.statut === "audit") ? 1 : 0;
+function analyseIA(e) {
+  const r = rng(e.seed * 7 + 3), sev = e.statut === "refusee" ? 2 : (e.audit || e.statut === "audit") ? 1 : 0;
   const niv = (ok, moy, ko) => sev === 2 && r() < .7 ? ["niv-ko", ko] : sev >= 1 && r() < .6 ? ["niv-moy", moy] : ["niv-ok", ok];
   const lignes = [
-    ["Métadonnées des fichiers", niv("Cohérentes avec les dates déclarées", "Quelques incohérences de dates", "Incohérentes")],
+    ["Kbis ou avis SIRENE", ["niv-ok", "Conforme au SIRET déclaré"]],
+    ["Métadonnées du portfolio", niv("Cohérentes avec les dates déclarées", "Quelques incohérences de dates", "Incohérentes")],
     ["Calques et historique", niv("Présents et complets", "Partiels", "Absents")],
     ["Traces de génération automatique", niv("Aucune trace", "Traces légères à confirmer", "Traces marquées")],
     ["Similarité avec des œuvres existantes", niv("Faible", "Moyenne", "Élevée")],
   ];
   const ko = lignes.filter(l => l[1][0] === "niv-ko").length, moy = lignes.filter(l => l[1][0] === "niv-moy").length;
-  const conf = ko ? ["niv-ko", "Faible"] : moy ? ["niv-moy", "Moyen"] : ["niv-ok", "Élevé"];
-  return { lignes, conf, reco: ko || moy ? "Audit terrain recommandé" : "Contrôle humain standard" };
+  return { lignes, conf: ko ? ["niv-ko", "Faible"] : moy ? ["niv-moy", "Moyen"] : ["niv-ok", "Élevé"], reco: ko || moy ? "Audit terrain recommandé" : "Contrôle humain standard" };
 }
-function blocAnalyseIA(o) {
-  if (o.statut === "deposee") return `<div class="analyse-ia"><h4>Analyse IA des fichiers</h4><p class="muted petit-texte" style="margin:0">À lancer. Premier niveau de la double vérification, avant le contrôle humain.</p></div>`;
-  const a = analyseIA(o);
+function blocAnalyseIA(e) {
+  if (e.statut === "deposee") return `<div class="analyse-ia"><h4>Analyse IA des fichiers</h4><p class="muted petit-texte" style="margin:0">À lancer. Premier niveau de la double vérification, avant le contrôle humain.</p></div>`;
+  const a = analyseIA(e);
   return `<div class="analyse-ia"><h4><span>Analyse IA des fichiers</span><span class="muted petit-texte">Usage interne · commission</span></h4>
     <ul>${a.lignes.map(([n, [c, v]]) => `<li><span>${n}</span><span class="${c}">${v}</span></li>`).join("")}
     <li><span><b>Indice de confiance</b></span><span class="${a.conf[0]}">${a.conf[1]}</span></li></ul>
     <p class="petit-texte" style="margin:8px 0 0"><b>Recommandation :</b> ${a.reco}. La décision revient toujours au contrôle humain.</p></div>`;
 }
 function tiroir(id, apres) {
-  const o = DB.get(id); if (!o) return;
+  const e = DB.entite(id); if (!e) return;
+  const oe = oeuvresDe(e);
   const fond = document.createElement("div"); fond.className = "tiroir-fond";
-  const t = document.createElement("aside"); t.className = "tiroir"; t.setAttribute("role", "dialog"); t.setAttribute("aria-modal", "true"); t.setAttribute("aria-label", "Dossier " + o.id);
+  const t = document.createElement("aside"); t.className = "tiroir"; t.setAttribute("role", "dialog"); t.setAttribute("aria-modal", "true"); t.setAttribute("aria-label", "Dossier " + e.id);
   const actions = { deposee: [["analyse", "Lancer l'analyse IA des fichiers", ""]], analyse: [["commission", "Valider l'analyse et passer au contrôle humain", ""]],
-    commission: [["certifiee", "Certifier l'œuvre", "vert"], ["audit", "Demander un audit terrain", ""], ["refusee", "Refuser", "danger"]],
-    audit: [["certifiee", "Certifier après audit", "vert"], ["refusee", "Refuser", "danger"]] }[o.statut] || [];
-  t.innerHTML = `<div class="t-ent"><div><span class="mono muted">${o.id}</span><h2 style="margin:2px 0 0;font-size:20px">${esc(o.titre)}</h2></div><button class="fermer" aria-label="Fermer">×</button></div>
+    commission: [["certifiee", "Certifier l'entreprise", "vert"], ["audit", "Demander un audit terrain", ""], ["refusee", "Refuser", "danger"]],
+    audit: [["certifiee", "Certifier après audit", "vert"], ["refusee", "Refuser", "danger"]] }[e.statut] || [];
+  t.innerHTML = `<div class="t-ent"><div><span class="mono muted">${e.id}</span><h2 style="margin:2px 0 0;font-size:20px">${esc(e.raison)}</h2></div><button class="fermer" aria-label="Fermer">×</button></div>
     <div class="t-corps">
-      <span class="badge b-${o.statut}">${STATUTS[o.statut]}</span>
-      <div class="vignette" style="margin:14px 0;aspect-ratio:auto">${visuel(o)}</div>
-      ${frise(o)}
-      <dl class="recap deux"><div><dt>Créateur</dt><dd>${esc(o.createur)}</dd><dt>E-mail</dt><dd>${esc(o.email)}</dd><dt>Ville</dt><dd>${esc(o.ville || "Non renseignée")}</dd></div><div><dt>Type</dt><dd>${esc(o.type)}</dd><dt>Formule</dt><dd>${o.formule === "abonnement" ? "Certification annuelle · " + (o.prixAbo ? eur(o.prixAbo) + " HT / an" : "sur devis") : "Unité · " + eur(TYPES[o.type])}</dd><dt>Structure</dt><dd>${esc(o.taille || "Indépendant")} · ${o.creationsAn || "?"} créations par an</dd><dt>Déposé le</dt><dd>${dateFr(o.date)}</dd></div></dl>
-      ${blocAnalyseIA(o)}
-      <h4>Processus déclaré</h4><p style="font-size:14.5px">${esc(o.description)}</p>
-      <h4>Recours à l'IA</h4><p style="font-size:14.5px">${IA_LIB[o.iaMode]}${o.outils ? " · " + esc(o.outils) : ""}</p>
-      <h4>Heures déclarées (indicatives)</h4>
-      <table class="devis"><tr><td>Recherche et intention</td><td>${o.dosage.recherche} h</td></tr><tr><td>Création et direction artistique</td><td>${o.dosage.creation} h</td></tr><tr><td>Exécution et finitions</td><td>${o.dosage.ia} h</td></tr></table>
-      <div class="verdict info" style="margin-top:12px">Heures déclarées par le créatif, à titre indicatif. La commission vérifie la démarche et le recours à l'IA sur les justificatifs (croquis, fichiers sources, calques, prompts) avant décision.</div>
+      <span class="badge b-${e.statut}">${STATUTS[e.statut]}</span>
+      <dl class="recap deux" style="margin-top:14px"><div><dt>SIRET</dt><dd class="mono">${siretFmt(e.siret)} <span class="niv-ok" style="font-family:Arial;font-size:12px">· clé valide</span></dd><dt>Forme juridique</dt><dd>${esc(e.forme)}</dd><dt>Représentant</dt><dd>${esc(e.representant)}</dd><dt>E-mail</dt><dd>${esc(e.email)}</dd></div>
+      <div><dt>Structure</dt><dd>${esc(e.taille)} · ${esc(e.ville || "")}</dd><dt>Disciplines</dt><dd>${e.disciplines.map(esc).join(", ")}</dd><dt>Certification annuelle</dt><dd>${e.prixAbo ? eur(e.prixAbo) + " HT / an" : "Sur devis"} · ${e.creationsAn} créations par an</dd><dt>Déposé le</dt><dd>${dateFr(e.date)}</dd></div></dl>
+      ${frise(e)}
+      ${blocAnalyseIA(e)}
+      <h4>Portfolio (${oe.length})</h4><div class="port-recap">${oe.map(o => `<figure><div class="mini-v">${visuel(o)}</div><figcaption>${esc(o.titre)}<br><span class="mono muted">${o.id}</span></figcaption></figure>`).join("")}</div>
+      <h4 style="margin-top:14px">Processus créatif déclaré</h4><p style="font-size:14.5px">${esc(e.description)}</p>
+      ${e.organisation ? `<h4>Organisation</h4><p style="font-size:14.5px">${esc(e.organisation)}</p>` : ""}
+      <h4>Recours à l'IA</h4><p style="font-size:14.5px">${IA_LIB[e.iaMode]}${e.outils ? " · " + esc(e.outils) : ""}</p>
+      <h4>Temps moyen par création (indicatif)</h4>
+      <table class="devis"><tr><td>Recherche et intention</td><td>${e.heures.recherche} h</td></tr><tr><td>Création et direction artistique</td><td>${e.heures.creation} h</td></tr><tr><td>Exécution et finitions</td><td>${e.heures.execution} h</td></tr></table>
+      <div class="verdict info" style="margin-top:12px">Déclarations de l'entreprise, à titre indicatif. La commission vérifie la démarche et le recours à l'IA sur les justificatifs avant décision.</div>
       <h4 style="margin-top:16px">Charte de transparence</h4>
-      ${o.charte ? `<div class="signee">${o.charte.signature ? `<img src="${o.charte.signature}" alt="Signature">` : ""}<div><b>Signée le ${dateFr(o.charte.signeLe || o.date)}</b><br><span class="muted">${esc(o.charte.expertise === "Autre" ? o.charte.expertiseAutre : o.charte.expertise)} · Outils IA : ${esc(o.charte.outilsIA)}</span><br><button type="button" class="lien" id="t-ch">Télécharger la charte signée</button></div></div>` : `<div class="res-ko">Charte non signée.</div>`}
-      <h4 style="margin-top:16px">Justificatifs</h4><ul class="fichiers">${o.justificatifs.map(n => `<li><span>📄 ${esc(n)}</span><span class="muted">Reçu</span></li>`).join("")}</ul>
-      ${o.motif ? `<div class="res-ko" style="margin-top:14px"><b>Motif du refus</b><p style="margin:6px 0 0">${esc(o.motif)}</p></div>` : ""}
-      ${["commission", "audit"].includes(o.statut) ? `<div class="champ" style="margin-top:16px"><label for="motif">Motif en cas de refus</label><textarea id="motif" style="min-height:70px" placeholder="Ex : après examen des justificatifs, la part d'exécution par IA dépasse le seuil du référentiel."></textarea></div>` : ""}
-      <div class="pile" style="margin-top:18px">${actions.map(([s, l, c]) => `<button class="btn ${c}" data-s="${s}">${l}</button>`).join("")}${o.statut === "certifiee" ? `<a class="btn sec" href="#/oeuvre/${o.id}">Voir la page publique</a>` : ""}</div>
+      ${e.charte ? `<div class="signee">${e.charte.signature ? `<img src="${e.charte.signature}" alt="Signature">` : ""}<div><b>Signée par ${esc(e.representant)} le ${dateFr(e.charte.signeLe || e.date)}</b><br><span class="muted">${esc(e.charte.expertise === "Autre" ? e.charte.expertiseAutre : e.charte.expertise)} · Outils IA : ${esc(e.charte.outilsIA)}</span><br><button type="button" class="lien" id="t-ch">Télécharger la charte signée</button></div></div>` : `<div class="res-ko">Charte non signée.</div>`}
+      <h4 style="margin-top:16px">Pièces</h4><ul class="fichiers"><li><span>📄 ${esc(e.kbis || "Kbis")}</span><span class="muted">Kbis / SIRENE</span></li>${e.justificatifs.map(n => `<li><span>📄 ${esc(n)}</span><span class="muted">Reçu</span></li>`).join("")}</ul>
+      ${e.motif ? `<div class="res-ko" style="margin-top:14px"><b>Motif du refus</b><p style="margin:6px 0 0">${esc(e.motif)}</p></div>` : ""}
+      ${["commission", "audit"].includes(e.statut) ? `<div class="champ" style="margin-top:16px"><label for="motif">Motif en cas de refus</label><textarea id="motif" style="min-height:70px" placeholder="Ex : après examen des justificatifs, la conception humaine des œuvres n'est pas établie."></textarea></div>` : ""}
+      <div class="pile" style="margin-top:18px">${actions.map(([s, l, c]) => `<button class="btn ${c}" data-s="${s}">${l}</button>`).join("")}${e.statut === "certifiee" ? `<a class="btn sec" href="#/entreprise/${e.id}">Voir la page publique</a>` : ""}</div>
     </div>`;
   document.body.append(fond, t);
-  if ($("#t-ch", t)) $("#t-ch", t).onclick = () => telechargerCharte(o);
+  if ($("#t-ch", t)) $("#t-ch", t).onclick = () => telechargerCharte(e);
   const fermer = () => { t.remove(); fond.remove(); document.removeEventListener("keydown", esc_); };
-  const esc_ = e => { if (e.key === "Escape") fermer(); };
+  const esc_ = ev => { if (ev.key === "Escape") fermer(); };
   document.addEventListener("keydown", esc_); fond.onclick = fermer; $(".fermer", t).onclick = fermer; $(".fermer", t).focus();
   $$("[data-s]", t).forEach(b => b.onclick = () => {
     const s = b.dataset.s, ch = { statut: s };
     if (s === "refusee") { const m = $("#motif", t).value.trim(); if (!m) { $("#motif", t).closest(".champ").classList.add("erreur"); return toast("Indiquez le motif du refus."); } ch.motif = m; }
-    if (s === "certifiee") ch.date = new Date().toISOString();
+    if (s === "certifiee") ch.dateCertif = new Date().toISOString();
     if (s === "audit") ch.audit = true;
-    DB.maj(o.id, ch); fermer(); apres(); toast(s === "certifiee" ? "Œuvre certifiée et publiée au registre." : s === "refusee" ? "Dossier refusé." : "Dossier mis à jour.");
+    DB.majEntite(e.id, ch); fermer(); apres(); toast(s === "certifiee" ? "Entreprise certifiée, ses œuvres sont publiées au registre." : s === "refusee" ? "Dossier refusé." : "Dossier mis à jour.");
   });
+}
+
+/* ---------- Espace client de l'entreprise ---------- */
+const client = () => DB.data.client && DB.entite(DB.data.client);
+function vueEspace() {
+  const e = client();
+  if (!e) return `<div class="conteneur">${ariane("Espace client")}
+    <div class="connexion"><div class="carte" style="padding:28px"><h1 style="font-size:26px">Espace client</h1><p class="muted">Accédez à la certification de votre entreprise et à vos œuvres certifiées.</p>
+    <form id="cl-login" novalidate>${champ("cl-id", "SIRET ou numéro de dossier", `<input id="cl-id" type="text" value="${esc(siretFmt(DB.entite(VEDETTE_E).siret))}" autocomplete="username">`, "", "Aucune entreprise ne correspond.")}${champ("cl-mail", "Adresse e-mail du dossier", `<input id="cl-mail" type="email" value="${esc(DB.entite(VEDETTE_E).email)}" autocomplete="email">`, "", "L'adresse ne correspond pas à ce dossier.")}
+    <button class="btn" style="width:100%;justify-content:center">Se connecter <span class="fl">→</span></button></form>
+    <p class="muted petit-texte" style="margin-top:14px">Démonstration : identifiants de Studio Lune pré-remplis. Pas encore de dossier ? <a href="#/depot">Déposer mon dossier</a></p></div></div></div>`;
+  const oe = vedetteEnTete(oeuvresDe(e)), cert = certifiee(e);
+  const jours = cert ? Math.max(0, Math.ceil((new Date(finValidite(e)) - AUJ) / 864e5)) : 0;
+  const annee = oe.filter(o => new Date(o.date).getFullYear() === 2026).length;
+  return `<div class="pro-bandeau"><div class="conteneur"><div style="display:flex;gap:12px;align-items:center"><span class="avatar petit" style="background:#fff;color:var(--marine)">${esc(initiales(e.raison))}</span><b>${esc(e.raison)}</b><span style="opacity:.8">SIRET ${siretFmt(e.siret)}</span></div><button class="lien" id="cl-out" style="color:#fff">Se déconnecter</button></div></div>
+    <div class="conteneur">${ariane("Espace client")}
+    <div style="display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap"><h1 style="margin:0">Bonjour ${esc(e.representant.split(" ")[0])}</h1><span class="badge b-${e.statut}">${cert ? "Entreprise certifiée" : STATUTS[e.statut]}</span></div>
+    ${cert ? `<div class="kpis">
+        <div class="kpi rev"><b>${dateC(finValidite(e))}</b><span>Fin de validité de la certification</span></div>
+        <div class="kpi rev"><b data-compte="${jours}">0</b><span>jours avant le renouvellement</span></div>
+        <div class="kpi rev"><b>${oe.length}</b><span>œuvre${oe.length > 1 ? "s" : ""} certifiée${oe.length > 1 ? "s" : ""} au registre</span></div>
+        <div class="kpi rev"><b>${annee} / ${e.creationsAn}</b><span>créations déclarées en 2026</span></div>
+      </div>
+      <div class="fiche">
+        <div>
+          <div style="display:flex;justify-content:space-between;align-items:end;gap:12px;flex-wrap:wrap"><h2 style="margin:0">Mes œuvres certifiées</h2><button class="btn petit" id="cl-ajout">Déclarer une nouvelle œuvre</button></div>
+          <div id="cl-form"></div>
+          <div class="galerie" style="margin-top:16px">${oe.map(o => `<div class="oeuvre-c"><a class="vignette" href="#/oeuvre/${o.id}">${visuel(o)}<img class="mini-sceau" src="${LOGO}" alt=""><span class="voir">Voir le certificat →</span></a><div class="txt"><b>${esc(o.titre)}</b><small class="mono">${o.id}</small><small>${esc(o.type)}</small><button type="button" class="lien" data-sig="${o.id}" style="margin-top:6px">Télécharger l'œuvre signée</button></div></div>`).join("") || `<div class="vide-msg">Aucune œuvre déclarée.</div>`}</div>
+        </div>
+        <div>${blocCertifEntite(e)}
+          <div class="pile" style="margin-top:18px"><button class="btn" id="cl-print">Imprimer le certificat</button><button class="btn sec" id="cl-ch">Télécharger la charte signée</button><a class="btn sec" href="#/entreprise/${e.id}">Voir ma page publique</a></div>
+          <div class="info" style="margin-top:16px"><span class="i">i</span><span>Certification annuelle : ${e.prixAbo ? eur(e.prixAbo) + " HT par an" : "sur devis"}, pour ${e.creationsAn} créations par an. Le renouvellement passe par une nouvelle vérification de votre dossier.</span></div>
+        </div>
+      </div>`
+    : `<h2 style="margin-top:24px">Suivi de mon dossier</h2>${frise(e)}${e.statut === "refusee" ? `<div class="res-ko"><b>Motif</b><p style="margin:6px 0 0">${esc(e.motif)}</p></div>` : `<div class="info"><span class="i">i</span><span>Votre dossier est en cours d'examen par la commission. Vos œuvres apparaîtront ici et au registre dès la certification.</span></div>`}
+      <div class="pile" style="margin-top:16px;max-width:420px"><a class="btn" href="#/suivi/${e.id}">Détail du suivi <span class="fl">→</span></a><button class="btn sec" id="cl-ch">Télécharger la charte signée</button></div>`}
+    <div style="height:56px"></div></div>`;
+}
+function initEspace() {
+  if ($("#cl-login")) {
+    $("#cl-login").onsubmit = ev => {
+      ev.preventDefault(); const v = $("#cl-id").value.trim(), e = DB.entite(v) || DB.parSiret(v);
+      $('[data-c="cl-id"]').classList.toggle("erreur", !e); if (!e) return;
+      const ok = e.email.toLowerCase() === $("#cl-mail").value.trim().toLowerCase(); $('[data-c="cl-mail"]').classList.toggle("erreur", !ok); if (!ok) return;
+      DB.data.client = e.id; DB.sauver(); rendre(); toast("Connexion réussie.");
+    };
+    return;
+  }
+  const e = client(); if (!e) return;
+  $("#cl-out").onclick = () => { DB.data.client = null; DB.sauver(); rendre(); };
+  if ($("#cl-ch")) $("#cl-ch").onclick = () => telechargerCharte(e);
+  $$("[data-sig]").forEach(x => x.onclick = () => oeuvreSignee(DB.oeuvre(x.dataset.sig)));
+  if ($("#cl-print")) $("#cl-print").onclick = () => { const z = $("#impression"); z.hidden = false; z.innerHTML = blocCertifEntite(e); window.print(); setTimeout(() => { z.hidden = true; z.innerHTML = ""; }, 300); };
+  if ($("#cl-ajout")) $("#cl-ajout").onclick = () => {
+    const z = $("#cl-form"); if (z.innerHTML) { z.innerHTML = ""; return; }
+    let img = null;
+    z.innerHTML = `<div class="panneau" style="margin-top:14px;animation:entree .3s both">
+      <div class="champ" data-c="no-img"><span class="lab">Œuvre *</span><div class="depose" id="z-no" tabindex="0" role="button"><b>⬆ Glisser l'œuvre ici</b><small>ou Parcourir · JPG, PNG</small></div><input type="file" id="f-no" accept="image/*" hidden><div id="ap-no"></div><div class="msg-err">Ajoutez l'image de l'œuvre.</div></div>
+      <div class="deux">${champ("no-titre", "Titre *", `<input id="no-titre" type="text">`)}${champ("no-type", "Type *", `<select id="no-type">${e.disciplines.map(x => `<option>${x}</option>`).join("")}</select>`)}</div>
+      <p class="muted petit-texte">L'œuvre est couverte par la certification de l'entreprise. Elle reçoit un numéro PCE, le sceau et un QR code. Elle peut faire l'objet d'un contrôle par la commission.</p>
+      <button class="btn" id="no-ok" type="button">Ajouter au registre <span class="fl">→</span></button></div>`;
+    zone("#z-no", "#f-no", async fs => { const f = fs.find(x => x.type.startsWith("image/")); if (!f) return toast("Choisissez une image JPG ou PNG."); img = await reduireImage(await lireFichier(f)); $("#ap-no").innerHTML = `<div class="apercu"><img src="${img}" alt=""><div><b>${esc(f.name)}</b></div></div>`; if (!$("#no-titre").value) $("#no-titre").value = f.name.replace(/\.[^.]+$/, ""); });
+    $("#no-ok").onclick = () => {
+      const titre = $("#no-titre").value.trim();
+      $('[data-c="no-img"]').classList.toggle("erreur", !img); $('[data-c="no-titre"]').classList.toggle("erreur", !titre); if (!img || !titre) return;
+      const id = DB.nouvelIdOeuvre(); DB.data.oeuvres.push({ id, entiteId: e.id, titre, type: $("#no-type").value, date: new Date().toISOString(), img, seed: Math.floor(Math.random() * 1e5) }); DB.sauver();
+      rendre(); toast(`Œuvre ajoutée au registre : ${id}`);
+    };
+  };
 }
 
 /* ---------- Animations ---------- */
@@ -3676,12 +3854,14 @@ function compteurs() {
 }
 
 /* ---------- Routeur ---------- */
+const dec = x => x && decodeURIComponent(x);
 const ROUTES = [
-  [/^\/$/, () => [vueAccueil(), initAccueil]], [/^\/createurs$/, () => [vueCreateurs(), initCreateurs]], [/^\/clients$/, () => { location.replace("#/verifier"); return [""]; }], [/^\/faq$/, () => [vueFaq()]], [/^\/charte$/, () => [vueCharte()]],
-  [/^\/registre$/, () => [vueRegistre(), initRegistre]], [/^\/annuaire$/, () => [vueAnnuaire(), initAnnuaire]], [/^\/certifie\/(.+)$/, m => [vueEntite(decodeURIComponent(m[1]))]], [/^\/verifier(?:\/(.+))?$/, m => [vueVerifier(m[1] && decodeURIComponent(m[1])), () => initVerifier(m[1] && decodeURIComponent(m[1]))]],
+  [/^\/$/, () => [vueAccueil(), initAccueil]], [/^\/createurs$/, () => [vueCreateurs(), initCreateurs]], [/^\/(clients|annuaire)$/, m => { location.replace(m[1] === "clients" ? "#/verifier" : "#/entreprises"); return [""]; }], [/^\/faq$/, () => [vueFaq()]], [/^\/charte$/, () => [vueCharte()]],
+  [/^\/registre$/, () => [vueRegistre(), initRegistre]], [/^\/entreprises$/, () => [vueEntreprises(), initEntreprises]], [/^\/(?:entreprise|certifie)\/(.+)$/, m => [vueEntreprise(dec(m[1]))]],
+  [/^\/verifier(?:\/(.+))?$/, m => [vueVerifier(dec(m[1])), () => initVerifier(dec(m[1]))]],
   [/^\/oeuvre\/(.+)$/, m => [vueOeuvre(m[1]), () => initOeuvre(m[1])]], [/^\/depot$/, () => [vueDepot(), initDepot]],
-  [/^\/confirmation\/(.+)$/, m => [vueConfirmation(m[1]), () => initConfirmation(m[1])]], [/^\/suivi(?:\/(.+))?$/, m => [vueSuivi(m[1]), () => initSuivi(m[1])]],
-  [/^\/pro$/, () => [vuePro(), initPro]],
+  [/^\/confirmation\/(.+)$/, m => [vueConfirmation(m[1]), () => initConfirmation(m[1])]], [/^\/suivi(?:\/(.+))?$/, m => [vueSuivi(dec(m[1])), () => initSuivi(dec(m[1]))]],
+  [/^\/pro$/, () => [vuePro(), initPro]], [/^\/espace$/, () => [vueEspace(), initEspace]],
 ];
 let routePrec = "";
 function rendre() {
@@ -3689,7 +3869,7 @@ function rendre() {
   entete(route);
   let html = null, init = null;
   for (const [re, f] of ROUTES) { const m = route.match(re); if (m) { [html, init] = f(m); break; } }
-  if (html === null) [html, init] = [vueAccueil()];
+  if (html === null) [html, init] = [vueAccueil(), initAccueil];
   const v = $("#vue"); v.classList.remove("vue-in"); void v.offsetWidth; v.innerHTML = html; v.classList.add("vue-in");
   if (route !== routePrec) { scrollTo({ top: 0, behavior: "instant" }); v.focus({ preventScroll: true }); }
   routePrec = route;
@@ -3699,9 +3879,10 @@ function rendre() {
 DB.charger(); DB.sauver();
 addEventListener("scroll", () => $("#entete").classList.toggle("ombre", scrollY > 8), { passive: true });
 $(".pied-logo").src = LOGO; $(".lien-charte").href = "#/charte";
-{ const m = location.pathname.match(/^\/(verifier|suivi|oeuvre)\/([^/]+)\/?$/); if (m && !location.hash) history.replaceState(null, "", "/#/" + m[1] + "/" + m[2]); }
+{ const m = location.pathname.match(/^\/(verifier|suivi|oeuvre|entreprise)\/([^/]+)\/?$/); if (m && !location.hash) history.replaceState(null, "", "/#/" + m[1] + "/" + m[2]); }
 addEventListener("hashchange", rendre);
 rendre();
+
 </script>
 </body>
 </html>

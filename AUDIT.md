@@ -34,6 +34,7 @@ Limites : tests faits dans Chromium (moteur de Chrome et Edge). Firefox et Safar
 | Deux rubriques « Pour les clients » et « Vérifier une certification » | Fusionnées en « Vérifier une œuvre » |
 | Le site mesurait l'IA d'après les heures déclarées par le créatif (déclaration invérifiable) | Aucun test d'IA dans le parcours créateur : plus de blocage, de verdict, de pourcentage humain / IA (dépôt, devis, certificat, vérification, accueil, espace pro, export). Les heures sont indicatives (devis et abonnement). Le seuil de 10 % reste une règle du référentiel, vérifiée ensuite par la commission sur les justificatifs. Charte (article 3), FAQ, critères et pitch alignés |
 | Retours du coach : moteur de recherche d'entités, prix annuel, double vérification IA puis humain | Annuaire des certifiés et fiches, certification annuelle sans abonnement mensuel (108 € HT/an minimum), analyse IA des fichiers puis contrôle humain et audit terrain si besoin dans l'espace pro. Pitch et hypothèses du BP alignés sur le prix annuel |
+| La certification portait sur une œuvre | Refonte : certification d'une entreprise identifiée par son SIRET (clé de contrôle vérifiée, doublons refusés), questionnaire sur l'entreprise (identité, processus, Kbis, portfolio, charte signée par le représentant), registres des entreprises et des œuvres, vérification par numéro, SIRET ou nom, espace client pour l'entreprise certifiée, back-office commission en accès discret |
 
 ## 3. Business plan après correction
 
