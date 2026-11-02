@@ -10,14 +10,14 @@
 
 Site complet en un seul fichier. Les données sont enregistrées dans le navigateur.
 
-- **Côté public** : accueil, critères et tarifs avec estimateur d'abonnement, vérification d'une œuvre (rubrique clients), registre des œuvres certifiées, Charte de transparence, FAQ.
-- **Parcours créateur** : dépôt du dossier en 5 étapes, heures indicatives sans test d'IA (vérification par la commission après le dépôt), Charte de transparence (version 1.1) remplie et signée en ligne, obligatoire, abonnement sur mesure, devis client transparent, accusé de réception, suivi, certificat, œuvre signée avec sceau et QR code.
+- **Côté public** : accueil, critères et tarifs avec estimateur d'abonnement, vérification d'une œuvre (rubrique clients), registre des œuvres certifiées, annuaire des certifiés (recherche par nom, discipline, structure, ville), Charte de transparence, FAQ.
+- **Parcours créateur** : dépôt du dossier en 5 étapes, heures indicatives sans test d'IA (vérification par la commission après le dépôt), Charte de transparence (version 1.1) remplie et signée en ligne, obligatoire, certification annuelle sur mesure, devis client transparent, accusé de réception, suivi, certificat, œuvre signée avec sceau et QR code.
 - **Bouton Livrables** dans l'en-tête : téléchargement du pitch, du business plan et du prototype.
-- **Espace pro** (connexion de démonstration pré-remplie) : tableau de bord, dossiers à traiter, base des œuvres avec recherche, filtres, tri, fiche détaillée avec charte signée, décision de la commission, export CSV.
+- **Espace pro** (connexion de démonstration pré-remplie) : tableau de bord, dossiers à traiter, base des œuvres avec recherche, filtres, tri, fiche détaillée avec charte signée, double vérification (analyse IA des fichiers, puis contrôle humain, audit terrain si besoin), décision de la commission, export CSV.
 
 ### Tarifs
 
-L'abonnement est sur mesure, à partir de 9 € HT par mois. Son tarif dépend du nombre de créations à certifier, de la taille de la structure, de l'ampleur du processus créatif et de l'étude du dossier. La certification à l'unité dépend de l'œuvre, de 25 € à 149 € HT. La vérification est gratuite.
+La certification est annuelle et sur mesure, à partir de 108 € HT par an. Son coût dépend du nombre de créations à certifier, de la taille de la structure, de l'ampleur du processus créatif et de l'étude du dossier. La certification à l'unité dépend de l'œuvre, de 25 € à 149 € HT. La vérification est gratuite.
 
 ### Accueil
 ![Accueil](captures/01-accueil.png)
@@ -31,7 +31,7 @@ L'abonnement est sur mesure, à partir de 9 € HT par mois. Son tarif dépend d
 ### Dépôt : abonnement, devis et règlement
 ![Dépôt, devis](captures/04-depot-devis.png)
 
-### Tarifs et estimateur d'abonnement
+### Tarifs et estimateur du coût annuel
 ![Tarifs](captures/05-tarifs.png)
 
 ### Confirmation
@@ -45,6 +45,9 @@ L'abonnement est sur mesure, à partir de 9 € HT par mois. Son tarif dépend d
 
 ### Registre public
 ![Registre](captures/09-registre.png)
+
+### Annuaire des certifiés
+![Annuaire](captures/14-annuaire.png)
 
 ### Espace pro : tableau de bord
 ![Tableau de bord](captures/10-pro-tableau.png)

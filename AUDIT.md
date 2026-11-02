@@ -33,6 +33,7 @@ Limites : tests faits dans Chromium (moteur de Chrome et Edge). Firefox et Safar
 | Charte v1.0 : « Label officiel » avant toute accréditation, tirets longs, pas de lien avec le seuil de 10 % | Charte v1.1 dans le site : « Label Processus Créatif Éthique », seuil de 10 % dans l'article 3, engagement d'exactitude des déclarations, retrait des certificats en cas de fraude (article 5), page publique `#/charte` |
 | Deux rubriques « Pour les clients » et « Vérifier une certification » | Fusionnées en « Vérifier une œuvre » |
 | Le site mesurait l'IA d'après les heures déclarées par le créatif (déclaration invérifiable) | Aucun test d'IA dans le parcours créateur : plus de blocage, de verdict, de pourcentage humain / IA (dépôt, devis, certificat, vérification, accueil, espace pro, export). Les heures sont indicatives (devis et abonnement). Le seuil de 10 % reste une règle du référentiel, vérifiée ensuite par la commission sur les justificatifs. Charte (article 3), FAQ, critères et pitch alignés |
+| Retours du coach : moteur de recherche d'entités, prix annuel, double vérification IA puis humain | Annuaire des certifiés et fiches, certification annuelle sans abonnement mensuel (108 € HT/an minimum), analyse IA des fichiers puis contrôle humain et audit terrain si besoin dans l'espace pro. Pitch et hypothèses du BP alignés sur le prix annuel |
 
 ## 3. Business plan après correction
 
@@ -46,6 +47,6 @@ Limites : tests faits dans Chromium (moteur de Chrome et Edge). Firefox et Safar
 
 ## 4. Points restant à votre charge
 
-- **Hypothèses non sourcées** : marché de 250 000 créatifs, grille d'abonnement, coûts AFNOR et COFRAC, subvention de 15 000 €. À vérifier ou à présenter comme hypothèses.
+- **Hypothèses non sourcées** : marché de 250 000 créatifs, grille de la certification annuelle, coûts AFNOR et COFRAC, subvention de 15 000 €. À vérifier ou à présenter comme hypothèses.
 - **Présentation** (archives) : non mise à jour. Elle contient l'ancien prix fixe, les anciens chiffres du BP et l'ancienne charte graphique.
 - **Revenu moyen de 137 € par client** : prudent pour des studios et agences. Peut être relevé si le jury le questionne.

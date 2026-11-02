@@ -267,12 +267,27 @@ table.devis tr.tot td { font-weight: 700; font-size: 16px; border-bottom: 2px so
 .pied-haut a:hover, .pied-haut button:hover { color: #fff; text-decoration: underline; }
 .pied-bas { border-top: 1px solid rgba(255, 255, 255, .18); }
 
-/* Estimateur d'abonnement */
+/* Estimateur du coût annuel */
 .estim { background: var(--fond); border: 1px solid var(--trait-c); padding: 16px 16px 4px; margin: 14px 0 18px; }
 .estim .champ { margin-bottom: 12px; }
 .estim-res { border-top: 2px solid var(--marine); padding: 12px 0; margin-top: 4px; }
 .estim-res b { display: block; font-size: 24px; color: var(--marine); transition: opacity .2s; }
 .estim-res span { font-size: 13px; color: var(--gris); }
+
+/* Annuaire des certifiés */
+.onglets-pub { display: flex; gap: 4px; border-bottom: 2px solid var(--trait-c); margin: 14px 0 22px; flex-wrap: wrap; }
+.onglets-pub a { padding: 10px 16px; text-decoration: none; color: var(--gris); font-weight: 700; border-bottom: 3px solid transparent; margin-bottom: -2px; transition: color .2s, border-color .2s; }
+.onglets-pub a:hover { color: var(--marine); } .onglets-pub a.actif { color: var(--marine); border-color: var(--marine); }
+.entites { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 18px; }
+.entite { display: flex; gap: 14px; align-items: flex-start; border: 1px solid var(--trait-c); border-top: 3px solid var(--marine); padding: 16px; text-decoration: none; color: var(--encre); background: var(--blanc); transition: transform .25s, box-shadow .25s; }
+.entite:hover { transform: translateY(-3px); box-shadow: var(--ombre); }
+.entite b { display: block; color: var(--marine); font-size: 16px; }
+.entite small { display: block; color: var(--gris); font-size: 13px; margin-top: 2px; }
+.tags { display: flex; flex-wrap: wrap; gap: 4px; margin: 6px 0 2px; }
+.tags i { font-style: normal; background: var(--pale); color: var(--marine); font-size: 11.5px; font-weight: 700; padding: 2px 6px; }
+.avatar { flex: none; width: 48px; height: 48px; border-radius: 50%; background: var(--marine); color: #fff; display: grid; place-items: center; font-weight: 700; font-size: 16px; }
+.avatar.grand { width: 84px; height: 84px; font-size: 28px; }
+.entite-ent { display: flex; gap: 20px; align-items: center; margin-top: 8px; }
 
 /* Livrables */
 .boite.livr { text-align: left; width: min(560px, 94vw); padding: 0; }
@@ -326,7 +341,13 @@ table.devis tr.tot td { font-weight: 700; font-size: 16px; border-bottom: 2px so
 .b-certifiee { background: var(--vert-p); color: var(--vert); }
 .b-refusee { background: var(--rouge-p); color: var(--rouge); }
 .b-analyse, .b-deposee { background: var(--pale); color: var(--marine); }
-.b-commission { background: var(--orange-p); color: var(--orange); }
+.b-commission, .b-audit { background: var(--orange-p); color: var(--orange); }
+.analyse-ia { border: 1px solid var(--trait-c); border-left: 4px solid var(--marine); padding: 12px 14px; margin: 14px 0; background: var(--fond); }
+.analyse-ia h4 { display: flex; justify-content: space-between; gap: 10px; margin-bottom: 8px; }
+.analyse-ia ul { list-style: none; margin: 0; padding: 0; font-size: 14px; }
+.analyse-ia li { display: flex; justify-content: space-between; gap: 10px; padding: 5px 0; border-bottom: 1px solid var(--trait-c); }
+.analyse-ia li:last-child { border: none; }
+.niv-ok { color: var(--vert); font-weight: 700; } .niv-moy { color: var(--orange); font-weight: 700; } .niv-ko { color: var(--rouge); font-weight: 700; }
 
 /* Vérifier */
 .verif-form { display: flex; gap: 12px; max-width: 640px; }
@@ -450,7 +471,7 @@ table.bdd tbody tr:hover { background: var(--pale); }
   <div class="conteneur pied-haut">
     <div><div class="pm"><img class="pied-logo" alt=""><div><b>Certification PCE</b><br><small style="color:#C9D6EE">Processus Créatif Éthique</small></div></div>
       <p>Le label qui certifie le processus créatif : une vision humaine, une IA maîtrisée, une transparence totale pour le client.</p></div>
-    <div><h4>Le label</h4><ul><li><a href="#/">Accueil</a></li><li><a href="#/registre">Registre des œuvres</a></li><li><a href="#/faq">Questions fréquentes</a></li></ul></div>
+    <div><h4>Le label</h4><ul><li><a href="#/">Accueil</a></li><li><a href="#/registre">Registre des œuvres</a></li><li><a href="#/annuaire">Annuaire des certifiés</a></li><li><a href="#/faq">Questions fréquentes</a></li></ul></div>
     <div><h4>Créateurs</h4><ul><li><a href="#/depot">Déposer mon dossier</a></li><li><a href="#/createurs">Critères et tarifs</a></li><li><a class="lien-charte">Charte de transparence</a></li><li><a href="#/suivi">Suivre mon dossier</a></li></ul></div>
     <div><h4>Clients</h4><ul><li><a href="#/verifier">Vérifier une œuvre</a></li><li><a href="#/registre">Registre des œuvres</a></li><li><button type="button" class="pied-livr">Livrables IDDIC 2026</button></li><li><a href="#/pro">Espace pro</a></li></ul></div>
   </div>
@@ -2770,28 +2791,28 @@ const SEUIL = 10;
 const TYPES = {
   "Illustration": 29, "Photographie": 25, "Identité visuelle": 49, "Tatouage": 39, "Campagne de marque": 149,
 };
-/* Abonnement sur mesure : le tarif dépend de la taille de la structure, du nombre de créations
+/* Certification annuelle sur mesure : le coût dépend de la taille de la structure, du nombre de créations
    à certifier, de l'ampleur du processus créatif et de l'étude du dossier. */
 const TAILLES = {
-  "Indépendant": { base: 9, inclus: 6, etude: 0 },
-  "Studio (2 à 10 personnes)": { base: 29, inclus: 24, etude: 49 },
-  "Agence (11 à 50 personnes)": { base: 79, inclus: 60, etude: 149 },
+  "Indépendant": { base: 108, inclus: 6, etude: 0 },
+  "Studio (2 à 10 personnes)": { base: 348, inclus: 24, etude: 49 },
+  "Agence (11 à 50 personnes)": { base: 948, inclus: 60, etude: 149 },
   "Grand compte (plus de 50 personnes)": null,
 };
-const SUPPL_CREATION = 0.5; // € HT par mois et par création annuelle au-delà du volume inclus
-const PROCESSUS = [[10, 0, "court (moins de 10 h)"], [40, 3, "moyen (10 à 40 h)"], [Infinity, 8, "long (plus de 40 h)"]];
+const SUPPL_CREATION = 6; // € HT par an et par création au-delà du volume inclus
+const PROCESSUS = [[10, 0, "court (moins de 10 h)"], [40, 36, "moyen (10 à 40 h)"], [Infinity, 96, "long (plus de 40 h)"]];
 function estimerAbo(taille, creations, heures) {
   const t = TAILLES[taille]; if (!t) return { surDevis: true };
   const p = PROCESSUS.find(x => (+heures || 0) < x[0]);
   const supp = Math.max(0, (+creations || 0) - t.inclus) * SUPPL_CREATION;
-  return { surDevis: false, base: t.base, supp, proc: p[1], procLib: p[2], mensuel: t.base + supp + p[1], etude: t.etude, inclus: t.inclus };
+  return { surDevis: false, base: t.base, supp, proc: p[1], procLib: p[2], annuel: t.base + supp + p[1], etude: t.etude, inclus: t.inclus };
 }
-const libAbo = e => e.surDevis ? "Sur devis" : eur(e.mensuel) + " HT / mois";
+const libAbo = e => e.surDevis ? "Sur devis" : eur(e.annuel) + " HT / an";
 const STATUTS = {
-  deposee: "Déposé", analyse: "Analyse du dossier", commission: "Étude par la commission", certifiee: "Certifiée", refusee: "Refusée",
+  deposee: "Déposé", analyse: "Analyse IA des fichiers", commission: "Contrôle humain", audit: "Audit terrain", certifiee: "Certifiée", refusee: "Refusée",
 };
 const IA_LIB = { aucun: "Aucun", appui: "En appui (idées, retouches)", generation: "Génération d'éléments du rendu" };
-const CLE = "pce-demo-v5";
+const CLE = "pce-demo-v6";
 
 /* ---------- Utilitaires ---------- */
 const $ = (s, r = document) => r.querySelector(s);
@@ -2847,7 +2868,7 @@ const TITRES = {
 };
 function seedBase() {
   const r = rng(2026), liste = [], types = Object.keys(TYPES), vus = {};
-  const statuts = ["certifiee", "certifiee", "certifiee", "certifiee", "certifiee", "certifiee", "certifiee", "analyse", "commission", "refusee", "certifiee", "deposee"];
+  const statuts = ["certifiee", "certifiee", "certifiee", "certifiee", "certifiee", "certifiee", "certifiee", "analyse", "commission", "refusee", "certifiee", "deposee", "audit", "certifiee"];
   for (let i = 0; i < 44; i++) {
     const type = types[Math.floor(r() * types.length)], prenom = PRENOMS[Math.floor(r() * PRENOMS.length)], nom = NOMS[Math.floor(r() * NOMS.length)];
     const st = statuts[Math.floor(r() * statuts.length)];
@@ -2862,8 +2883,8 @@ function seedBase() {
       statut: st, dosage: { recherche: rech, creation: crea, ia }, iaMode,
       outils: iaMode === "aucun" ? "" : ["Retouche colorimétrique assistée", "Recherche de références", "Détourage automatique", "Variantes de mise en page"][Math.floor(r() * 4)],
       description: "Recherches documentaires et croquis préparatoires, choix de la palette, trois versions successives validées avec le client, finalisation manuelle.",
-      formule: r() < .7 ? "abonnement" : "unite", seed: 1 + Math.floor(r() * 100000), img: null,
-      ...((tl, nb) => ({ taille: tl, creationsAn: nb, prixAbo: estimerAbo(tl, nb, rech + crea + ia).mensuel ?? null }))(["Indépendant", "Indépendant", "Indépendant", "Studio (2 à 10 personnes)", "Agence (11 à 50 personnes)"][Math.floor(r() * 5)], 3 + Math.floor(r() * 40)),
+      formule: r() < .7 ? "abonnement" : "unite", seed: 1 + Math.floor(r() * 100000), img: null, audit: st === "audit" || (st === "certifiee" && r() < .12),
+      ...((tl, nb) => ({ taille: tl, creationsAn: nb, prixAbo: estimerAbo(tl, nb, rech + crea + ia).annuel ?? null }))(["Indépendant", "Indépendant", "Indépendant", "Studio (2 à 10 personnes)", "Agence (11 à 50 personnes)"][Math.floor(r() * 5)], 3 + Math.floor(r() * 40)),
       justificatifs: ["croquis-preparatoires.pdf", "fichier-source.psd"].slice(0, 1 + Math.floor(r() * 2)),
       motif: st === "refusee" ? "Après examen des justificatifs, la part d'exécution par IA dépasse le seuil du référentiel." : "",
       charte: { expertise: expertiseDefaut(type), expertiseAutre: type === "Tatouage" ? "Tatouage" : "", outilsTrad: "Crayon, carnet de croquis, tablette graphique, logiciel de retouche", outilsIA: iaMode === "aucun" ? "Aucun" : "Assistant de recherche, retouche assistée", signature: null, signeLe: new Date(2026, mois, jour).toISOString() },
@@ -2871,7 +2892,7 @@ function seedBase() {
   }
   liste.push({ id: "PCE-2026-000127", titre: "La maison au soleil", createur: "Studio Lune", email: "contact@studiolune.fr", type: "Illustration", ville: "Lyon",
     date: new Date(2026, 9, 2).toISOString(), statut: "certifiee", dosage: { recherche: 4, creation: 8, ia: 1 }, iaMode: "appui", outils: "Nettoyage du trait",
-    description: "Croquis au crayon, composition de la scène familiale, mise en couleur à la main, nettoyage du trait assisté.", formule: "abonnement", seed: 7, img: OEUVRE, taille: "Indépendant", creationsAn: 6, prixAbo: 12,
+    description: "Croquis au crayon, composition de la scène familiale, mise en couleur à la main, nettoyage du trait assisté.", formule: "abonnement", seed: 7, img: OEUVRE, taille: "Indépendant", creationsAn: 6, prixAbo: 144,
     justificatifs: ["croquis-maison.jpg", "etapes-couleur.pdf"], motif: "",
     charte: { expertise: "Design Graphique / Illustration", expertiseAutre: "", outilsTrad: "Crayon, feutres, tablette graphique", outilsIA: "Nettoyage du trait assisté", signature: null, signeLe: new Date(2026, 9, 1).toISOString() } });
   return liste.sort((a, b) => new Date(b.date) - new Date(a.date));
@@ -2894,7 +2915,7 @@ function entete(route) {
     <a class="marque" href="#/"><img src="${LOGO}" alt=""><span><b>Certification PCE</b><small>Processus Créatif Éthique</small></span></a>
     <button class="menu-btn" aria-expanded="false" aria-controls="nav">☰ Menu</button>
     <nav class="nav" id="nav" aria-label="Navigation principale">
-      ${liens.map(([h, t]) => `<a href="${h}" class="${(h === "#/" ? route === "/" : (route === h.slice(1) || route.startsWith(h.slice(1) + "/"))) ? "actif" : ""}">${t}</a>`).join("")}
+      ${liens.map(([h, t]) => `<a href="${h}" class="${(h === "#/" ? route === "/" : (route === h.slice(1) || route.startsWith(h.slice(1) + "/") || (h === "#/registre" && /^\/(annuaire|certifie\/)/.test(route)))) ? "actif" : ""}">${t}</a>`).join("")}
       <a href="#/pro" class="pro ${route.startsWith("/pro") ? "actif" : ""}">Espace pro</a>
       <button class="btn petit sec" id="btn-livrables" type="button" style="margin-left:8px">Livrables</button>
       <a class="btn petit" href="#/depot" style="margin-left:8px">Déposer mon dossier</a>
@@ -2936,7 +2957,7 @@ function vueAccueil() {
       <div>
         <span class="tag">Service en ligne</span>
         <h1 style="margin-top:12px">La certification du processus créatif éthique</h1>
-        <p class="chapo">Un label qui atteste que vos créations sont issues d'un processus créatif documenté et examiné par une commission indépendante.</p>
+        <p class="chapo">Un label qui atteste que vos créations sont issues d'un processus créatif documenté, analysé par notre IA de vérification puis examiné par une commission indépendante.</p>
         <div class="actions"><a class="btn" href="#/depot">Déposer mon dossier <span class="fl">→</span></a><a class="btn sec" href="#/verifier">Vérifier une certification</a></div>
       </div>
       <div class="hero-visu"><img class="sceau-h" src="${LOGO}" alt="Sceau de la certification PCE"></div>
@@ -2953,20 +2974,20 @@ function vueAccueil() {
     <div class="grille3">
       <div class="carte rev"><div class="ico"><svg viewBox="0 0 24 24"><path d="M12 3l7 3v5c0 4.5-3 8.3-7 10-4-1.7-7-5.5-7-10V6z"/><path d="M8.5 12l2.5 2.5 4.5-5"/></svg></div><h3><span class="pastille">1</span>Rassurer vos clients</h3><p>Le label atteste que le rendu résulte d'un processus créatif réel, documenté et vérifiable.</p></div>
       <div class="carte rev"><div class="ico"><svg viewBox="0 0 24 24"><path d="M12 3l2.6 5.6 6.1.7-4.5 4.2 1.2 6L12 16.5 6.6 19.5l1.2-6L3.3 9.3l6.1-.7z"/></svg></div><h3><span class="pastille">2</span>Valoriser votre travail</h3><p>Distinguez votre prestation des rendus générés automatiquement, à qualité apparente égale.</p></div>
-      <div class="carte rev"><div class="ico"><svg viewBox="0 0 24 24"><circle cx="9" cy="8" r="3.2"/><path d="M3 20c0-3.3 2.7-6 6-6s6 2.7 6 6"/><circle cx="17" cy="9" r="2.4"/><path d="M15.5 14.2c3 .2 5.5 2.6 5.5 5.8"/></svg></div><h3><span class="pastille">3</span>Un examen indépendant</h3><p>Chaque dossier est étudié par une commission : compétences, démarche, rapport à l'IA.</p></div>
+      <div class="carte rev"><div class="ico"><svg viewBox="0 0 24 24"><circle cx="9" cy="8" r="3.2"/><path d="M3 20c0-3.3 2.7-6 6-6s6 2.7 6 6"/><circle cx="17" cy="9" r="2.4"/><path d="M15.5 14.2c3 .2 5.5 2.6 5.5 5.8"/></svg></div><h3><span class="pastille">3</span>Une double vérification</h3><p>Chaque dossier est analysé par notre IA de vérification, puis contrôlé par la commission. Un audit terrain est réalisé si besoin.</p></div>
     </div>
   </div></section>
   <section class="section fond"><div class="conteneur">
     <h2 class="rev">Comment obtenir la certification ?</h2>
     <div class="etapes-h rev" id="etapes-h">
       <div><span class="pastille">1</span><b>Déposer le dossier</b><span>En ligne, environ 15 minutes</span></div>
-      <div><span class="pastille vide">2</span><b>Analyse du dossier</b><span>Processus, ambitions, usage de l'IA</span></div>
-      <div><span class="pastille vide">3</span><b>Étude par la commission</b><span>Compétences et environnement</span></div>
+      <div><span class="pastille vide">2</span><b>Analyse IA des fichiers</b><span>Métadonnées, calques, historique</span></div>
+      <div><span class="pastille vide">3</span><b>Contrôle humain</b><span>Commission, audit terrain si besoin</span></div>
       <div><span class="pastille vide">4</span><b>Décision</b><span>Remise de la certification PCE</span></div>
     </div>
   </div></section>
   <section class="section"><div class="conteneur">
-    <div style="display:flex;justify-content:space-between;align-items:end;gap:16px;flex-wrap:wrap" class="rev"><h2 style="margin:0">Dernières œuvres certifiées</h2><a href="#/registre">Consulter le registre →</a></div>
+    <div style="display:flex;justify-content:space-between;align-items:end;gap:16px;flex-wrap:wrap" class="rev"><h2 style="margin:0">Dernières œuvres certifiées</h2><span><a href="#/registre">Consulter le registre →</a> &nbsp; <a href="#/annuaire">Annuaire des certifiés →</a></span></div>
     <div class="galerie" style="margin-top:22px">${vedetteEnTete(cert).slice(0, 8).map(carteOeuvre).join("")}</div>
   </div></section>
   <section class="section fond"><div class="conteneur"><div class="verif-home rev">
@@ -2999,7 +3020,7 @@ function vueCreateurs() {
     </div>
     <h2 style="margin-top:44px">Tarifs</h2>
     <div class="deux" style="margin-bottom:24px">
-      <div class="carte rev"><h3>Abonnement sur mesure</h3><p style="font-size:34px;font-weight:700;color:var(--marine);margin:4px 0"><span style="font-size:16px">À partir de</span> 9 € <span style="font-size:16px">HT / mois</span></p>
+      <div class="carte rev"><h3>Certification annuelle sur mesure</h3><p style="font-size:34px;font-weight:700;color:var(--marine);margin:4px 0"><span style="font-size:16px">À partir de</span> 108 € <span style="font-size:16px">HT / an</span></p>
         <p>Le tarif dépend du nombre de créations à certifier, de la taille de votre structure, de l'ampleur de votre processus créatif et de l'étude de votre dossier. Certifications incluses, profil dans le registre, devis transparents.</p>
         <div class="estim" id="estim">
           <div class="champ"><label for="es-t">Taille de la structure</label><select id="es-t">${Object.keys(TAILLES).map(x => `<option>${x}</option>`).join("")}</select></div>
@@ -3041,18 +3062,66 @@ function vueFaq() {
     ["Qu'est-ce que la certification PCE ?", "Un label qui certifie le processus créatif : la conception est humaine, l'IA reste un outil d'exécution, dans la limite de " + SEUIL + " % du temps du projet."],
     ["La certification est-elle contre l'IA ?", "Non. PCE certifie une IA maîtrisée par l'humain. Vous pouvez utiliser l'IA en appui, à condition de le déclarer."],
     ["Combien de temps dure l'examen ?", "Le dépôt prend environ 15 minutes. Le dossier passe ensuite par l'analyse, l'étude par la commission, puis la décision."],
-    ["Combien coûte la certification ?", "L'abonnement est sur mesure, à partir de 9 € HT par mois pour un indépendant. Son tarif dépend du nombre de créations à certifier, de la taille de la structure, de l'ampleur du processus créatif et de l'étude du dossier. La certification à l'unité dépend de l'œuvre, de 25 € à 149 € HT. La vérification est gratuite."],
+    ["Combien coûte la certification ?", "La certification est annuelle et sur mesure, à partir de 108 € HT par an pour un indépendant. Son coût dépend du nombre de créations à certifier, de la taille de la structure, de l'ampleur du processus créatif et de l'étude du dossier. La certification à l'unité dépend de l'œuvre, de 25 € à 149 € HT. La vérification est gratuite."],
     ["Comment un acheteur vérifie-t-il une œuvre ?", "En scannant le QR code apposé sur l'œuvre ou en saisissant le numéro PCE sur la page Vérifier une certification."],
     ["Pourquoi signer la Charte de transparence ?", "La charte engage le créateur sur l'usage de l'IA, la transparence des devis, le respect de la propriété intellectuelle et l'acceptation des audits. Sa signature est obligatoire pour déposer un dossier."],
-    ["Les heures déclarées suffisent-elles à obtenir le label ?", "Non. Les heures sont indicatives : elles servent au devis client et à l'estimation de l'abonnement. Aucun test d'IA n'est fait au dépôt : la commission vérifie ensuite la démarche sur les justificatifs (croquis, fichiers sources, calques, prompts)."],
+    ["Comment vérifiez-vous un dossier ?", "Par une double vérification. Notre IA de vérification analyse d'abord les fichiers (métadonnées, calques, historique, traces de génération, similarité). La commission contrôle ensuite le dossier et décide. Si un doute subsiste, un membre de l'équipe réalise un audit terrain. Cette double vérification garantit la fiabilité à moindre coût, ce qui rend le label abordable."],
+    ["Les heures déclarées suffisent-elles à obtenir le label ?", "Non. Les heures sont indicatives : elles servent au devis client et à l'estimation du coût annuel de la certification. Aucun test d'IA n'est fait au dépôt : la commission vérifie ensuite la démarche sur les justificatifs (croquis, fichiers sources, calques, prompts)."],
     ["Que se passe-t-il en cas de refus ?", "Le motif vous est communiqué. Vous pouvez compléter votre dossier et le déposer à nouveau."],
   ];
   return `<div class="conteneur etroit">${ariane("FAQ")}<h1>Questions fréquentes</h1>${q.map(([a, b]) => `<details class="rev"><summary>${a}</summary><p>${b}</p></details>`).join("")}<div style="height:56px"></div></div>`;
 }
 
+const ongletsRegistre = actif => `<div class="onglets-pub" role="tablist"><a href="#/registre" class="${actif === "oeuvres" ? "actif" : ""}">Œuvres certifiées</a><a href="#/annuaire" class="${actif === "annuaire" ? "actif" : ""}">Annuaire des certifiés</a></div>`;
+const slugEntite = n => n.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
+const initiales = n => n.split(/[\s,]+/).filter(Boolean).slice(0, 2).map(x => x[0].toUpperCase()).join("");
+function entites() {
+  const m = new Map();
+  DB.data.oeuvres.filter(o => o.statut === "certifiee").forEach(o => {
+    const k = slugEntite(o.createur); if (!m.has(k)) m.set(k, { slug: k, nom: o.createur, ville: o.ville, taille: o.taille || "Indépendant", types: new Set(), oeuvres: [], depuis: o.date });
+    const e = m.get(k); e.types.add(o.type); e.oeuvres.push(o); if (new Date(o.date) < new Date(e.depuis)) e.depuis = o.date; if (!e.ville && o.ville) e.ville = o.ville;
+  });
+  return [...m.values()].sort((a, b) => (b.oeuvres.some(o => o.id === VEDETTE)) - (a.oeuvres.some(o => o.id === VEDETTE)) || b.oeuvres.length - a.oeuvres.length || a.nom.localeCompare(b.nom));
+}
+const carteEntite = e => `<a class="entite rev" href="#/certifie/${e.slug}"><span class="avatar">${esc(initiales(e.nom))}</span><span><b>${esc(e.nom)}</b><small>${esc(e.taille)}${e.ville ? " · " + esc(e.ville) : ""}</small><span class="tags">${[...e.types].map(x => `<i>${esc(x)}</i>`).join("")}</span><small>${e.oeuvres.length} œuvre${e.oeuvres.length > 1 ? "s" : ""} certifiée${e.oeuvres.length > 1 ? "s" : ""} · certifié depuis ${new Date(e.depuis).toLocaleDateString("fr-FR", { month: "long", year: "numeric" })}</small></span></a>`;
+function vueAnnuaire() {
+  const villes = [...new Set(entites().map(e => e.ville).filter(Boolean))].sort();
+  return `<div class="conteneur">${ariane(["#/registre", "Registre"], "Annuaire des certifiés")}
+    <h1>Annuaire des certifiés</h1><p class="muted">Trouvez un créatif, un studio ou une agence certifiés PCE.</p>
+    ${ongletsRegistre("annuaire")}
+    <div class="filtres">
+      <div class="champ" style="flex:1;min-width:220px"><label for="a-q">Rechercher un certifié</label><input id="a-q" type="search" placeholder="Nom, studio, agence, discipline, ville"></div>
+      <div class="champ"><label for="a-t">Discipline</label><select id="a-t"><option value="">Toutes</option>${Object.keys(TYPES).map(t => `<option>${t}</option>`).join("")}</select></div>
+      <div class="champ"><label for="a-s">Structure</label><select id="a-s"><option value="">Toutes</option>${Object.keys(TAILLES).map(t => `<option>${t}</option>`).join("")}</select></div>
+      <div class="champ"><label for="a-v">Ville</label><select id="a-v"><option value="">Toutes</option>${villes.map(v => `<option>${esc(v)}</option>`).join("")}</select></div>
+    </div>
+    <p class="muted petit-texte" id="a-n" aria-live="polite"></p>
+    <div class="entites" id="a-g"></div><div style="height:56px"></div></div>`;
+}
+function initAnnuaire() {
+  const f = () => {
+    const q = $("#a-q").value.trim().toLowerCase(), t = $("#a-t").value, s = $("#a-s").value, v = $("#a-v").value;
+    const l = entites().filter(e => (!t || e.types.has(t)) && (!s || e.taille === s) && (!v || e.ville === v) && (!q || (e.nom + " " + [...e.types].join(" ") + " " + (e.ville || "") + " " + e.taille).toLowerCase().includes(q)));
+    $("#a-n").textContent = `${l.length} certifié${l.length > 1 ? "s" : ""}`;
+    $("#a-g").innerHTML = l.length ? l.map(carteEntite).join("") : `<div class="vide-msg" style="grid-column:1/-1">Aucun certifié ne correspond à votre recherche.</div>`;
+    revele();
+  };
+  ["#a-q", "#a-t", "#a-s", "#a-v"].forEach(x => $(x).addEventListener("input", f)); f();
+}
+function vueEntite(slug) {
+  const e = entites().find(x => x.slug === slug);
+  if (!e) return `<div class="conteneur etroit">${ariane(["#/annuaire", "Annuaire des certifiés"], "Introuvable")}<h1>Certifié introuvable</h1><p>Ce créatif n'a pas d'œuvre certifiée au registre.</p><a class="btn" href="#/annuaire">Retour à l'annuaire</a><div style="height:56px"></div></div>`;
+  return `<div class="conteneur">${ariane(["#/annuaire", "Annuaire des certifiés"], e.nom)}
+    <div class="entite-ent"><span class="avatar grand">${esc(initiales(e.nom))}</span><div><span class="badge b-certifiee">Certifié PCE</span><h1 style="margin:8px 0 4px">${esc(e.nom)}</h1>
+      <p class="muted" style="margin:0">${esc(e.taille)}${e.ville ? " · " + esc(e.ville) : ""} · ${[...e.types].map(esc).join(", ")}</p>
+      <p class="muted petit-texte" style="margin:4px 0 0">${e.oeuvres.length} œuvre${e.oeuvres.length > 1 ? "s" : ""} certifiée${e.oeuvres.length > 1 ? "s" : ""} · certifié depuis le ${dateFr(e.depuis)}</p></div></div>
+    <h2 style="margin-top:28px">Œuvres certifiées</h2>
+    <div class="galerie">${vedetteEnTete(e.oeuvres).map(carteOeuvre).join("")}</div><div style="height:56px"></div></div>`;
+}
 function vueRegistre() {
   return `<div class="conteneur">${ariane("Registre")}
     <h1>Registre des œuvres certifiées</h1><p class="muted">Toutes les œuvres certifiées PCE, consultables librement.</p>
+    ${ongletsRegistre("oeuvres")}
     <div class="filtres">
       <div class="champ" style="flex:1;min-width:220px"><label for="r-q">Rechercher</label><input id="r-q" type="search" placeholder="Titre, créateur, numéro PCE"></div>
       <div class="champ"><label for="r-t">Type d'œuvre</label><select id="r-t"><option value="">Tous les types</option>${Object.keys(TYPES).map(t => `<option>${t}</option>`).join("")}</select></div>
@@ -3201,7 +3270,7 @@ function etape2(b) {
   return champ("titre", "Titre de l'œuvre *", `<input id="titre" type="text" value="${esc(b.titre)}">`)
     + champ("description", "Décrivez votre processus, de l'idée au rendu *", `<textarea id="description" placeholder="Ex : recherches, croquis, choix de style, versions successives, outils utilisés…">${esc(b.description)}</textarea>`, "", "Décrivez votre processus en 40 caractères minimum.")
     + `<div class="champ"><span class="lab">Recours à l'IA dans votre travail *</span><div class="radios">${Object.entries(IA_LIB).map(([k, v]) => `<label><input type="radio" name="iaMode" value="${k}" ${b.iaMode === k ? "checked" : ""}> ${v}</label>`).join("")}</div></div>
-    <div class="champ"><span class="lab">Temps consacré au projet (heures, à titre indicatif)</span><span class="aide">Ces heures servent uniquement au devis client et à l'estimation de l'abonnement. Aucun test d'IA n'est fait au dépôt : la commission vérifie votre démarche après le dépôt, sur vos justificatifs.</span>
+    <div class="champ"><span class="lab">Temps consacré au projet (heures, à titre indicatif)</span><span class="aide">Ces heures servent uniquement au devis client et à l'estimation du coût annuel de la certification. Aucun test d'IA n'est fait au dépôt : la commission vérifie votre démarche après le dépôt, sur vos justificatifs.</span>
       <div class="ligne-h"><label for="recherche">Recherche et intention</label><input id="recherche" type="number" min="0" value="${b.recherche}"></div>
       <div class="ligne-h"><label for="creation">Création et direction artistique</label><input id="creation" type="number" min="0" value="${b.creation}"></div>
       <div class="ligne-h" id="l-ia"><label for="ia">Exécution et finitions</label><input id="ia" type="number" min="0" value="${b.ia}"></div>
@@ -3289,10 +3358,10 @@ function etape4(b) {
   const h = (+b.recherche || 0) + (+b.creation || 0) + (+b.ia || 0), t = +b.taux || 0, cert = b.formule === "unite" ? unite : 0;
   return `<h3>Votre formule</h3>
     <div class="formules">
-      <label class="formule"><input type="radio" name="formule" value="abonnement" ${b.formule === "abonnement" ? "checked" : ""}>Abonnement sur mesure<b>${libAbo(est)}</b><small class="muted">${est.surDevis ? "Tarif établi après l'étude du dossier" : `${b.creationsAn} créations par an · processus ${est.procLib}${est.etude ? ` · étude ${eur(est.etude)} HT` : ""}`}</small></label>
+      <label class="formule"><input type="radio" name="formule" value="abonnement" ${b.formule === "abonnement" ? "checked" : ""}>Certification annuelle sur mesure<b>${libAbo(est)}</b><small class="muted">${est.surDevis ? "Tarif établi après l'étude du dossier" : `${b.creationsAn} créations par an · processus ${est.procLib}${est.etude ? ` · étude ${eur(est.etude)} HT` : ""}`}</small></label>
       <label class="formule"><input type="radio" name="formule" value="unite" ${b.formule === "unite" ? "checked" : ""}>Certification à l'unité<b>${eur(unite)} HT</b><small class="muted">Tarif ${esc(b.type.toLowerCase())}</small></label>
     </div>
-    <p class="muted petit-texte" style="margin-top:8px">Le tarif de l'abonnement dépend du nombre de créations à certifier, de la taille de votre structure (${esc(b.taille.toLowerCase())}), de l'ampleur de votre processus créatif et de l'étude de votre dossier. Il est confirmé après l'étude du dossier.</p>
+    <p class="muted petit-texte" style="margin-top:8px">Le coût annuel de la certification dépend du nombre de créations à certifier, de la taille de votre structure (${esc(b.taille.toLowerCase())}), de l'ampleur de votre processus créatif et de l'étude de votre dossier. Il est confirmé après l'étude du dossier.</p>
     <h3 style="margin-top:28px">Devis client transparent</h3>
     <div class="ligne-h" style="border:none"><label for="taux">Votre taux horaire (€ HT)</label><input id="taux" type="number" min="0" value="${b.taux}"></div>
     <table class="devis"><tr><th>Poste</th><th>Montant HT</th></tr>
@@ -3377,7 +3446,7 @@ function initEtape4() {
 }
 function payer() {
   const b = brouillon(), v = document.createElement("div"); v.className = "voile";
-  v.innerHTML = `<div class="boite" role="dialog" aria-modal="true" aria-label="Dépôt en cours"><div class="rond"></div><h3 id="p-t">Règlement sécurisé…</h3><p class="muted" id="p-s">${b.formule === "abonnement" ? "Abonnement sur mesure · " + libAbo(estimerAbo(b.taille, b.creationsAn, +b.recherche + +b.creation + +b.ia)) : "Certification à l'unité · " + eur(TYPES[b.type]) + " HT"}</p></div>`;
+  v.innerHTML = `<div class="boite" role="dialog" aria-modal="true" aria-label="Dépôt en cours"><div class="rond"></div><h3 id="p-t">Règlement sécurisé…</h3><p class="muted" id="p-s">${b.formule === "abonnement" ? "Certification annuelle · " + libAbo(estimerAbo(b.taille, b.creationsAn, +b.recherche + +b.creation + +b.ia)) : "Certification à l'unité · " + eur(TYPES[b.type]) + " HT"}</p></div>`;
   document.body.append(v);
   setTimeout(() => { $("#p-t").textContent = "Transmission du dossier…"; $("#p-s").textContent = "Envoi de l'œuvre et des justificatifs"; }, 1100);
   setTimeout(() => {
@@ -3385,15 +3454,18 @@ function payer() {
     DB.ajouter({ id, titre: b.titre, createur: b.createur, email: b.email, type: b.type, ville: b.ville, date: new Date().toISOString(), statut: "deposee",
       dosage: { recherche: +b.recherche, creation: +b.creation, ia: +b.ia }, iaMode: b.iaMode, outils: b.outils, description: b.description, formule: b.formule,
       seed: Math.floor(Math.random() * 1e5), img: b.img, justificatifs: [...b.justificatifs], motif: "", taux: b.taux,
-      taille: b.taille, creationsAn: +b.creationsAn, prixAbo: (e => e.surDevis ? null : e.mensuel)(estimerAbo(b.taille, b.creationsAn, +b.recherche + +b.creation + +b.ia)),
+      taille: b.taille, creationsAn: +b.creationsAn, prixAbo: (e => e.surDevis ? null : e.annuel)(estimerAbo(b.taille, b.creationsAn, +b.recherche + +b.creation + +b.ia)),
       charte: { expertise: b.expertise, expertiseAutre: b.expertiseAutre, outilsTrad: b.outilsTrad, outilsIA: b.outilsIA, signature: b.signature, signeLe: b.signeLe } });
     DB.data.brouillon = null; DB.sauver(); v.remove(); location.hash = "#/confirmation/" + id;
   }, 2200);
 }
 function frise(o) {
-  const ordre = ["deposee", "analyse", "commission", "decision"], i = o.statut === "certifiee" || o.statut === "refusee" ? 4 : ordre.indexOf(o.statut) + 1;
-  const lib = [["Dossier déposé", dateFr(o.date)], ["Analyse du dossier", "Processus, ambitions, usage de l'IA"], ["Étude par la commission", "Compétences et environnement"], ["Décision et remise de la certification", o.statut === "certifiee" ? "Certification délivrée" : o.statut === "refusee" ? "Certification refusée" : ""]];
-  return `<ol class="frise">${lib.map(([t, s], k) => `<li class="${k < i ? "fait" : k === i ? "cours" : ""}"><span class="pt"></span><b>${t}</b><small>${k === i ? "Prochaine étape" : s}</small></li>`).join("")}</ol>`;
+  const avecAudit = o.audit || o.statut === "audit";
+  const etapes = [["deposee", "Dossier déposé", dateFr(o.date)], ["analyse", "Analyse IA des fichiers", "Métadonnées, calques, historique des fichiers"], ["commission", "Contrôle humain", "La commission examine le dossier et l'analyse"]];
+  if (avecAudit) etapes.push(["audit", "Audit terrain", "Vérification sur place par un membre de l'équipe"]);
+  etapes.push(["decision", "Décision et remise de la certification", o.statut === "certifiee" ? "Certification délivrée" : o.statut === "refusee" ? "Certification refusée" : ""]);
+  const i = o.statut === "certifiee" || o.statut === "refusee" ? etapes.length : etapes.findIndex(x => x[0] === o.statut) + 1;
+  return `<ol class="frise">${etapes.map(([, t, s], k) => `<li class="${k < i ? "fait" : k === i ? "cours" : ""}"><span class="pt"></span><b>${t}</b><small>${k === i ? "Prochaine étape" : s}</small></li>`).join("")}</ol>`;
 }
 function vueConfirmation(id) {
   const o = DB.get(id); if (!o) return vueOeuvre(id);
@@ -3427,7 +3499,7 @@ function initSuivi(id) {
   const o = DB.get(id); if (!o) return;
   if ($("#dl-oeuvre")) $("#dl-oeuvre").onclick = () => oeuvreSignee(o);
   if ($("#avancer")) $("#avancer").onclick = () => {
-    const suite = { deposee: "analyse", analyse: "commission", commission: "certifiee" }[o.statut];
+    const suite = { deposee: "analyse", analyse: "commission", commission: "certifiee", audit: "certifiee" }[o.statut];
     DB.maj(o.id, suite === "certifiee" ? { statut: "certifiee", date: new Date().toISOString() } : { statut: suite });
     rendre(); toast(suite === "certifiee" ? "Certification délivrée par la commission." : "Dossier mis à jour.");
   };
@@ -3503,7 +3575,7 @@ function initPro() {
     if ($("#pg-s")) $("#pg-s").onclick = () => { PRO.page++; re(); };
     if ($("#csv")) $("#csv").onclick = () => {
       const l = filtrer(PRO.onglet === "dossiers"), q = s => `"${String(s).replace(/"/g, '""')}"`;
-      const csv = "﻿" + ["Numéro;Œuvre;Créateur;E-mail;Type;Ville;Date;Statut;Heures recherche (indicatif);Heures création (indicatif);Heures exécution (indicatif);Recours IA déclaré;Formule;Structure;Créations par an;Tarif abonnement HT / mois"].concat(l.map(o => [o.id, o.titre, o.createur, o.email, o.type, o.ville, dateC(o.date), STATUTS[o.statut], o.dosage.recherche, o.dosage.creation, o.dosage.ia, IA_LIB[o.iaMode], o.formule === "abonnement" ? "Abonnement" : "Unité", o.taille || "", o.creationsAn || "", o.prixAbo ?? ""].map(q).join(";"))).join("\n");
+      const csv = "﻿" + ["Numéro;Œuvre;Créateur;E-mail;Type;Ville;Date;Statut;Heures recherche (indicatif);Heures création (indicatif);Heures exécution (indicatif);Recours IA déclaré;Formule;Structure;Créations par an;Coût annuel de la certification HT"].concat(l.map(o => [o.id, o.titre, o.createur, o.email, o.type, o.ville, dateC(o.date), STATUTS[o.statut], o.dosage.recherche, o.dosage.creation, o.dosage.ia, IA_LIB[o.iaMode], o.formule === "abonnement" ? "Annuelle" : "Unité", o.taille || "", o.creationsAn || "", o.prixAbo ?? ""].map(q).join(";"))).join("\n");
       telecharger("base-oeuvres-pce.csv", csv, "text/csv;charset=utf-8"); toast(`${l.length} ligne(s) exportée(s).`);
     };
     if ($("#reset")) $("#reset").onclick = () => { if (confirm("Réinitialiser toutes les données de démonstration ?")) { DB.reset(); DB.data.pro = true; DB.sauver(); re(); toast("Données de démonstration réinitialisées."); } };
@@ -3512,17 +3584,42 @@ function initPro() {
   };
   initPro2();
 }
+/* Analyse IA des fichiers : premier niveau de la double vérification, réservé à la commission */
+function analyseIA(o) {
+  const r = rng(o.seed * 7 + 3), sev = o.statut === "refusee" ? 2 : (o.audit || o.statut === "audit") ? 1 : 0;
+  const niv = (ok, moy, ko) => sev === 2 && r() < .7 ? ["niv-ko", ko] : sev >= 1 && r() < .6 ? ["niv-moy", moy] : ["niv-ok", ok];
+  const lignes = [
+    ["Métadonnées des fichiers", niv("Cohérentes avec les dates déclarées", "Quelques incohérences de dates", "Incohérentes")],
+    ["Calques et historique", niv("Présents et complets", "Partiels", "Absents")],
+    ["Traces de génération automatique", niv("Aucune trace", "Traces légères à confirmer", "Traces marquées")],
+    ["Similarité avec des œuvres existantes", niv("Faible", "Moyenne", "Élevée")],
+  ];
+  const ko = lignes.filter(l => l[1][0] === "niv-ko").length, moy = lignes.filter(l => l[1][0] === "niv-moy").length;
+  const conf = ko ? ["niv-ko", "Faible"] : moy ? ["niv-moy", "Moyen"] : ["niv-ok", "Élevé"];
+  return { lignes, conf, reco: ko || moy ? "Audit terrain recommandé" : "Contrôle humain standard" };
+}
+function blocAnalyseIA(o) {
+  if (o.statut === "deposee") return `<div class="analyse-ia"><h4>Analyse IA des fichiers</h4><p class="muted petit-texte" style="margin:0">À lancer. Premier niveau de la double vérification, avant le contrôle humain.</p></div>`;
+  const a = analyseIA(o);
+  return `<div class="analyse-ia"><h4><span>Analyse IA des fichiers</span><span class="muted petit-texte">Usage interne · commission</span></h4>
+    <ul>${a.lignes.map(([n, [c, v]]) => `<li><span>${n}</span><span class="${c}">${v}</span></li>`).join("")}
+    <li><span><b>Indice de confiance</b></span><span class="${a.conf[0]}">${a.conf[1]}</span></li></ul>
+    <p class="petit-texte" style="margin:8px 0 0"><b>Recommandation :</b> ${a.reco}. La décision revient toujours au contrôle humain.</p></div>`;
+}
 function tiroir(id, apres) {
   const o = DB.get(id); if (!o) return;
   const fond = document.createElement("div"); fond.className = "tiroir-fond";
   const t = document.createElement("aside"); t.className = "tiroir"; t.setAttribute("role", "dialog"); t.setAttribute("aria-modal", "true"); t.setAttribute("aria-label", "Dossier " + o.id);
-  const actions = { deposee: [["analyse", "Lancer l'analyse", ""]], analyse: [["commission", "Transmettre à la commission", ""]], commission: [["certifiee", "Certifier l'œuvre", "vert"], ["refusee", "Refuser", "danger"]] }[o.statut] || [];
+  const actions = { deposee: [["analyse", "Lancer l'analyse IA des fichiers", ""]], analyse: [["commission", "Valider l'analyse et passer au contrôle humain", ""]],
+    commission: [["certifiee", "Certifier l'œuvre", "vert"], ["audit", "Demander un audit terrain", ""], ["refusee", "Refuser", "danger"]],
+    audit: [["certifiee", "Certifier après audit", "vert"], ["refusee", "Refuser", "danger"]] }[o.statut] || [];
   t.innerHTML = `<div class="t-ent"><div><span class="mono muted">${o.id}</span><h2 style="margin:2px 0 0;font-size:20px">${esc(o.titre)}</h2></div><button class="fermer" aria-label="Fermer">×</button></div>
     <div class="t-corps">
       <span class="badge b-${o.statut}">${STATUTS[o.statut]}</span>
       <div class="vignette" style="margin:14px 0;aspect-ratio:auto">${visuel(o)}</div>
       ${frise(o)}
-      <dl class="recap deux"><div><dt>Créateur</dt><dd>${esc(o.createur)}</dd><dt>E-mail</dt><dd>${esc(o.email)}</dd><dt>Ville</dt><dd>${esc(o.ville || "Non renseignée")}</dd></div><div><dt>Type</dt><dd>${esc(o.type)}</dd><dt>Formule</dt><dd>${o.formule === "abonnement" ? "Abonnement · " + (o.prixAbo ? eur(o.prixAbo) + " HT / mois" : "sur devis") : "Unité · " + eur(TYPES[o.type])}</dd><dt>Structure</dt><dd>${esc(o.taille || "Indépendant")} · ${o.creationsAn || "?"} créations par an</dd><dt>Déposé le</dt><dd>${dateFr(o.date)}</dd></div></dl>
+      <dl class="recap deux"><div><dt>Créateur</dt><dd>${esc(o.createur)}</dd><dt>E-mail</dt><dd>${esc(o.email)}</dd><dt>Ville</dt><dd>${esc(o.ville || "Non renseignée")}</dd></div><div><dt>Type</dt><dd>${esc(o.type)}</dd><dt>Formule</dt><dd>${o.formule === "abonnement" ? "Certification annuelle · " + (o.prixAbo ? eur(o.prixAbo) + " HT / an" : "sur devis") : "Unité · " + eur(TYPES[o.type])}</dd><dt>Structure</dt><dd>${esc(o.taille || "Indépendant")} · ${o.creationsAn || "?"} créations par an</dd><dt>Déposé le</dt><dd>${dateFr(o.date)}</dd></div></dl>
+      ${blocAnalyseIA(o)}
       <h4>Processus déclaré</h4><p style="font-size:14.5px">${esc(o.description)}</p>
       <h4>Recours à l'IA</h4><p style="font-size:14.5px">${IA_LIB[o.iaMode]}${o.outils ? " · " + esc(o.outils) : ""}</p>
       <h4>Heures déclarées (indicatives)</h4>
@@ -3532,7 +3629,7 @@ function tiroir(id, apres) {
       ${o.charte ? `<div class="signee">${o.charte.signature ? `<img src="${o.charte.signature}" alt="Signature">` : ""}<div><b>Signée le ${dateFr(o.charte.signeLe || o.date)}</b><br><span class="muted">${esc(o.charte.expertise === "Autre" ? o.charte.expertiseAutre : o.charte.expertise)} · Outils IA : ${esc(o.charte.outilsIA)}</span><br><button type="button" class="lien" id="t-ch">Télécharger la charte signée</button></div></div>` : `<div class="res-ko">Charte non signée.</div>`}
       <h4 style="margin-top:16px">Justificatifs</h4><ul class="fichiers">${o.justificatifs.map(n => `<li><span>📄 ${esc(n)}</span><span class="muted">Reçu</span></li>`).join("")}</ul>
       ${o.motif ? `<div class="res-ko" style="margin-top:14px"><b>Motif du refus</b><p style="margin:6px 0 0">${esc(o.motif)}</p></div>` : ""}
-      ${o.statut === "commission" ? `<div class="champ" style="margin-top:16px"><label for="motif">Motif en cas de refus</label><textarea id="motif" style="min-height:70px" placeholder="Ex : après examen des justificatifs, la part d'exécution par IA dépasse le seuil du référentiel."></textarea></div>` : ""}
+      ${["commission", "audit"].includes(o.statut) ? `<div class="champ" style="margin-top:16px"><label for="motif">Motif en cas de refus</label><textarea id="motif" style="min-height:70px" placeholder="Ex : après examen des justificatifs, la part d'exécution par IA dépasse le seuil du référentiel."></textarea></div>` : ""}
       <div class="pile" style="margin-top:18px">${actions.map(([s, l, c]) => `<button class="btn ${c}" data-s="${s}">${l}</button>`).join("")}${o.statut === "certifiee" ? `<a class="btn sec" href="#/oeuvre/${o.id}">Voir la page publique</a>` : ""}</div>
     </div>`;
   document.body.append(fond, t);
@@ -3544,6 +3641,7 @@ function tiroir(id, apres) {
     const s = b.dataset.s, ch = { statut: s };
     if (s === "refusee") { const m = $("#motif", t).value.trim(); if (!m) { $("#motif", t).closest(".champ").classList.add("erreur"); return toast("Indiquez le motif du refus."); } ch.motif = m; }
     if (s === "certifiee") ch.date = new Date().toISOString();
+    if (s === "audit") ch.audit = true;
     DB.maj(o.id, ch); fermer(); apres(); toast(s === "certifiee" ? "Œuvre certifiée et publiée au registre." : s === "refusee" ? "Dossier refusé." : "Dossier mis à jour.");
   });
 }
@@ -3565,7 +3663,7 @@ function compteurs() {
 /* ---------- Routeur ---------- */
 const ROUTES = [
   [/^\/$/, () => [vueAccueil(), initAccueil]], [/^\/createurs$/, () => [vueCreateurs(), initCreateurs]], [/^\/clients$/, () => { location.replace("#/verifier"); return [""]; }], [/^\/faq$/, () => [vueFaq()]], [/^\/charte$/, () => [vueCharte()]],
-  [/^\/registre$/, () => [vueRegistre(), initRegistre]], [/^\/verifier(?:\/(.+))?$/, m => [vueVerifier(m[1] && decodeURIComponent(m[1])), () => initVerifier(m[1] && decodeURIComponent(m[1]))]],
+  [/^\/registre$/, () => [vueRegistre(), initRegistre]], [/^\/annuaire$/, () => [vueAnnuaire(), initAnnuaire]], [/^\/certifie\/(.+)$/, m => [vueEntite(decodeURIComponent(m[1]))]], [/^\/verifier(?:\/(.+))?$/, m => [vueVerifier(m[1] && decodeURIComponent(m[1])), () => initVerifier(m[1] && decodeURIComponent(m[1]))]],
   [/^\/oeuvre\/(.+)$/, m => [vueOeuvre(m[1]), () => initOeuvre(m[1])]], [/^\/depot$/, () => [vueDepot(), initDepot]],
   [/^\/confirmation\/(.+)$/, m => [vueConfirmation(m[1]), () => initConfirmation(m[1])]], [/^\/suivi(?:\/(.+))?$/, m => [vueSuivi(m[1]), () => initSuivi(m[1])]],
   [/^\/pro$/, () => [vuePro(), initPro]],
