@@ -323,6 +323,10 @@ table.devis tr.tot td { font-weight: 700; font-size: 16px; border-bottom: 2px so
 .res-ok .avatar.grand { align-self: start; }
 .apercu input, .apercu select { max-width: 320px; }
 
+/* Barre de démonstration du dépôt */
+.demo-barre { display: flex; justify-content: space-between; align-items: center; gap: 10px; flex-wrap: wrap; background: var(--pale); border: 1px dashed var(--marine); padding: 10px 14px; margin-bottom: 14px; font-size: 14px; }
+.demo-barre .g { display: flex; gap: 8px; flex-wrap: wrap; }
+
 /* Livrables */
 .boite.livr { text-align: left; width: min(560px, 94vw); padding: 0; }
 .livr-ent { display: flex; justify-content: space-between; align-items: center; padding: 18px 22px; border-bottom: 1px solid var(--trait-c); }
@@ -3369,6 +3373,7 @@ function vueDepot() {
           <div class="barres">${ETAPES.map((t, i) => `<div class="pas ${i < e ? "fait" : i === e ? "cur" : ""}"><span class="${i < e ? "ok" : ""}" data-b="${i}"><i></i></span><small>${t}</small></div>`).join("")}</div>
           ${e < N - 1 ? `<div class="suiv">Étape suivante : ${ETAPES[e + 1]}</div>` : ""}
         </div>
+        <div class="demo-barre"><span><b>Démonstration</b> · remplissage automatique</span><span class="g"><button type="button" class="btn petit sec" id="d-demo">Remplir cette étape</button><button type="button" class="btn petit sec" id="d-demo-tout">Remplir tout le dossier</button></span></div>
         <form class="panneau" id="d-form" novalidate>${[etape1, etape2, etape3, etapeCharte, etape4][e](b)}</form>
         <div class="nav-etapes">
           <div class="g">${e > 0 ? `<button class="btn sec" id="d-prec" type="button">Précédent</button>` : ""}<button class="btn" id="d-suiv" type="button">${e < N - 1 ? "Continuer" : "Déposer ma demande"} <span class="fl">→</span></button></div>
@@ -3577,10 +3582,34 @@ function initDepot() {
     return ok;
   };
   const aller = n => { b.etape = n; DB.sauver(); rendre(); };
+  $("#d-demo").onclick = () => { remplirDemo(b, e); DB.sauver(); rendre(); toast("Étape remplie avec des données de démonstration."); };
+  $("#d-demo-tout").onclick = () => { for (let k = 0; k < N; k++) remplirDemo(b, k); b.etape = N - 1; DB.sauver(); rendre(); toast("Dossier rempli : vérifiez le récapitulatif puis déposez."); };
   $("#d-suiv").onclick = () => { if (!valider()) return; if (e < N - 1) aller(e + 1); else payer(); };
   if ($("#d-prec")) $("#d-prec").onclick = () => aller(e - 1);
   if ($("#d-retour")) $("#d-retour").onclick = () => aller(e - 1);
   $("#d-plus-tard").onclick = () => { lire(); toast("Dossier enregistré. Vous pourrez le reprendre depuis cet appareil."); };
+}
+/* Remplissage de démonstration, étape par étape */
+function signatureDemo() {
+  const c = document.createElement("canvas"); c.width = 640; c.height = 150; const g = c.getContext("2d");
+  g.strokeStyle = "#023481"; g.lineWidth = 3; g.lineCap = g.lineJoin = "round"; g.beginPath(); g.moveTo(40, 100);
+  for (let x = 40; x <= 420; x += 6) g.lineTo(x, 85 + Math.sin(x / 14) * 26 * Math.cos(x / 60) - (x - 40) * .05);
+  g.moveTo(440, 60); g.quadraticCurveTo(470, 130, 520, 70); g.quadraticCurveTo(560, 40, 600, 95); g.moveTo(60, 118); g.lineTo(560, 112); g.stroke();
+  return c.toDataURL("image/png");
+}
+function remplirDemo(b, e) {
+  if (e === 0) {
+    let s; const r = rng(Date.now() % 100000); do { s = genSiret(r); } while (DB.parSiret(s));
+    Object.assign(b, { siret: s, raison: "Atelier Phare", forme: "SARL", taille: "Studio (2 à 10 personnes)", disciplines: ["Photographie", "Illustration"], representant: "Hugo Fabre", ville: "Nantes", email: "contact@atelierphare.fr", site: "https://atelierphare.fr" });
+  }
+  if (e === 1) Object.assign(b, { description: "Pour chaque projet : recherches documentaires, croquis de cadrage, choix de la palette, plusieurs versions validées avec le client, puis retouche et finalisation à la main.", organisation: "Le directeur artistique conçoit chaque projet, deux photographes réalisent les prises de vue, la direction artistique valide chaque rendu.", iaMode: "appui", outils: "Détourage automatique, retouche colorimétrique assistée" });
+  if (e === 2) {
+    b.kbis = "kbis-atelier-phare.pdf";
+    if (!b.portfolio.length) b.portfolio = [{ img: OEUVRE, titre: "La maison au soleil", type: b.disciplines.includes("Illustration") ? "Illustration" : b.disciplines[0] }, { img: "data:image/svg+xml;charset=utf-8," + encodeURIComponent(art(4242).replace("<svg ", '<svg width="800" height="600" ')), titre: "Brume sur Loire", type: b.disciplines[0] }];
+    if (!b.justificatifs.length) b.justificatifs = ["croquis-preparatoires.pdf", "fichiers-sources-calques.zip"];
+  }
+  if (e === 3) Object.assign(b, { expertise: expertiseDefaut(b.disciplines[0]), outilsTrad: "Appareil photo, carnet de croquis, tablette graphique, logiciel de retouche", outilsIA: b.iaMode === "aucun" ? "Aucun" : (b.outils || "Détourage automatique"), charteOk: true, signature: b.signature || signatureDemo(), signeLe: b.signeLe || new Date().toISOString() });
+  if (e === 4 && !OFFRES[b.offre]) b.offre = offreDefaut(b.taille);
 }
 function payer() {
   const b = brouillon(), v = document.createElement("div"); v.className = "voile";
