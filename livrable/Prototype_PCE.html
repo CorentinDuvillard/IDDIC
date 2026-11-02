@@ -274,6 +274,14 @@ table.devis tr.tot td { font-weight: 700; font-size: 16px; border-bottom: 2px so
 .estim-res b { display: block; font-size: 24px; color: var(--marine); transition: opacity .2s; }
 .estim-res span { font-size: 13px; color: var(--gris); }
 
+/* Moteur de l'accueil : œuvres ou entités */
+.moteur { display: flex; gap: 16px; align-items: center; flex-wrap: wrap; border: 1px solid var(--marine); border-top: 4px solid var(--marine); padding: 16px; background: var(--blanc); }
+.bascule { display: inline-flex; border: 1.5px solid var(--marine); flex: none; }
+.bascule button { background: var(--blanc); color: var(--marine); border: none; padding: 11px 20px; font: 700 15px var(--police); cursor: pointer; transition: background .2s, color .2s; }
+.bascule button.actif { background: var(--marine); color: var(--blanc); }
+.moteur-f { display: flex; gap: 10px; flex: 1; min-width: 260px; }
+.moteur-f input { flex: 1; }
+
 /* Annuaire des certifiés */
 .onglets-pub { display: flex; gap: 4px; border-bottom: 2px solid var(--trait-c); margin: 14px 0 22px; flex-wrap: wrap; }
 .onglets-pub a { padding: 10px 16px; text-decoration: none; color: var(--gris); font-weight: 700; border-bottom: 3px solid transparent; margin-bottom: -2px; transition: color .2s, border-color .2s; }
@@ -289,15 +297,6 @@ table.devis tr.tot td { font-weight: 700; font-size: 16px; border-bottom: 2px so
 .avatar.grand { width: 84px; height: 84px; font-size: 28px; }
 .entite-ent { display: flex; gap: 20px; align-items: center; margin-top: 8px; }
 
-/* Livrables */
-.boite.livr { text-align: left; width: min(560px, 94vw); padding: 0; }
-.livr-ent { display: flex; justify-content: space-between; align-items: center; padding: 18px 22px; border-bottom: 1px solid var(--trait-c); }
-.livr-ent h2 { margin: 0; font-size: 20px; }
-.livr ul { list-style: none; margin: 0; padding: 8px 22px 18px; }
-.livr li { display: grid; grid-template-columns: 28px 1fr auto; gap: 14px; align-items: center; padding: 12px 0; border-bottom: 1px solid var(--trait-c); animation: entree .35s both; }
-.livr li:last-child { border-bottom: none; }
-.livr li b { display: block; color: var(--marine); }
-.livr li small { color: var(--gris); font-size: 13px; }
 
 /* Confirmation / suivi */
 .etroit { max-width: 720px; margin: 0 auto; padding-bottom: 56px; }
@@ -473,7 +472,7 @@ table.bdd tbody tr:hover { background: var(--pale); }
       <p>Le label qui certifie le processus créatif : une vision humaine, une IA maîtrisée, une transparence totale pour le client.</p></div>
     <div><h4>Le label</h4><ul><li><a href="#/">Accueil</a></li><li><a href="#/registre">Registre des œuvres</a></li><li><a href="#/annuaire">Annuaire des certifiés</a></li><li><a href="#/faq">Questions fréquentes</a></li></ul></div>
     <div><h4>Créateurs</h4><ul><li><a href="#/depot">Déposer mon dossier</a></li><li><a href="#/createurs">Critères et tarifs</a></li><li><a class="lien-charte">Charte de transparence</a></li><li><a href="#/suivi">Suivre mon dossier</a></li></ul></div>
-    <div><h4>Clients</h4><ul><li><a href="#/verifier">Vérifier une œuvre</a></li><li><a href="#/registre">Registre des œuvres</a></li><li><button type="button" class="pied-livr">Livrables IDDIC 2026</button></li><li><a href="#/pro">Espace pro</a></li></ul></div>
+    <div><h4>Clients</h4><ul><li><a href="#/verifier">Vérifier une œuvre</a></li><li><a href="#/registre">Registre des œuvres</a></li><li><a href="#/pro">Espace pro</a></li></ul></div>
   </div>
   <div class="conteneur pied-bas">
     <div><a href="#/faq">Mentions légales</a> · <a href="#/faq">Accessibilité</a> · <a href="#/registre">Plan du site</a> · <a href="#/faq">Contact</a></div>
@@ -2917,32 +2916,10 @@ function entete(route) {
     <nav class="nav" id="nav" aria-label="Navigation principale">
       ${liens.map(([h, t]) => `<a href="${h}" class="${(h === "#/" ? route === "/" : (route === h.slice(1) || route.startsWith(h.slice(1) + "/") || (h === "#/registre" && /^\/(annuaire|certifie\/)/.test(route)))) ? "actif" : ""}">${t}</a>`).join("")}
       <a href="#/pro" class="pro ${route.startsWith("/pro") ? "actif" : ""}">Espace pro</a>
-      <button class="btn petit sec" id="btn-livrables" type="button" style="margin-left:8px">Livrables</button>
       <a class="btn petit" href="#/depot" style="margin-left:8px">Déposer mon dossier</a>
     </nav></div>`;
   const b = $(".menu-btn"), n = $("#nav");
   b.onclick = () => { const o = n.classList.toggle("ouvert"); b.setAttribute("aria-expanded", o); };
-  $("#btn-livrables").onclick = livrables;
-}
-/* ---------- Livrables (fenêtre de téléchargement) ---------- */
-const DOSSIER_LIVRABLES = location.pathname.includes("/livrable/") ? "" : "/livrable/";
-const LIVRABLES = [
-  ["Pitch_PCE.pdf", "Pitch écrit", "PDF · 1 page"],
-  ["Business_Plan_PCE.xlsx", "Business plan", "Excel · 3 ans, onglet Hypothèses"],
-  ["Prototype_PCE.html", "Prototype", "HTML · fichier unique, hors ligne"],
-];
-function livrables() {
-  const v = document.createElement("div"); v.className = "voile";
-  v.innerHTML = `<div class="boite livr" role="dialog" aria-modal="true" aria-labelledby="livr-t">
-    <div class="livr-ent"><h2 id="livr-t">Livrables IDDIC 2026</h2><button class="fermer" aria-label="Fermer">×</button></div>
-    <ul>${LIVRABLES.map(([f, t, d], i) => `<li style="animation-delay:${i * 60}ms"><span class="pastille">${i + 1}</span><span><b>${t}</b><small>${d}</small></span><a class="btn petit" href="${DOSSIER_LIVRABLES}${f}" download="${f}">Télécharger</a></li>`).join("")}</ul>
-  </div>`;
-  document.body.append(v);
-  const fermer = () => { v.remove(); document.removeEventListener("keydown", k); $("#btn-livrables").focus(); };
-  const k = e => { if (e.key === "Escape") fermer(); };
-  document.addEventListener("keydown", k);
-  v.onclick = e => { if (e.target === v) fermer(); };
-  $(".fermer", v).onclick = fermer; $(".fermer", v).focus();
 }
 const ariane = (...p) => `<div class="ariane"><a href="#/">Accueil</a> › ${p.map((x, i) => i < p.length - 1 ? `<a href="${x[0]}">${x[1]}</a>` : esc(x)).join(" › ")}</div>`;
 
@@ -2987,8 +2964,17 @@ function vueAccueil() {
     </div>
   </div></section>
   <section class="section"><div class="conteneur">
-    <div style="display:flex;justify-content:space-between;align-items:end;gap:16px;flex-wrap:wrap" class="rev"><h2 style="margin:0">Dernières œuvres certifiées</h2><span><a href="#/registre">Consulter le registre →</a> &nbsp; <a href="#/annuaire">Annuaire des certifiés →</a></span></div>
-    <div class="galerie" style="margin-top:22px">${vedetteEnTete(cert).slice(0, 8).map(carteOeuvre).join("")}</div>
+    <h2 class="rev">Dernières œuvres et entités vérifiées</h2>
+    <div class="moteur rev">
+      <div class="bascule" role="tablist" aria-label="Afficher">
+        <button type="button" role="tab" data-vue="oeuvres" aria-selected="true" class="actif">Œuvres</button>
+        <button type="button" role="tab" data-vue="entites" aria-selected="false">Entités</button>
+      </div>
+      <form id="m-f" class="moteur-f"><label class="sr" for="m-q">Rechercher</label><input id="m-q" type="search" placeholder="Rechercher une œuvre, un créateur, un numéro PCE" autocomplete="off"><button class="btn">Rechercher <span class="fl">→</span></button></form>
+    </div>
+    <p class="muted petit-texte" id="m-n" aria-live="polite" style="margin:10px 0 0"></p>
+    <div id="m-g" style="margin-top:14px"></div>
+    <p style="margin-top:18px"><a id="m-tout" href="#/registre">Voir tout le registre des œuvres →</a></p>
   </div></section>
   <section class="section fond"><div class="conteneur"><div class="verif-home rev">
     <div><span class="tag">Pour les clients</span><h2 style="margin-top:10px">Vous achetez une création ?</h2><p class="muted" style="margin:0">Saisissez le numéro PCE inscrit sur l'œuvre ou scannez son QR code. La vérification est gratuite.</p></div>
@@ -2999,7 +2985,38 @@ function vueAccueil() {
 }
 const bandeauCta = () => `<section class="cta"><div class="conteneur"><div><h2>Faites certifier votre processus créatif</h2><p>Dépôt en ligne en 15 minutes, signature de la Charte de transparence, décision de la commission.</p></div>
   <div class="g"><a class="btn blanc" href="#/depot">Déposer mon dossier <span class="fl">→</span></a><a class="btn contour" href="#/charte">Lire la charte</a></div></div></section>`;
+const paramQ = () => decodeURIComponent((location.hash.split("?q=")[1] || "").split("&")[0]);
+const dernierCertif = e => Math.max(...e.oeuvres.map(o => +new Date(o.date)));
+function initMoteur() {
+  let vue = "oeuvres";
+  const f = () => {
+    const q = $("#m-q").value.trim().toLowerCase();
+    if (vue === "oeuvres") {
+      const l = vedetteEnTete(DB.data.oeuvres.filter(o => o.statut === "certifiee" && (!q || (o.titre + " " + o.createur + " " + o.type + " " + o.id).toLowerCase().includes(q))).sort((a, b) => new Date(b.date) - new Date(a.date)));
+      $("#m-n").textContent = q ? `${l.length} œuvre${l.length > 1 ? "s" : ""} trouvée${l.length > 1 ? "s" : ""}` : "Les dernières œuvres certifiées";
+      $("#m-g").innerHTML = l.length ? `<div class="galerie">${l.slice(0, 8).map(carteOeuvre).join("")}</div>` : `<div class="vide-msg">Aucune œuvre ne correspond à votre recherche.</div>`;
+    } else {
+      const l = entites().filter(e => !q || (e.nom + " " + [...e.types].join(" ") + " " + (e.ville || "") + " " + e.taille).toLowerCase().includes(q))
+        .sort((a, b) => (b.oeuvres.some(o => o.id === VEDETTE)) - (a.oeuvres.some(o => o.id === VEDETTE)) || dernierCertif(b) - dernierCertif(a));
+      $("#m-n").textContent = q ? `${l.length} entité${l.length > 1 ? "s" : ""} trouvée${l.length > 1 ? "s" : ""}` : "Les dernières entités certifiées : créatifs, studios et agences";
+      $("#m-g").innerHTML = l.length ? `<div class="entites">${l.slice(0, 6).map(carteEntite).join("")}</div>` : `<div class="vide-msg">Aucune entité ne correspond à votre recherche.</div>`;
+    }
+    const cible = vue === "oeuvres" ? "#/registre" : "#/annuaire";
+    $("#m-tout").href = cible + (q ? "?q=" + encodeURIComponent($("#m-q").value.trim()) : "");
+    $("#m-tout").textContent = vue === "oeuvres" ? "Voir tout le registre des œuvres →" : "Voir tout l'annuaire des certifiés →";
+    revele();
+  };
+  $$(".bascule button").forEach(b => b.onclick = () => {
+    vue = b.dataset.vue; $$(".bascule button").forEach(x => { x.classList.toggle("actif", x === b); x.setAttribute("aria-selected", x === b); });
+    $("#m-q").placeholder = vue === "oeuvres" ? "Rechercher une œuvre, un créateur, un numéro PCE" : "Rechercher un créatif, un studio, une agence, une ville";
+    f();
+  });
+  $("#m-q").addEventListener("input", f);
+  $("#m-f").onsubmit = e => { e.preventDefault(); location.hash = $("#m-tout").getAttribute("href"); };
+  f();
+}
 function initAccueil() {
+  initMoteur();
   $("#vh-f").onsubmit = e => { e.preventDefault(); const n = $("#vh-n").value.trim(); if (n) location.hash = "#/verifier/" + encodeURIComponent(n); };
   $$("[data-vh]").forEach(b => b.onclick = () => { location.hash = "#/verifier/" + b.dataset.vh; });
 }
@@ -3019,7 +3036,7 @@ function vueCreateurs() {
       <div class="carte rev"><h3><span class="pastille">4</span>Justificatifs</h3><p>Croquis, fichiers sources ou étapes intermédiaires, au format PDF, JPG ou PNG.</p></div>
     </div>
     <h2 style="margin-top:44px">Tarifs</h2>
-    <div class="deux" style="margin-bottom:24px">
+    <div style="margin-bottom:24px;max-width:760px">
       <div class="carte rev"><h3>Certification annuelle sur mesure</h3><p style="font-size:34px;font-weight:700;color:var(--marine);margin:4px 0"><span style="font-size:16px">À partir de</span> 108 € <span style="font-size:16px">HT / an</span></p>
         <p>Le tarif dépend du nombre de créations à certifier, de la taille de votre structure, de l'ampleur de votre processus créatif et de l'étude de votre dossier. Certifications incluses, profil dans le registre, devis transparents.</p>
         <div class="estim" id="estim">
@@ -3029,8 +3046,6 @@ function vueCreateurs() {
           <div class="estim-res" id="es-r" aria-live="polite"></div>
         </div>
         <a class="btn" href="#/depot">Déposer mon dossier <span class="fl">→</span></a></div>
-      <div class="carte rev"><h3>Certification à l'unité</h3><p class="muted">Le tarif dépend de l'œuvre.</p>
-        <table class="devis">${Object.entries(TYPES).map(([t, p]) => `<tr><td>${t}</td><td>${eur(p)} HT</td></tr>`).join("")}</table></div>
     </div>
     <p class="muted petit-texte rev" style="margin:0 0 18px">Estimation indicative. Le tarif définitif est confirmé après l'étude du dossier par la commission.</p>
     <div class="info rev" style="margin-bottom:56px"><span class="i">i</span><span>La signature de la <a href="#/charte">Charte de transparence et d'éthique créative</a> est obligatoire pour déposer un dossier. Elle se signe en ligne, à l'étape 4 du dépôt.</span></div>
@@ -3106,7 +3121,7 @@ function initAnnuaire() {
     $("#a-g").innerHTML = l.length ? l.map(carteEntite).join("") : `<div class="vide-msg" style="grid-column:1/-1">Aucun certifié ne correspond à votre recherche.</div>`;
     revele();
   };
-  ["#a-q", "#a-t", "#a-s", "#a-v"].forEach(x => $(x).addEventListener("input", f)); f();
+  $("#a-q").value = paramQ(); ["#a-q", "#a-t", "#a-s", "#a-v"].forEach(x => $(x).addEventListener("input", f)); f();
 }
 function vueEntite(slug) {
   const e = entites().find(x => x.slug === slug);
@@ -3135,7 +3150,7 @@ function initRegistre() {
     $("#r-g").innerHTML = l.length ? l.map(carteOeuvre).join("") : `<div class="vide-msg" style="grid-column:1/-1">Aucune œuvre ne correspond à votre recherche.</div>`;
     revele();
   };
-  $("#r-q").oninput = f; $("#r-t").onchange = f; f();
+  $("#r-q").value = paramQ(); $("#r-q").oninput = f; $("#r-t").onchange = f; f();
 }
 
 function vueVerifier(id) {
@@ -3683,7 +3698,7 @@ function rendre() {
 }
 DB.charger(); DB.sauver();
 addEventListener("scroll", () => $("#entete").classList.toggle("ombre", scrollY > 8), { passive: true });
-$(".pied-logo").src = LOGO; $(".lien-charte").href = "#/charte"; $(".pied-livr").onclick = livrables;
+$(".pied-logo").src = LOGO; $(".lien-charte").href = "#/charte";
 { const m = location.pathname.match(/^\/(verifier|suivi|oeuvre)\/([^/]+)\/?$/); if (m && !location.hash) history.replaceState(null, "", "/#/" + m[1] + "/" + m[2]); }
 addEventListener("hashchange", rendre);
 rendre();
